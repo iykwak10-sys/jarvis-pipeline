@@ -1,117 +1,161 @@
 {
   "date": "20260410",
-  "collected_at": "2026-04-10T15:35:01.149173",
+  "collected_at": "2026-04-10T16:11:44.195197",
   "source": "한국투자증권 KIS API",
-  "kospi_portfolio": [
+  "stocks": [
+    {
+      "code": "006800",
+      "name": "미래에셋증권",
+      "sector": "금융",
+      "quantity": 30,
+      "buy_price": null,
+      "close": 66500,
+      "change": -1200,
+      "change_pct": -1.77,
+      "volume": 1813658,
+      "high": 68600,
+      "low": 66500,
+      "open": 68500
+    },
+    {
+      "code": "005930",
+      "name": "삼성전자",
+      "sector": "반도체",
+      "quantity": 6,
+      "buy_price": null,
+      "close": 206000,
+      "change": 2000,
+      "change_pct": 0.98,
+      "volume": 18229163,
+      "high": 211000,
+      "low": 205500,
+      "open": 208500
+    },
+    {
+      "code": "010120",
+      "name": "LS일렉트릭",
+      "sector": "에너지/전력",
+      "quantity": 17,
+      "buy_price": null,
+      "close": 788000,
+      "change": 0,
+      "change_pct": 0.0,
+      "volume": 0,
+      "high": 0,
+      "low": 0,
+      "open": 0
+    },
+    {
+      "code": "012450",
+      "name": "한화에어로스페이스",
+      "sector": "방산",
+      "quantity": 16,
+      "buy_price": null,
+      "close": 1507000,
+      "change": 56000,
+      "change_pct": 3.86,
+      "volume": 189941,
+      "high": 1517000,
+      "low": 1456000,
+      "open": 1465000
+    },
     {
       "code": "034020",
+      "name": "두산에너빌리티",
+      "sector": "에너지/발전",
+      "quantity": 700,
+      "buy_price": null,
       "close": 100200,
       "change": 200,
       "change_pct": 0.2,
-      "volume": 2784035,
-      "trading_value": 278721342950,
+      "volume": 2784448,
       "high": 101200,
       "low": 99500,
-      "open": 101200,
-      "name": "두산에너빌리티"
+      "open": 101200
     },
     {
       "code": "042660",
+      "name": "한화오션",
+      "sector": "방산/조선",
+      "quantity": 100,
+      "buy_price": null,
       "close": 123400,
       "change": -100,
       "change_pct": -0.08,
-      "volume": 572200,
-      "trading_value": 70932958400,
+      "volume": 572233,
       "high": 125700,
       "low": 123200,
-      "open": 125300,
-      "name": "한화오션"
+      "open": 125300
     },
     {
       "code": "052690",
+      "name": "한전기술",
+      "sector": "에너지/전력",
+      "quantity": 70,
+      "buy_price": null,
       "close": 166000,
       "change": -3400,
       "change_pct": -2.01,
       "volume": 195377,
-      "trading_value": 32790193300,
       "high": 173000,
       "low": 166000,
-      "open": 172500,
-      "name": "한전기술"
-    }
-  ],
-  "kosdaq_portfolio": [
+      "open": 172500
+    },
     {
       "code": "207940",
+      "name": "삼성바이오로직스",
+      "sector": "바이오",
+      "quantity": 20,
+      "buy_price": null,
       "close": 1571000,
       "change": -9000,
       "change_pct": -0.57,
       "volume": 30706,
-      "trading_value": 48400952000,
       "high": 1594000,
       "low": 1569500,
-      "open": 1586000,
-      "name": "삼성바이오로직스"
+      "open": 1586000
     },
     {
       "code": "272210",
+      "name": "한화시스템",
+      "sector": "방산",
+      "quantity": 170,
+      "buy_price": null,
       "close": 133300,
       "change": -3800,
       "change_pct": -2.77,
-      "volume": 1020739,
-      "trading_value": 138011602050,
+      "volume": 1020816,
       "high": 137900,
       "low": 133300,
-      "open": 135700,
-      "name": "한화시스템"
+      "open": 135700
     },
     {
       "code": "336260",
+      "name": "두산퓨어셀",
+      "sector": "에너지/수소",
+      "quantity": 90,
+      "buy_price": null,
       "close": 36200,
       "change": 200,
       "change_pct": 0.56,
-      "volume": 531613,
-      "trading_value": 19099979225,
+      "volume": 531619,
       "high": 36650,
       "low": 35550,
-      "open": 36600,
-      "name": "두산퓨얼셀"
-    },
-    {
-      "code": "365340",
-      "close": 65400,
-      "change": -900,
-      "change_pct": -1.36,
-      "volume": 95496,
-      "trading_value": 6345096700,
-      "high": 68600,
-      "low": 65200,
-      "open": 67000,
-      "name": "성일하이텍"
+      "open": 36600
     },
     {
       "code": "469150",
+      "name": "ACE AI반도체TOP3+",
+      "sector": "ETF",
+      "quantity": 110,
+      "buy_price": null,
       "close": 48155,
       "change": 780,
       "change_pct": 1.65,
-      "volume": 596971,
-      "trading_value": 28902036813,
+      "volume": 597139,
       "high": 48705,
       "low": 47990,
-      "open": 48485,
-      "name": "ACE AI반도체TOP3+"
+      "open": 48485
     }
-  ],
-  "kospi_index": {},
-  "kosdaq_index": {},
-  "collection_status": {
-    "034020": "✅",
-    "042660": "✅",
-    "052690": "✅",
-    "207940": "✅",
-    "272210": "✅",
-    "336260": "✅",
-    "365340": "✅",
-    "469150": "✅"
-  }
+  ]
 }
