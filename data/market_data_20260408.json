@@ -1,0 +1,117 @@
+{
+  "date": "20260408",
+  "collected_at": "2026-04-08T19:23:25.560104",
+  "source": "한국투자증권 KIS API",
+  "kospi_portfolio": [
+    {
+      "code": "034020",
+      "close": 101200,
+      "change": 6300,
+      "change_pct": 6.64,
+      "volume": 4010457,
+      "trading_value": 403209573000,
+      "high": 101700,
+      "low": 99200,
+      "open": 99200,
+      "name": "두산에너빌리티"
+    },
+    {
+      "code": "042660",
+      "close": 127700,
+      "change": 6800,
+      "change_pct": 5.62,
+      "volume": 977536,
+      "trading_value": 124443719950,
+      "high": 128600,
+      "low": 125200,
+      "open": 127000,
+      "name": "한화오션"
+    },
+    {
+      "code": "052690",
+      "close": 172800,
+      "change": 14700,
+      "change_pct": 9.3,
+      "volume": 356547,
+      "trading_value": 60920632650,
+      "high": 174500,
+      "low": 165000,
+      "open": 165000,
+      "name": "한전기술"
+    }
+  ],
+  "kosdaq_portfolio": [
+    {
+      "code": "207940",
+      "close": 1598000,
+      "change": 12000,
+      "change_pct": 0.76,
+      "volume": 52453,
+      "trading_value": 84303502500,
+      "high": 1660000,
+      "low": 1591000,
+      "open": 1659000,
+      "name": "삼성바이오로직스"
+    },
+    {
+      "code": "272210",
+      "close": 130600,
+      "change": -1100,
+      "change_pct": -0.84,
+      "volume": 1008429,
+      "trading_value": 131270341600,
+      "high": 133300,
+      "low": 128300,
+      "open": 130500,
+      "name": "한화시스템"
+    },
+    {
+      "code": "336260",
+      "close": 36600,
+      "change": 2100,
+      "change_pct": 6.09,
+      "volume": 382136,
+      "trading_value": 13677344100,
+      "high": 36600,
+      "low": 35200,
+      "open": 35950,
+      "name": "두산퓨얼셀"
+    },
+    {
+      "code": "365340",
+      "close": 66000,
+      "change": -500,
+      "change_pct": -0.75,
+      "volume": 168186,
+      "trading_value": 11064646500,
+      "high": 69400,
+      "low": 63600,
+      "open": 69400,
+      "name": "성일하이텍"
+    },
+    {
+      "code": "469150",
+      "close": 48495,
+      "change": 4495,
+      "change_pct": 10.22,
+      "volume": 1141846,
+      "trading_value": 54410480517,
+      "high": 48575,
+      "low": 46830,
+      "open": 47520,
+      "name": "ACE AI반도체TOP3+"
+    }
+  ],
+  "kospi_index": {},
+  "kosdaq_index": {},
+  "collection_status": {
+    "034020": "✅",
+    "042660": "✅",
+    "052690": "✅",
+    "207940": "✅",
+    "272210": "✅",
+    "336260": "✅",
+    "365340": "✅",
+    "469150": "✅"
+  }
+}

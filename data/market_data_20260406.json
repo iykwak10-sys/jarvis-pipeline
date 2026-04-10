@@ -1,0 +1,143 @@
+{
+  "date": "20260406",
+  "collected_at": "2026-04-06T15:35:00.166443",
+  "source": "한국투자증권 KIS API",
+  "kospi_portfolio": [
+    {
+      "code": "005930",
+      "close": 193100,
+      "change": 6900,
+      "change_pct": 3.71,
+      "volume": 20627571,
+      "trading_value": 3970120871600,
+      "high": 194600,
+      "low": 190100,
+      "open": 190900,
+      "name": "삼성전자"
+    },
+    {
+      "code": "000660",
+      "close": 886000,
+      "change": 10000,
+      "change_pct": 1.14,
+      "volume": 2999955,
+      "trading_value": 2654472499000,
+      "high": 901500,
+      "low": 869000,
+      "open": 877000,
+      "name": "SK하이닉스"
+    },
+    {
+      "code": "207940",
+      "close": 1555000,
+      "change": 1000,
+      "change_pct": 0.06,
+      "volume": 25959,
+      "trading_value": 40463064000,
+      "high": 1582000,
+      "low": 1545000,
+      "open": 1560000,
+      "name": "삼성바이오로직스"
+    },
+    {
+      "code": "006800",
+      "close": 63200,
+      "change": 100,
+      "change_pct": 0.16,
+      "volume": 1648186,
+      "trading_value": 103698254850,
+      "high": 64500,
+      "low": 61700,
+      "open": 63400,
+      "name": "미래에셋증권"
+    },
+    {
+      "code": "042660",
+      "close": 122000,
+      "change": -6000,
+      "change_pct": -4.69,
+      "volume": 939881,
+      "trading_value": 116380905000,
+      "high": 128400,
+      "low": 121500,
+      "open": 126800,
+      "name": "한화오션"
+    },
+    {
+      "code": "034020",
+      "close": 95700,
+      "change": -900,
+      "change_pct": -0.93,
+      "volume": 2039794,
+      "trading_value": 197274800800,
+      "high": 99000,
+      "low": 95500,
+      "open": 96500,
+      "name": "두산에너빌리티"
+    },
+    {
+      "code": "010120",
+      "close": 799000,
+      "change": 30000,
+      "change_pct": 3.9,
+      "volume": 117860,
+      "trading_value": 95344952500,
+      "high": 829000,
+      "low": 790000,
+      "open": 799000,
+      "name": "LS ELECTRIC"
+    },
+    {
+      "code": "103590",
+      "close": 76000,
+      "change": 5000,
+      "change_pct": 7.04,
+      "volume": 338040,
+      "trading_value": 25513644850,
+      "high": 77400,
+      "low": 72500,
+      "open": 72900,
+      "name": "일진전기"
+    }
+  ],
+  "kosdaq_portfolio": [
+    {
+      "code": "058470",
+      "close": 105500,
+      "change": -4900,
+      "change_pct": -4.44,
+      "volume": 552967,
+      "trading_value": 59351090300,
+      "high": 111200,
+      "low": 105000,
+      "open": 109200,
+      "name": "리노공업"
+    },
+    {
+      "code": "039440",
+      "close": 28800,
+      "change": -500,
+      "change_pct": -1.71,
+      "volume": 72923,
+      "trading_value": 2124443175,
+      "high": 29900,
+      "low": 28550,
+      "open": 29100,
+      "name": "STI"
+    }
+  ],
+  "kospi_index": {},
+  "kosdaq_index": {},
+  "collection_status": {
+    "005930": "✅",
+    "000660": "✅",
+    "207940": "✅",
+    "006800": "✅",
+    "042660": "✅",
+    "034020": "✅",
+    "010120": "✅",
+    "103590": "✅",
+    "058470": "✅",
+    "039440": "✅"
+  }
+}

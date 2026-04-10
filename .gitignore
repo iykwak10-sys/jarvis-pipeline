@@ -1,0 +1,9 @@
+.env
+google_credentials.json
+credentials/
+data/.kis_token.json
+logs/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
