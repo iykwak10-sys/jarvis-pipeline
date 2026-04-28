@@ -2,23 +2,41 @@
 """Notion API DB 저장 모듈"""
 
 import logging
-import os
 from pathlib import Path
 from typing import Optional
 
 import requests
-from dotenv import load_dotenv
+from requests.exceptions import ConnectionError, Timeout
 
-load_dotenv(Path(__file__).parent.parent / ".env")
+from core.config import NOTION_TOKEN, NOTION_STOCK_DB_ID, NOTION_ANALYSIS_DB_ID
+from core.retry import retry
 
 NOTION_API = "https://api.notion.com/v1"
 NOTION_VERSION = "2022-06-28"
 logger = logging.getLogger(__name__)
 
 
+@retry(max_attempts=3, base_delay=1.0, exceptions=(ConnectionError, Timeout, requests.RequestException))
+def _notion_post(url_path: str, json_data: dict) -> requests.Response:
+    """Notion API POST with retry. url_path: e.g. '/pages'"""
+    resp = requests.post(
+        f"{NOTION_API}{url_path}",
+        headers=_headers(),
+        json=json_data,
+        timeout=30,
+    )
+    resp.raise_for_status()
+    return resp
+
+
+def _notion_post_with_retry(payload: dict) -> requests.Response:
+    """Helper for save_stock_prices individual page POST."""
+    return _notion_post("/pages", payload)
+
+
 def _headers() -> dict:
     return {
-        "Authorization": f"Bearer {os.environ['NOTION_TOKEN']}",
+        "Authorization": f"Bearer {NOTION_TOKEN}",
         "Notion-Version": NOTION_VERSION,
         "Content-Type": "application/json",
     }
@@ -29,7 +47,7 @@ def save_stock_prices(date_str: str, stocks_data: list) -> int:
     stocks_data: {code, name, sector, close, change_pct, volume, quantity} 리스트
     반환: 저장 성공 종목 수
     """
-    db_id = os.environ.get("NOTION_STOCK_DB_ID", "")
+    db_id = NOTION_STOCK_DB_ID or ""
     if not db_id:
         logger.warning("NOTION_STOCK_DB_ID 미설정 — Notion 저장 스킵")
         return 0
@@ -53,9 +71,7 @@ def save_stock_prices(date_str: str, stocks_data: list) -> int:
             },
         }
         try:
-            resp = requests.post(f"{NOTION_API}/pages", headers=_headers(),
-                                 json=payload, timeout=30)
-            resp.raise_for_status()
+            resp = _notion_post_with_retry(payload)
             success += 1
             logger.info(f"  Notion 저장: {s.get('name')} ({s['code']})")
         except Exception as e:
@@ -69,7 +85,7 @@ def save_analysis_report(date_str: str, report_text: str,
                           kospi_close: Optional[float] = None,
                           kospi_change_pct: Optional[float] = None) -> Optional[str]:
     """분석리포트 DB에 저장. 반환: 저장된 Notion 페이지 URL"""
-    db_id = os.environ.get("NOTION_ANALYSIS_DB_ID", "")
+    db_id = NOTION_ANALYSIS_DB_ID or ""
     if not db_id:
         logger.warning("NOTION_ANALYSIS_DB_ID 미설정 — 분석리포트 저장 스킵")
         return None
@@ -98,12 +114,11 @@ def save_analysis_report(date_str: str, report_text: str,
     ]
 
     try:
-        resp = requests.post(f"{NOTION_API}/pages", headers=_headers(),
-                             json={"parent": {"database_id": db_id},
-                                   "properties": properties,
-                                   "children": children},
-                             timeout=30)
-        resp.raise_for_status()
+        resp = _notion_post("/pages", {
+            "parent": {"database_id": db_id},
+            "properties": properties,
+            "children": children,
+        })
         url = resp.json().get("url", "")
         logger.info(f"분석리포트 Notion 저장: {url}")
         return url

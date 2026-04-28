@@ -9,15 +9,10 @@ from pathlib import Path
 import feedparser
 import holidays
 import yfinance as yf
-from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).parent / ".env")
-
+from core.config import LOG_DIR
 from core.kis_client import KISClient
 from core.notifier import send
-
-LOG_DIR = Path(__file__).parent / "logs"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
