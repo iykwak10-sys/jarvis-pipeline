@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/Users/kwaksmacmini/jarvis-pipeline/bot.py", line 83, in <module>
+    main()
+  File "/Users/kwaksmacmini/jarvis-pipeline/bot.py", line 66, in main
+    request = HTTPXRequest(
+              ^^^^^^^^^^^^^
+TypeError: HTTPXRequest.__init__() got an unexpected keyword argument 'httpx_args'

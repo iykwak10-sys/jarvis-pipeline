@@ -1,0 +1,2 @@
+2026-04-25 06:28:40,650 [INFO] Jarvis webhook bot 시작— /add /remove /list /p 대기 중
+2026-04-25 06:28:40,650 [ERROR] WEBHOOK_URL이 설정되지 않았습니다. 공개 URL을 설정해 주세요.

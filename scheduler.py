@@ -111,6 +111,13 @@ def job_price_alert() -> None:
     run_script("price_alert.py")
 
 
+def job_morning_briefing() -> None:
+    if not is_weekday():
+        return
+    logger.info("🌅 아침 브리핑 실행")
+    run_script("morning_briefing.py")
+
+
 def job_us_alert() -> None:
     if not is_weekday():
         return
@@ -128,6 +135,7 @@ def main() -> None:
     start_bot()
 
     schedule.every(5).minutes.do(job_realtime)
+    schedule.every().day.at("06:30").do(job_morning_briefing)
     schedule.every().day.at("06:05").do(job_us_alert)
     schedule.every().day.at("09:00").do(job_health_check)
     schedule.every().day.at("10:00").do(job_price_alert)
@@ -136,7 +144,7 @@ def main() -> None:
     schedule.every().day.at("15:35").do(job_closing)
 
     logger.info("🚀 Jarvis 스케줄러 시작")
-    logger.info("  06:05 미국장 마감 알림 | 09:00 헬스체크")
+    logger.info("  06:30 아침 브리핑 | 06:05 미국장 마감 알림 | 09:00 헬스체크")
     logger.info("  10:00/13:00/14:30 급등락 알림 | 15:35 마감 수집")
     logger.info("  5분 간격 장중 실시간 수집")
 

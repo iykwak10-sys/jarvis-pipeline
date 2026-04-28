@@ -1,0 +1,5 @@
+2026-04-25 06:43:31,155 - __main__ - INFO - 봇 초기화 완료. 수동 polling 시작 (offset=0 from server)
+2026-04-25 06:43:31,909 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/deleteWebhook "HTTP/1.1 200 OK"
+2026-04-25 06:43:31,910 - __main__ - INFO - Webhook 삭제 및 pending 업데이트 정리 완료
+2026-04-25 06:43:36,915 - __main__ - ERROR - Polling 오류: Timed out
+2026-04-25 06:44:08,702 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"

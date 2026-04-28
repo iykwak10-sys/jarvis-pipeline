@@ -17,6 +17,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 BASE_URL = "https://openapi.koreainvestment.com:9443"
 TOKEN_URL = f"{BASE_URL}/oauth2/tokenP"
 PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
+INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
 TOKEN_CACHE = Path(__file__).parent.parent / "data" / ".kis_token.json"
 
 logger = logging.getLogger(__name__)
@@ -106,6 +107,33 @@ class KISClient:
             "high": int(output.get("stck_hgpr", 0)),
             "low": int(output.get("stck_lwpr", 0)),
             "open": int(output.get("stck_oprc", 0)),
+        }
+
+    def get_index_price(self, iscd: str) -> dict:
+        """국내 지수 현재가(직전 영업일 포함) 조회.
+        iscd: '0001'=KOSPI, '1001'=KOSDAQ
+        반환: {iscd, current, change, change_pct, sign}
+          sign: 1=상한, 2=상승, 3=보합, 4=하한, 5=하락
+        """
+        today = datetime.now().strftime("%Y%m%d")
+        headers = self._headers()
+        headers["tr_id"] = "FHKUP03500100"
+        resp = requests.get(INDEX_URL, headers=headers, params={
+            "fid_cond_mrkt_div_code": "U",
+            "fid_input_iscd": iscd,
+            "fid_input_date_1": today,
+            "fid_input_date_2": today,
+            "fid_period_div_code": "D",
+        }, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        output = data.get("output1") or data.get("output") or {}
+        return {
+            "iscd": iscd,
+            "current": float(output.get("bstp_nmix_prpr", 0)),
+            "change": float(output.get("bstp_nmix_prdy_vrss", 0)),
+            "change_pct": float(output.get("bstp_nmix_prdy_ctrt", 0)),
+            "sign": output.get("prdy_vrss_sign", "3"),  # 3=보합
         }
 
     def get_prices(self, codes: list) -> list:

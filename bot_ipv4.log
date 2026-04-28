@@ -1,0 +1,13 @@
+2026-04-25 06:42:02,048 - __main__ - INFO - 봇 초기화 완료, polling 시작...
+2026-04-25 06:42:02,899 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getMe "HTTP/1.1 200 OK"
+2026-04-25 06:42:03,201 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/deleteWebhook "HTTP/1.1 200 OK"
+2026-04-25 06:42:03,202 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-25 06:42:03,202 - telegram.ext.Application - INFO - Application started
+2026-04-25 06:42:13,934 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:42:24,205 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:42:34,545 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:42:44,791 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:42:55,126 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:43:05,385 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:43:15,631 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:43:25,872 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
