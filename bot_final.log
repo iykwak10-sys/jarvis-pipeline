@@ -1,0 +1,8 @@
+2026-04-25 06:33:09,010 - __main__ - INFO - 🤖 Jarvis AI 봇 시작
+2026-04-25 06:33:09,838 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getMe "HTTP/1.1 200 OK"
+2026-04-25 06:33:10,176 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/deleteWebhook "HTTP/1.1 200 OK"
+2026-04-25 06:33:10,178 - apscheduler.scheduler - INFO - Scheduler started
+2026-04-25 06:33:10,179 - telegram.ext.Application - INFO - Application started
+2026-04-25 06:33:26,000 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:33:36,239 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"
+2026-04-25 06:33:46,481 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8777824856:AAED_9UaxeEBtZ5yQi_b67vybjeWPKxqRsc/getUpdates "HTTP/1.1 200 OK"

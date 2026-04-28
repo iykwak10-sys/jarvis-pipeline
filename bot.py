@@ -10,8 +10,10 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent / ".env")
 
+import asyncio
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.constants import ChatAction
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 from core import portfolio, notifier
 from core.kis_client import KISClient
@@ -36,6 +38,18 @@ ALLOWED_CHAT_ID = int(os.environ["JARVIS_CHAT_ID"])
 def auth(update: Update) -> bool:
     """허가된 채팅 ID만 명령 수락"""
     return update.effective_chat.id == ALLOWED_CHAT_ID
+
+
+# 1. 타이핑 상태를 유지하는 백그라운드 함수
+async def keep_typing(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
+    """답변이 올 때까지 4.5초마다 타이핑 액션을 지속적으로 전송합니다."""
+    try:
+        while True:
+            await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+            await asyncio.sleep(4.5)  # 텔레그램 타이핑 만료(5초) 전 갱신
+    except asyncio.CancelledError:
+        # 응답이 완료되어 태스크가 취소되면 조용히 종료합니다.
+        pass
 
 
 async def cmd_add(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -133,6 +147,50 @@ async def cmd_price(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("현재가 리포트 전송 완료")
 
 
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not update.message or not update.message.text:
+        return
+    
+    chat_id = update.effective_chat.id
+    user_text = update.message.text
+
+    # 타이핑 루프 시작 ('점 세 개' 표시 시작)
+    typing_task = asyncio.create_task(keep_typing(context, chat_id))
+
+    try:
+        # 비동기로 Hermes CLI 호출 (봇이 얼어붙는 것을 방지)
+        process = await asyncio.create_subprocess_exec(
+            "hermes", "chat", "-q", user_text, "-Q",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+
+        # 60초 타임아웃 적용하여 대기
+        try:
+            stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=60.0)
+            
+            # 응답 텍스트 디코딩
+            response = stdout.decode().strip() if stdout else ""
+            if not response:
+                response = stderr.decode().strip() if stderr else "응답 내용이 없습니다."
+                
+        except asyncio.TimeoutError:
+            process.kill()
+            response = "⏳ 응답 시간이 초과되었습니다 (60초)."
+
+        # 답변이 준비되었으므로 타이핑 루프 종료 ('점 세 개' 사라짐)
+        typing_task.cancel()
+        
+        # 텔레그램으로 최종 결과 전송
+        await update.message.reply_text(response[:4000])
+
+    except Exception as e:
+        # 에러 발생 시에도 타이핑 표시는 확실히 끕니다.
+        typing_task.cancel()
+        logger.error(f"Hermes Agent 호출 오류: {e}")
+        await update.message.reply_text("⚠️ AI 호출 중 시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
+
 def main() -> None:
     token = os.environ["JARVIS_BOT_TOKEN"]
     app = Application.builder().token(token).build()
@@ -140,6 +198,7 @@ def main() -> None:
     app.add_handler(CommandHandler("remove", cmd_remove))
     app.add_handler(CommandHandler("list", cmd_list))
     app.add_handler(CommandHandler("p", cmd_price))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     logger.info("Jarvis 봇 시작 — /add /remove /list /p 대기 중")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
