@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kwaksmacmini/jarvis-pipeline/bot.py", line 40, in <module>
-    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-ImportError: cannot import name 'Filters' from 'telegram.ext' (/Users/kwaksmacmini/.hermes/hermes-agent/venv/lib/python3.11/site-packages/telegram/ext/__init__.py)

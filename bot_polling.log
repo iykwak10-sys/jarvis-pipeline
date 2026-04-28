@@ -1,4 +1,0 @@
-  File "/Users/kwaksmacmini/jarvis-pipeline/bot.py", line 66
-    "안녕하세요! 저는 Hermes AI 어시스턴트입니다.
-    ^
-SyntaxError: unterminated string literal (detected at line 66)

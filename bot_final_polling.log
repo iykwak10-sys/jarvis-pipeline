@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/kwaksmacmini/jarvis-pipeline/bot.py", line 29, in <module>
-    request = HTTPXRequest(
-              ^^^^^^^^^^^^^
-TypeError: HTTPXRequest.__init__() got an unexpected keyword argument 'connection_pool_limits'
