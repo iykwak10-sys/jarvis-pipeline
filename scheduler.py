@@ -12,17 +12,13 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import schedule
-from dotenv import load_dotenv
-
-load_dotenv(Path(__file__).parent / ".env")
 
 from core import notifier
+from core.config import LOG_DIR
 
 BASE_DIR = Path(__file__).parent
-LOG_DIR = BASE_DIR / "logs"
 PID_FILE = LOG_DIR / "scheduler.pid"
 BOT_PID_FILE = LOG_DIR / "bot.pid"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,

@@ -2,24 +2,24 @@
 """Telegram 알림 전송 모듈"""
 
 import logging
-import os
 from pathlib import Path
 
 import requests
-from dotenv import load_dotenv
+from requests.exceptions import ConnectionError, Timeout
 
-load_dotenv(Path(__file__).parent.parent / ".env")
+from core.config import JARVIS_BOT_TOKEN, JARVIS_CHAT_ID, JARVIS_TELEGRAM_MODE
+from core.retry import retry
 
 TELEGRAM_URL = "https://api.telegram.org/bot{token}/sendMessage"
 logger = logging.getLogger(__name__)
 
 
 def _token() -> str:
-    return os.environ["JARVIS_BOT_TOKEN"]
+    return JARVIS_BOT_TOKEN or ""
 
 
 def _chat_id() -> str:
-    return os.environ["JARVIS_CHAT_ID"]
+    return str(JARVIS_CHAT_ID)
 
 def _trend_symbol(change_pct: float) -> str:
     """Return a triangle symbol representing market movement.
@@ -62,6 +62,7 @@ def _validate_stock_entry(s: dict) -> bool:
         return False
 
 
+@retry(max_attempts=3, base_delay=1.0, exceptions=(ConnectionError, Timeout, requests.RequestException))
 def send(message: str) -> bool:
     """텍스트 메시지 전송. HTML parse_mode 사용."""
     try:
@@ -83,7 +84,7 @@ def send_portfolio_report(stocks_data: list) -> bool:
     각 항목: {code, name, close, change_pct, quantity, buy_price(optional)}
     """
     # Mode-based header: 'news' as default, 'diagnostic' to emphasize detailed analysis
-    mode = os.environ.get("JARVIS_TELEGRAM_MODE", "news").lower()
+    mode = JARVIS_TELEGRAM_MODE
     # Normalize mode to a known set to avoid unintended verbose diagnostics
     if mode not in ("news", "diagnostic"):
         mode = "news"

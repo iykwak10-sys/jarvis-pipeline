@@ -10,15 +10,15 @@ from pathlib import Path
 from typing import Optional
 
 import requests
-from dotenv import load_dotenv
+from requests.exceptions import ConnectionError, Timeout
 
-load_dotenv(Path(__file__).parent.parent / ".env")
+from core.retry import retry
 
 BASE_URL = "https://openapi.koreainvestment.com:9443"
-TOKEN_URL = f"{BASE_URL}/oauth2/tokenP"
+TOKEN_URL=f"{BASE_URL}/oauth2/tokenP"
 PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
 INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
-TOKEN_CACHE = Path(__file__).parent.parent / "data" / ".kis_token.json"
+TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,7 @@ class TokenManager:
                 pass
         return False
 
+    @retry(max_attempts=3, base_delay=1.0, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def _issue_token(self) -> str:
         resp = requests.post(TOKEN_URL, json={
             "grant_type": "client_credentials",
@@ -76,9 +77,10 @@ class KISClient:
     """KIS REST API 래퍼"""
 
     def __init__(self):
+        from core.config import KIS_APP_KEY, KIS_APP_SECRET
         self._token_mgr = TokenManager(
-            os.environ["KIS_APP_KEY"],
-            os.environ["KIS_APP_SECRET"],
+            KIS_APP_KEY,
+            KIS_APP_SECRET,
         )
 
     def _headers(self) -> dict:
@@ -90,6 +92,7 @@ class KISClient:
             "tr_id": "FHKST01010100",
         }
 
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def get_price(self, code: str) -> dict:
         """단일 종목 현재가 조회. 반환: {code, close, change, change_pct, volume, high, low, open}"""
         resp = requests.get(PRICE_URL, headers=self._headers(), params={
@@ -109,6 +112,7 @@ class KISClient:
             "open": int(output.get("stck_oprc", 0)),
         }
 
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def get_index_price(self, iscd: str) -> dict:
         """국내 지수 현재가(직전 영업일 포함) 조회.
         iscd: '0001'=KOSPI, '1001'=KOSDAQ

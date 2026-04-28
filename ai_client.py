@@ -2,9 +2,10 @@ import os
 import httpx
 from typing import Optional, List, Dict
 
+from core.config import OPENROUTER_API_KEY
+
 # 정확한 오픈라우터 엔드포인트로 고정합니다.
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 async def ai_chat(prompt: str, model: str = "openai/gpt-5-nano", history: Optional[List[Dict]] = None) -> str:
     if not API_KEY:

@@ -3,23 +3,14 @@
 
 import json
 import logging
-import os
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-load_dotenv(Path(__file__).parent / ".env")
+from core.config import DATA_DIR, LOG_DIR
 
 from core import portfolio, notifier, notion_saver
 from core.kis_client import KISClient
-
-BASE_DIR = Path(__file__).parent
-DATA_DIR = BASE_DIR / "data"
-LOG_DIR = BASE_DIR / "logs"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
-LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
