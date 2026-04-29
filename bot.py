@@ -2,6 +2,8 @@
 """Telegram 봇 — 종목 추가/삭제/조회 명령어 처리 (별도 프로세스, polling 방식)"""
 
 import asyncio
+import atexit
+import fcntl
 import logging
 import os
 from logging.handlers import RotatingFileHandler
@@ -30,6 +32,41 @@ logger = logging.getLogger(__name__)
 
 ALLOWED_CHAT_ID = JARVIS_CHAT_ID
 
+# ── 파일 기반 잠금 (중복 인스턴스 방지) ──
+LOCK_PATH = "/tmp/jarvis_bot.lock"
+_lock_fd = None
+
+def acquire_bot_lock():
+    global _lock_fd
+    if _lock_fd is not None:
+        return _lock_fd
+    try:
+        fd = os.open(LOCK_PATH, os.O_RDWR | os.O_CREAT)
+        fcntl.lockf(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        os.ftruncate(fd, 0)
+        os.write(fd, str(os.getpid()).encode())
+        _lock_fd = fd
+        return fd
+    except OSError:
+        return None
+
+def release_bot_lock():
+    global _lock_fd
+    if _lock_fd is not None:
+        try:
+            fcntl.lockf(_lock_fd, fcntl.LOCK_UN)
+        except Exception:
+            pass
+        try:
+            os.close(_lock_fd)
+        except Exception:
+            pass
+        _lock_fd = None
+        try:
+            os.remove(LOCK_PATH)
+        except OSError:
+            pass
+
 
 # 1. 타이핑 상태를 유지하는 백그라운드 함수
 async def keep_typing(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
@@ -48,44 +85,59 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     chat_id = update.effective_chat.id
     user_text = update.message.text
+    logger.info(f"메시지 수신: chat_id={chat_id}, text={user_text[:50]}...")
 
     # 타이핑 루프 시작 ('점 세 개' 표시 시작)
     typing_task = asyncio.create_task(keep_typing(context, chat_id))
 
+    # Hermes CLI 호출 및 응답 처리
+    response = None
     try:
-        # 비동기로 Hermes CLI 호출 (봇이 얼어붙는 것을 방지)
         process = await asyncio.create_subprocess_exec(
-            "hermes", "chat", "-q", user_text, "-Q",
+            "/Users/kwaksmacmini/.local/bin/hermes", "chat",
+            "-q", user_text, "-Q",
+            "-m", "deepseek-v4-flash",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
 
-        # 60초 타임아웃 적용하여 대기
+        # 최대 180초 대기
+        stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=180.0)
+        response = stdout.decode().strip() if stdout else ""
+        if not response:
+            response = stderr.decode().strip() if stderr else "응답 내용이 없습니다."
+        logger.info(f"Hermes 응답: {response[:100]}...")
+
+    except asyncio.TimeoutError:
         try:
-            stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=60.0)
-
-            # 응답 텍스트 디코딩
-            response = stdout.decode().strip() if stdout else ""
-            if not response:
-                response = stderr.decode().strip() if stderr else "응답 내용이 없습니다."
-
-        except asyncio.TimeoutError:
             process.kill()
-            response = "⏳ 응답 시간이 초과되었습니다 (60초)."
-
-        # 답변이 준비되었으므로 타이핑 루프 종료
-        typing_task.cancel()
-
-        # 텔레그램으로 최종 결과 전송
-        await update.message.reply_text(response[:4000])
+        except Exception:
+            pass
+        response = "⏳ 응답 시간이 초과되었습니다 (180초). 다시 시도해주세요."
+        logger.warning("Hermes 호출 타임아웃 (180초)")
 
     except Exception as e:
-        typing_task.cancel()
+        try:
+            process.kill()
+        except Exception:
+            pass
+        response = "⚠️ AI 호출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
         logger.error(f"Hermes Agent 호출 오류: {e}")
-        await update.message.reply_text("⚠️ AI 호출 중 시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
+
+    finally:
+        typing_task.cancel()
+        if response:
+            await update.message.reply_text(response[:4000])
 
 
 def main() -> None:
+    # ── 단일 인스턴스 잠금 획득 ──
+    lock_fd = acquire_bot_lock()
+    if lock_fd is None:
+        logger.error("Jarvis bot is already running on this host. Stop the other instance and retry.")
+        raise SystemExit("Jarvis bot is already running. Exiting.")
+    atexit.register(release_bot_lock)
+
     token = os.environ.get("JARVIS_BOT_TOKEN") or JARVIS_BOT_TOKEN
     app = Application.builder().token(token).build()
 
