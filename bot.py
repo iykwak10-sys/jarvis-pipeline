@@ -97,6 +97,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "/Users/kwaksmacmini/.local/bin/hermes", "chat",
             "-q", user_text, "-Q",
             "-m", "deepseek-v4-flash",
+            "--yolo",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
