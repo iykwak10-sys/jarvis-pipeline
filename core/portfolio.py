@@ -1,35 +1,40 @@
 # core/portfolio.py
-"""portfolio.json 단일 소스 관리 — 로드/저장/추가/삭제 (fcntl 파일 Lock 포함)"""
+"""SSOT CSV 포트폴리오 로더 — fcntl 동시성 보호 포함
 
+모든 종목 데이터는 개인투자비서 Agent/data/portfolio.csv (SSOT) 를 읽는다.
+이 모듈은 jarvis-pipeline 형식({"stocks": [{code, name, sector, quantity, buy_price}]})으로 변환 제공.
+쓰기 작업(매수/매도)은 SSOT CSV를 직접 수정하지 않고 SSOT의 runbook/대시보드가 처리.
+"""
+
+import csv
 import fcntl
-import json
 import logging
 import os
 from pathlib import Path
 from typing import Optional
 
-PORTFOLIO_FILE = Path(__file__).parent.parent / "portfolio.json"
+# ── SSOT CSV 경로 ────────────────────────────────────────────────
+SSOT_CSV = Path("/Users/kwaksmacmini/개인투자비서 Agent/data/portfolio.csv")
 LOCK_PATH = "/tmp/jarvis_portfolio.lock"
 logger = logging.getLogger(__name__)
 
 
 class PortfolioLock:
-    """파일 기반 flock을 통한 portfolio.json 동시 접근 제어.
+    """파일 기반 flock을 통한 SSOT CSV 동시 접근 제어 (읽기 전용).
 
-    모든 load/save 작업이 이 Lock을 통하도록 강제.
-    bot.py/bot_webhook.py/scheduler.py 간 race condition 방지.
+    모든 load 작업이 이 Lock을 통하도록 강제.
+    bot.py/scheduler.py 간 race condition 방지.
     """
 
     def __init__(self):
         self._fd: Optional[int] = None
 
     def acquire(self) -> None:
-        """전역 flock 획득 (블로킹, 최대 10초 대기 후 예외)"""
         if self._fd is not None:
-            return  # 이미 보유 중
+            return
         fd = os.open(LOCK_PATH, os.O_RDWR | os.O_CREAT)
         try:
-            fcntl.flock(fd, fcntl.LOCK_EX)  # 블로킹 Lock
+            fcntl.flock(fd, fcntl.LOCK_SH)  # 공유 Lock (읽기 전용)
             os.ftruncate(fd, 0)
             os.write(fd, str(os.getpid()).encode())
         except OSError:
@@ -38,7 +43,6 @@ class PortfolioLock:
         self._fd = fd
 
     def release(self) -> None:
-        """flock 해제"""
         if self._fd is not None:
             try:
                 fcntl.flock(self._fd, fcntl.LOCK_UN)
@@ -58,14 +62,11 @@ class PortfolioLock:
         self.release()
 
 
-# 전역 Lock 인스턴스 (모듈 수준에서 공유)
 _portfolio_lock = PortfolioLock()
 
 
 def _with_lock(func):
-    """데코레이터: portfolio.json 작업 시 Lock 자동 획득/해제"""
     import functools
-
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         with _portfolio_lock:
@@ -73,61 +74,61 @@ def _with_lock(func):
     return wrapper
 
 
+# ── CSV 컬럼 ─────────────────────────────────────────────────────
+_CSV_COLUMNS = [
+    "ticker", "company_name", "market", "sector", "holding_status",
+    "quantity", "avg_cost", "currency", "target_weight",
+    "thesis", "risk_notes", "priority",
+]
+
+
 @_with_lock
 def load() -> list:
-    """portfolio.json에서 종목 목록 로드"""
-    with open(PORTFOLIO_FILE, encoding="utf-8") as f:
-        return json.load(f)["stocks"]
+    """SSOT CSV에서 active 종목만 로드 → jarvis-pipeline 형식 dict 리스트"""
+    if not SSOT_CSV.exists():
+        logger.error(f"SSOT CSV 누락: {SSOT_CSV}")
+        return []
 
-
-@_with_lock
-def save(stocks: list) -> None:
-    """종목 목록을 portfolio.json에 저장"""
-    PORTFOLIO_FILE.write_text(
-        json.dumps({"stocks": stocks}, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    logger.info(f"portfolio.json 저장 완료 ({len(stocks)}종목)")
-
-
-def add(code: str, name: str, sector: str = "기타",
-        quantity: int = 0, buy_price: Optional[int] = None) -> bool:
-    """종목 추가. 이미 존재하면 False 반환"""
-    with _portfolio_lock:
-        stocks = _load_unlocked()
-    if any(s["code"] == code for s in stocks):
-        logger.warning(f"이미 존재하는 종목: {code} {name}")
-        return False
-    entry: dict = {"code": code, "name": name, "sector": sector, "quantity": quantity}
-    if buy_price is not None:
-        entry["buy_price"] = buy_price
-    stocks.append(entry)
-    with _portfolio_lock:
-        save(stocks)
-    logger.info(f"종목 추가: {code} {name}")
-    return True
-
-
-def remove(code: str) -> bool:
-    """종목 삭제. 존재하지 않으면 False 반환"""
-    with _portfolio_lock:
-        stocks = _load_unlocked()
-    new_stocks = [s for s in stocks if s["code"] != code]
-    if len(new_stocks) == len(stocks):
-        logger.warning(f"존재하지 않는 종목: {code}")
-        return False
-    with _portfolio_lock:
-        save(new_stocks)
-    logger.info(f"종목 삭제: {code}")
-    return True
-
-
-def _load_unlocked() -> list:
-    """Lock 없이 raw 로드 (add/remove 내부에서 Lock 재진입 방지용)"""
-    with open(PORTFOLIO_FILE, encoding="utf-8") as f:
-        return json.load(f)["stocks"]
+    stocks = []
+    with open(SSOT_CSV, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            ticker = row.get("ticker", "").strip()
+            if not ticker or ticker in ("CASH_KRW", "DEPOSIT_KRW"):
+                continue
+            stocks.append({
+                "code": ticker,
+                "name": row.get("company_name", "").strip(),
+                "sector": row.get("sector", "").strip(),
+                "quantity": int(row.get("quantity", 0) or 0),
+                "buy_price": int(float(row.get("avg_cost", 0) or 0)),
+            })
+    logger.info(f"SSOT CSV 로드: {len(stocks)}종목")
+    return stocks
 
 
 def codes() -> list:
     """종목 코드 목록만 반환"""
     return [s["code"] for s in load()]
+
+
+# ── 하위 호환: 기존 add/remove/save 함수 (no-op 또는 경고) ──────
+
+def save(stocks: list) -> None:
+    """⚠️ SSOT CSV는 이 모듈에서 직접 수정하지 않습니다.
+    수정은 개인투자비서 Agent 대시보드나 portfolio.csv 직접 편집으로만 가능.
+    """
+    logger.warning("SSOT CSV 직접 수정은 지원되지 않습니다. portfolio.csv를 직접 편집하세요.")
+
+
+def add(code: str, name: str, sector: str = "기타",
+        quantity: int = 0, buy_price: Optional[int] = None) -> bool:
+    """⚠️ 종목 추가는 SSOT CSV를 통해 해주세요."""
+    logger.warning(f"SSOT CSV 직접 수정 불가. portfolio.csv에 '{code} {name}'을 직접 추가하세요.")
+    return False
+
+
+def remove(code: str) -> bool:
+    """⚠️ 종목 삭제는 SSOT CSV를 통해 해주세요."""
+    logger.warning(f"SSOT CSV 직접 수정 불가. portfolio.csv에서 '{code}'를 직접 삭제하세요.")
+    return False
