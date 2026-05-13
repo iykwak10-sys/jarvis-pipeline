@@ -52,7 +52,8 @@ def get_bool(key: str, default: bool = False) -> bool:
 # ── 주요 경로 상수 ──────────────────────────────────────────────
 DATA_DIR = PROJECT_ROOT / "data"
 LOG_DIR = PROJECT_ROOT / "logs"
-PORTFOLIO_FILE = PROJECT_ROOT / "portfolio.json"
+# SSOT 포트폴리오 CSV — 모든 프로젝트의 단일 진실 원천
+PORTFOLIO_FILE = Path(os.path.expanduser("~/개인투자비서 Agent/data/portfolio.csv"))
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)

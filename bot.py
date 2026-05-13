@@ -102,8 +102,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             stderr=asyncio.subprocess.PIPE
         )
 
-        # 최대 180초 대기
-        stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=180.0)
+        # 최대 360초 대기 (Hermes CLI terminal.timeout=300s보다 여유있게)
+        stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=360.0)
         response = stdout.decode().strip() if stdout else ""
         if not response:
             response = stderr.decode().strip() if stderr else "응답 내용이 없습니다."
