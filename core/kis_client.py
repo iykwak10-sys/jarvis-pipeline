@@ -183,9 +183,9 @@ class KISClient:
         }
 
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
-    def get_investor_daily(self, code: str) -> dict:
-        """당일 외국인·기관·개인 순매수 수량 조회
-        반환: {frgn_qty, orgn_qty, indv_qty}  (양수=순매수, 음수=순매도)
+    def get_investor_history(self, code: str) -> list:
+        """외국인·기관·개인 순매수 히스토리 반환 (최근 30일, 최신순)
+        각 항목: {date, frgn_qty, orgn_qty, indv_qty}
         """
         headers = self._headers()
         headers["tr_id"] = "FHKST01010900"
@@ -195,11 +195,12 @@ class KISClient:
         }, timeout=10)
         resp.raise_for_status()
         items = resp.json().get("output", [])
-        if not items:
-            return {"frgn_qty": 0, "orgn_qty": 0, "indv_qty": 0}
-        today = items[0]  # 가장 최근일
-        return {
-            "frgn_qty": int(today.get("frgn_ntby_qty", 0)),
-            "orgn_qty": int(today.get("orgn_ntby_qty", 0)),
-            "indv_qty": int(today.get("indv_ntby_qty", 0)),
-        }
+        return [
+            {
+                "date": item.get("stck_bsop_date", ""),
+                "frgn_qty": int(item.get("frgn_ntby_qty", 0)),
+                "orgn_qty": int(item.get("orgn_ntby_qty", 0)),
+                "indv_qty": int(item.get("indv_ntby_qty", 0)),
+            }
+            for item in items
+        ]
