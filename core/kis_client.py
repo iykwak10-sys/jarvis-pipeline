@@ -18,6 +18,7 @@ BASE_URL = "https://openapi.koreainvestment.com:9443"
 TOKEN_URL=f"{BASE_URL}/oauth2/tokenP"
 PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
 INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
+INVESTOR_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor"
 TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
 
 logger = logging.getLogger(__name__)
@@ -153,3 +154,52 @@ class KISClient:
                                  "high": 0, "low": 0, "open": 0})
             time.sleep(0.1)
         return results
+
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
+    def get_price_full(self, code: str) -> dict:
+        """단일 종목 전체 지표 조회 (주도주 스캐너용)
+        추가 필드: acml_tr_pbmn(거래대금), prdy_vol(전일거래량),
+                   d250_hgpr(52주고가), hts_avls(시가총액억), name(종목명)
+        """
+        resp = requests.get(PRICE_URL, headers=self._headers(), params={
+            "fid_cond_mrkt_div_code": "J",
+            "fid_input_iscd": code,
+        }, timeout=10)
+        resp.raise_for_status()
+        o = resp.json().get("output", {})
+        return {
+            "code": code,
+            "name": o.get("hts_kor_isnm", code),
+            "close": int(o.get("stck_prpr", 0)),
+            "change_pct": float(o.get("prdy_ctrt", 0)),
+            "volume": int(o.get("acml_vol", 0)),
+            "vol_rate": float(o.get("prdy_vrss_vol_rate", 0)),  # 전일 대비 거래량 비율(%)
+            "trade_value_m": int(o.get("acml_tr_pbmn", 0)),  # 단위: 원
+            "high52": int(o.get("d250_hgpr", 0)),
+            "market_cap_100m": int(o.get("hts_avls", 0)),    # 단위: 억원
+            "foreign_ratio": float(o.get("hts_frgn_ehrt", 0)),
+            "high": int(o.get("stck_hgpr", 0)),
+            "low": int(o.get("stck_lwpr", 0)),
+        }
+
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
+    def get_investor_daily(self, code: str) -> dict:
+        """당일 외국인·기관·개인 순매수 수량 조회
+        반환: {frgn_qty, orgn_qty, indv_qty}  (양수=순매수, 음수=순매도)
+        """
+        headers = self._headers()
+        headers["tr_id"] = "FHKST01010900"
+        resp = requests.get(INVESTOR_URL, headers=headers, params={
+            "fid_cond_mrkt_div_code": "J",
+            "fid_input_iscd": code,
+        }, timeout=10)
+        resp.raise_for_status()
+        items = resp.json().get("output", [])
+        if not items:
+            return {"frgn_qty": 0, "orgn_qty": 0, "indv_qty": 0}
+        today = items[0]  # 가장 최근일
+        return {
+            "frgn_qty": int(today.get("frgn_ntby_qty", 0)),
+            "orgn_qty": int(today.get("orgn_ntby_qty", 0)),
+            "indv_qty": int(today.get("indv_ntby_qty", 0)),
+        }

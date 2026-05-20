@@ -6,12 +6,15 @@ from datetime import date, datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
+import csv
+
 import feedparser
 import holidays
 import yfinance as yf
 
-from core.config import LOG_DIR
+from core.config import LOG_DIR, PORTFOLIO_FILE
 from core.kis_client import KISClient
+from core.leading_stock_scanner import scan as scan_leading, format_telegram as fmt_leading
 from core.notifier import send
 
 logging.basicConfig(
@@ -196,6 +199,36 @@ def get_news_rss(feed_url: str, label: str, max_items: int = 3) -> str:
     return "\n".join(lines)
 
 
+def _load_portfolio() -> dict:
+    """SSOT CSV에서 활성 국내 종목 코드→이름 매핑 반환 (KRW + active)"""
+    mapping = {}
+    try:
+        with open(PORTFOLIO_FILE, newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("holding_status") == "active" and row.get("currency") == "KRW":
+                    ticker = row.get("ticker", "").strip()
+                    name = row.get("company_name", ticker).strip()
+                    if ticker and len(ticker) == 6 and ticker.isdigit():
+                        mapping[ticker] = name
+    except Exception as e:
+        logger.warning(f"포트폴리오 로딩 실패: {e}")
+    return mapping
+
+
+def get_leading_stocks() -> str:
+    """포트폴리오 종목 대상 주도주 7-Condition 스캔 (KIS API)"""
+    portfolio = _load_portfolio()
+    if not portfolio:
+        return "🔍 <b>주도주 스캐너</b>\n• 포트폴리오 종목 없음"
+    logger.info(f"주도주 스캔 대상: {len(portfolio)}종목")
+    try:
+        results = scan_leading(list(portfolio.keys()), name_map=portfolio, min_score=4)
+        return fmt_leading(results)
+    except Exception as e:
+        logger.error(f"주도주 스캔 실패: {e}")
+        return f"🔍 <b>주도주 스캐너</b>\n• 데이터 조회 실패: {e}"
+
+
 def run() -> None:
     if not is_business_day():
         return
@@ -206,10 +239,11 @@ def run() -> None:
 
     logger.info("아침 브리핑 수집 시작")
 
-    kr_market = get_kr_market()   # KIS API 고정
-    market    = get_us_market()
-    fx        = get_fx()
-    commod    = get_commodities()
+    kr_market    = get_kr_market()   # KIS API 고정
+    market       = get_us_market()
+    fx           = get_fx()
+    commod       = get_commodities()
+    leading      = get_leading_stocks()  # 주도주 스캐너
 
     # 뉴스 RSS
     intl_news = get_news_rss(
@@ -234,14 +268,16 @@ def run() -> None:
     # 메시지 분할 전송 (Telegram 4096자 제한)
     blocks = [
         f"{header}\n\n{kr_market}\n\n{market}\n\n{fx}\n\n{commod}",
+        f"{leading}",
         f"{intl_news}",
         f"{econ_news}",
         f"{kr_news}\n\n{footer}",
     ]
 
+    total = len(blocks)
     for i, block in enumerate(blocks, 1):
         ok = send(block)
-        logger.info(f"브리핑 블록 {i}/4 전송: {'성공' if ok else '실패'}")
+        logger.info(f"브리핑 블록 {i}/{total} 전송: {'성공' if ok else '실패'}")
 
 
 if __name__ == "__main__":
