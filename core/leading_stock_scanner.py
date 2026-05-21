@@ -196,29 +196,35 @@ def scan(
 
 
 def format_telegram(results: List[StockScore]) -> str:
-    """스캔 결과를 Telegram HTML 블록으로 변환"""
+    """스캔 결과를 간결한 Telegram HTML 테이블로 변환"""
     if not results:
-        return (
-            "🔍 <b>주도주 포착 스캐너</b>\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            "• 오늘은 조건을 충족한 주도주 후보가 없습니다."
+        return "🔍 <b>주도주 스캐너</b>\n• 오늘 조건 충족 종목 없음"
+
+    header = f"🔍 <b>주도주 스캐너</b> — <b>{len(results)}종목 포착</b>"
+    medal = {9: "🥇", 8: "🥇", 7: "🥈", 6: "🥉", 5: "4️⃣"}
+
+    # 테이블 헤더
+    col = "종목       점수  등락    거래량   외국인  기관"
+    sep = "─" * len(col)
+    rows = [col, sep]
+
+    for s in results:
+        m = s.metrics
+        name = s.name[:7]  # 최대 7자
+        rows.append(
+            f"{name:<9} {s.score}/{MAX_CONDITIONS}"
+            f"  {m.get('등락률', '?'):>6}"
+            f"  {m.get('거래량비율', '?'):>6}"
+            f"  {m.get('외국인연속', '?'):>4}"
+            f"  {m.get('기관연속', '?'):>4}"
         )
 
-    lines = [
-        "🔍 <b>주도주 포착 스캐너 (9-Condition)</b>",
-        "━━━━━━━━━━━━━━━━━━━━",
-    ]
-    medal = {9: "🥇", 8: "🥇", 7: "🥈", 6: "🥉", 5: "4️⃣"}
+    # 통과 조건 요약 (종목별 한 줄)
+    detail_lines = []
     for s in results:
         icon = medal.get(s.score, "⭐")
-        cond_icons = " ".join([f"✅{c}" for c in s.passed])
-        metric_str = " | ".join(f"{k}:{v}" for k, v in s.metrics.items())
-        lines.append(
-            f"\n{icon} <b>{s.name}</b> ({s.code}) — {s.score}/{MAX_CONDITIONS}점\n"
-            f"   {cond_icons}\n"
-            f"   {metric_str}"
-        )
+        detail_lines.append(f"{icon} <b>{s.name}</b>: {' '.join(s.passed)}")
 
-    lines.append("\n━━━━━━━━━━━━━━━━━━━━")
-    lines.append(f"📊 총 {len(results)}종목 포착 (9조건 중 {min(s.score for s in results)}개 이상 충족)")
-    return "\n".join(lines)
+    table = "<pre>" + "\n".join(rows) + "</pre>"
+    details = "\n".join(detail_lines)
+    return f"{header}\n{table}\n{details}"
