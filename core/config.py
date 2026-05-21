@@ -74,6 +74,19 @@ OPENROUTER_API_KEY: Optional[str] = get("OPENROUTER_API_KEY")
 OPENROUTER_MODEL: str = get("MODEL", "openai/gpt-5-nano")
 OPENROUTER_BASE_URL: str = get("BASE_URL", "https://openrouter.ai/api/v1")
 
+# Anthropic / Raphael Stock Analysis
+ANTHROPIC_API_KEY: Optional[str] = get("ANTHROPIC_API_KEY")
+ANTHROPIC_MODEL: str = get("ANTHROPIC_MODEL", "claude-3-7-sonnet-latest")
+RAPHAEL_BRAIN_DIR: str = get("RAPHAEL_BRAIN_DIR", os.path.expanduser("~/00_Raphael_Hermes_Brain"))
+RAPHAEL_INSTRUCTION_DIR: str = get(
+    "RAPHAEL_INSTRUCTION_DIR",
+    os.path.join(RAPHAEL_BRAIN_DIR, "Instruction_Set"),
+)
+RAPHAEL_CLAUDE_SKILL_DIR: str = get(
+    "RAPHAEL_CLAUDE_SKILL_DIR",
+    os.path.expanduser("~/.claude/skills/raphael-stock-analysis"),
+)
+
 # Notion
 NOTION_TOKEN: Optional[str] = get("NOTION_TOKEN")
 NOTION_STOCK_DB_ID: Optional[str] = get("NOTION_STOCK_DB_ID")
