@@ -24,6 +24,22 @@ TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
 logger = logging.getLogger(__name__)
 
 
+def _si(val, default: int = 0) -> int:
+    """빈 문자열·None을 0으로 폴백하는 안전한 int 변환 (장중 KIS API 빈 문자열 대응)"""
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return default
+
+
+def _sf(val, default: float = 0.0) -> float:
+    """빈 문자열·None을 0.0으로 폴백하는 안전한 float 변환"""
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return default
+
+
 class TokenManager:
     """KIS API 토큰 발급 및 캐시 관리"""
 
@@ -104,13 +120,13 @@ class KISClient:
         output = resp.json().get("output", {})
         return {
             "code": code,
-            "close": int(output.get("stck_prpr", 0)),
-            "change": int(output.get("prdy_vrss", 0)),
-            "change_pct": float(output.get("prdy_ctrt", 0)),
-            "volume": int(output.get("acml_vol", 0)),
-            "high": int(output.get("stck_hgpr", 0)),
-            "low": int(output.get("stck_lwpr", 0)),
-            "open": int(output.get("stck_oprc", 0)),
+            "close": _si(output.get("stck_prpr")),
+            "change": _si(output.get("prdy_vrss")),
+            "change_pct": _sf(output.get("prdy_ctrt")),
+            "volume": _si(output.get("acml_vol")),
+            "high": _si(output.get("stck_hgpr")),
+            "low": _si(output.get("stck_lwpr")),
+            "open": _si(output.get("stck_oprc")),
         }
 
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
@@ -135,9 +151,9 @@ class KISClient:
         output = data.get("output1") or data.get("output") or {}
         return {
             "iscd": iscd,
-            "current": float(output.get("bstp_nmix_prpr", 0)),
-            "change": float(output.get("bstp_nmix_prdy_vrss", 0)),
-            "change_pct": float(output.get("bstp_nmix_prdy_ctrt", 0)),
+            "current": _sf(output.get("bstp_nmix_prpr")),
+            "change": _sf(output.get("bstp_nmix_prdy_vrss")),
+            "change_pct": _sf(output.get("bstp_nmix_prdy_ctrt")),
             "sign": output.get("prdy_vrss_sign", "3"),  # 3=보합
         }
 
@@ -170,16 +186,16 @@ class KISClient:
         return {
             "code": code,
             "name": o.get("hts_kor_isnm", code),
-            "close": int(o.get("stck_prpr", 0)),
-            "change_pct": float(o.get("prdy_ctrt", 0)),
-            "volume": int(o.get("acml_vol", 0)),
-            "vol_rate": float(o.get("prdy_vrss_vol_rate", 0)),  # 전일 대비 거래량 비율(%)
-            "trade_value_m": int(o.get("acml_tr_pbmn", 0)),  # 단위: 원
-            "high52": int(o.get("d250_hgpr", 0)),
-            "market_cap_100m": int(o.get("hts_avls", 0)),    # 단위: 억원
-            "foreign_ratio": float(o.get("hts_frgn_ehrt", 0)),
-            "high": int(o.get("stck_hgpr", 0)),
-            "low": int(o.get("stck_lwpr", 0)),
+            "close": _si(o.get("stck_prpr")),
+            "change_pct": _sf(o.get("prdy_ctrt")),
+            "volume": _si(o.get("acml_vol")),
+            "vol_rate": _sf(o.get("prdy_vrss_vol_rate")),  # 전일 대비 거래량 비율(%)
+            "trade_value_m": _si(o.get("acml_tr_pbmn")),  # 단위: 원
+            "high52": _si(o.get("d250_hgpr")),
+            "market_cap_100m": _si(o.get("hts_avls")),    # 단위: 억원
+            "foreign_ratio": _sf(o.get("hts_frgn_ehrt")),
+            "high": _si(o.get("stck_hgpr")),
+            "low": _si(o.get("stck_lwpr")),
         }
 
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
@@ -198,9 +214,9 @@ class KISClient:
         return [
             {
                 "date": item.get("stck_bsop_date", ""),
-                "frgn_qty": int(item.get("frgn_ntby_qty", 0)),
-                "orgn_qty": int(item.get("orgn_ntby_qty", 0)),
-                "indv_qty": int(item.get("indv_ntby_qty", 0)),
+                "frgn_qty": _si(item.get("frgn_ntby_qty")),
+                "orgn_qty": _si(item.get("orgn_ntby_qty")),
+                "indv_qty": _si(item.get("indv_ntby_qty")),
             }
             for item in items
         ]
