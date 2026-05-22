@@ -14,6 +14,7 @@ import yfinance as yf
 from core.config import LOG_DIR, OPENROUTER_MODEL, PORTFOLIO_FILE
 from core.kis_client import KISClient
 from core.leading_stock_scanner import scan as scan_leading, format_telegram as fmt_leading
+from core.universe_scanner import scan_market, format_universe_telegram
 from core.notifier import send
 
 logging.basicConfig(
@@ -159,17 +160,37 @@ def _load_portfolio() -> dict:
     return mapping
 
 
-def get_leading_stocks() -> str:
-    portfolio = _load_portfolio()
+def get_leading_stocks(portfolio: dict) -> str:
+    """포트폴리오 종목 대상 12-Condition 주도주 스캔"""
     if not portfolio:
-        return "🔍 <b>주도주 스캐너</b>\n• 포트폴리오 종목 없음"
-    logger.info(f"주도주 스캔 대상: {len(portfolio)}종목")
+        return "🔍 <b>주도주 스캐너 [포트폴리오]</b>\n• 포트폴리오 종목 없음"
+    logger.info(f"포트폴리오 주도주 스캔 대상: {len(portfolio)}종목")
     try:
-        results = scan_leading(list(portfolio.keys()), name_map=portfolio, min_score=4)
-        return fmt_leading(results)
+        results = scan_leading(
+            list(portfolio.keys()),
+            name_map=portfolio,
+            min_score=6,
+            portfolio_codes=set(portfolio.keys()),
+        )
+        return fmt_leading(results, title="주도주 스캐너 [포트폴리오]")
     except Exception as e:
-        logger.error(f"주도주 스캔 실패: {e}")
-        return f"🔍 <b>주도주 스캐너</b>\n• 조회 실패: {e}"
+        logger.error(f"포트폴리오 주도주 스캔 실패: {e}")
+        return f"🔍 <b>주도주 스캐너 [포트폴리오]</b>\n• 조회 실패: {e}"
+
+
+def get_universe_scan(portfolio: dict) -> str:
+    """시장 전체 유니버스 주도주 스캔 (KOSPI + KOSDAQ 상위 80종목)"""
+    logger.info("시장 유니버스 주도주 스캔 시작")
+    try:
+        result = scan_market(
+            portfolio_codes=set(portfolio.keys()),
+            name_map=portfolio,
+            min_score=6,
+        )
+        return format_universe_telegram(result)
+    except Exception as e:
+        logger.error(f"유니버스 스캔 실패: {e}")
+        return f"🌐 <b>시장 유니버스 스캔</b>\n• 조회 실패: {e}"
 
 
 # ════════════════════════════════════════════════════════════════
@@ -336,10 +357,11 @@ def run() -> None:
 
     portfolio = _load_portfolio()
 
-    market_block   = get_market_summary()
-    leading_block  = get_leading_stocks()
-    us_block, ctx  = get_us_data_block()
-    ai_block       = get_ai_strategy_block(ctx, portfolio)
+    market_block    = get_market_summary()
+    leading_block   = get_leading_stocks(portfolio)
+    universe_block  = get_universe_scan(portfolio)
+    us_block, ctx   = get_us_data_block()
+    ai_block        = get_ai_strategy_block(ctx, portfolio)
 
     header = (
         f"🌅 <b>모닝 브리핑 │ {today_str} ({day_of_week})</b>\n"
@@ -350,6 +372,7 @@ def run() -> None:
     blocks = [
         f"{header}\n\n{market_block}",
         leading_block,
+        universe_block,
         us_block,
         f"{ai_block}\n\n{footer}",
     ]

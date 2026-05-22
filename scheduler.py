@@ -121,6 +121,17 @@ def job_us_alert() -> None:
     notifier.send_us_market_alert()
 
 
+def job_intraday_monitor(label: str, initial: bool = False) -> None:
+    """장중 주도주 델타 알림 — 09:10(초기) / 10:30 / 13:30 / 15:00"""
+    if not is_weekday():
+        return
+    logger.info(f"⚡ 장중 주도주 모니터 [{label}] {'(초기)' if initial else ''}")
+    args = ["--label", label]
+    if initial:
+        args = ["--initial"] + args
+    run_script("intraday_monitor.py", *args)
+
+
 def job_health_check() -> None:
     logger.info(f"💚 Health Check OK — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
 
@@ -139,10 +150,17 @@ def main() -> None:
     schedule.every().day.at("14:30").do(job_price_alert)
     schedule.every().day.at("15:35").do(job_closing)
 
+    # Phase 3 — 장중 주도주 실시간 모니터 (4회)
+    schedule.every().day.at("09:10").do(job_intraday_monitor, label="09:10", initial=True)
+    schedule.every().day.at("10:30").do(job_intraday_monitor, label="10:30")
+    schedule.every().day.at("13:30").do(job_intraday_monitor, label="13:30")
+    schedule.every().day.at("15:00").do(job_intraday_monitor, label="15:00")
+
     logger.info("🚀 Jarvis 스케줄러 시작")
     logger.info("  06:30 아침 브리핑 | 06:05 미국장 마감 알림 | 09:00 헬스체크")
     logger.info("  10:00/13:00/14:30 급등락 알림 | 15:35 마감 수집")
     logger.info("  5분 간격 장중 실시간 수집")
+    logger.info("  ⚡ 장중 주도주 모니터: 09:10(초기) / 10:30 / 13:30 / 15:00")
 
     while True:
         schedule.run_pending()

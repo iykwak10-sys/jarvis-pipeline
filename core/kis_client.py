@@ -19,6 +19,8 @@ TOKEN_URL=f"{BASE_URL}/oauth2/tokenP"
 PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
 INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
 INVESTOR_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor"
+DAILY_PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-price"
+VOLUME_RANK_URL = f"{BASE_URL}/uapi/domestic-stock/v1/ranking/volume"
 TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
 
 logger = logging.getLogger(__name__)
@@ -219,4 +221,68 @@ class KISClient:
                 "indv_qty": _si(item.get("indv_ntby_qty")),
             }
             for item in items
+        ]
+
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
+    def get_daily_close_prices(self, code: str, n: int = 120) -> list:
+        """일봉 종가 리스트 반환 (oldest→newest 정렬, MA/RSI 계산용)
+
+        Returns:
+            list[float]: 최대 n개 종가 (오래된 순 → 최신 순)
+        """
+        headers = self._headers()
+        headers["tr_id"] = "FHKST01010400"
+        resp = requests.get(DAILY_PRICE_URL, headers=headers, params={
+            "fid_cond_mrkt_div_code": "J",
+            "fid_input_iscd": code,
+            "fid_input_date_1": "",
+            "fid_input_date_2": "",
+            "fid_period_div_code": "D",
+            "fid_org_adj_prc": "1",
+        }, timeout=10)
+        resp.raise_for_status()
+        items = resp.json().get("output", [])[:n]
+        closes = [_sf(item.get("stck_clpr")) for item in items]
+        closes = [c for c in closes if c > 0]
+        closes.reverse()  # KIS는 최신순 반환 → oldest first로 뒤집기
+        return closes
+
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
+    def get_top_trade_value_codes(self, market: str = "J", top_n: int = 50) -> list:
+        """거래대금 상위 종목 코드 리스트 반환 (유니버스 확장용)
+
+        Args:
+            market: "J"=KOSPI, "Q"=KOSDAQ
+            top_n: 반환할 최대 종목 수 (API 기본 30개 제한)
+
+        Returns:
+            list[str]: 6자리 종목코드 리스트 (거래대금 내림차순)
+        """
+        headers = self._headers()
+        headers["tr_id"] = "FHPST01710000"
+        resp = requests.get(VOLUME_RANK_URL, headers=headers, params={
+            "fid_cond_mrkt_cls_code": market,
+            "fid_cond_scr_div_code": "20171",
+            "fid_input_iscd": "0000",
+            "fid_div_cls_code": "0",
+            "fid_blng_cls_code": "0",
+            "fid_trgt_cls_code": "111111111",
+            "fid_trgt_exls_cls_code": "0000000000",
+            "fid_input_price_1": "",
+            "fid_input_price_2": "",
+            "fid_vol_cnt": "",
+            "fid_input_date_1": "",
+        }, timeout=10)
+        resp.raise_for_status()
+        items = resp.json().get("output", [])
+        # acml_tr_pbmn(거래대금) 기준 내림차순 정렬
+        items_sorted = sorted(
+            items,
+            key=lambda x: _si(x.get("acml_tr_pbmn", 0)),
+            reverse=True,
+        )
+        return [
+            item["mksc_shrn_iscd"]
+            for item in items_sorted[:top_n]
+            if item.get("mksc_shrn_iscd")
         ]
