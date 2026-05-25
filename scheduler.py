@@ -11,10 +11,13 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
+import holidays
 import schedule
 
 from core import notifier
 from core.config import LOG_DIR
+
+KR_HOLIDAYS = holidays.KR()
 
 BASE_DIR = Path(__file__).parent
 PID_FILE = LOG_DIR / "scheduler.pid"
@@ -60,8 +63,19 @@ def start_bot() -> None:
 
 
 # ── 헬퍼 ─────────────────────────────────────────────────────────────────────
-def is_weekday() -> bool:
-    return datetime.now().weekday() < 5
+def is_trading_day() -> bool:
+    """한국 증시 개장일 여부 (주말 + 공휴일 제외)"""
+    today = datetime.now().date()
+    if today.weekday() >= 5:
+        return False
+    if today in KR_HOLIDAYS:
+        logger.info(f"⏭️ 오늘은 공휴일({KR_HOLIDAYS.get(today)}) — 스킵")
+        return False
+    return True
+
+
+# 하위 호환성 유지 (기존 코드 참조용)
+is_weekday = is_trading_day
 
 
 def run_script(script: str, *args: str) -> None:
