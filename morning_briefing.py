@@ -59,6 +59,30 @@ SECTOR_ETFS = {
     "XLRE": "부동산",
 }
 
+# ── 뉴스 RSS 피드 소스 ───────────────────────────────────────────
+INTL_FEEDS = [
+    ("https://feeds.bbci.co.uk/korean/rss.xml",              "BBC코리아"),
+    ("https://rss.dw.com/rdf/rss-ko-all",                    "DW한국어"),
+    ("https://www.rfi.fr/ko/rss",                            "RFI한국어"),
+    ("https://feeds.reuters.com/reuters/worldNews",           "Reuters"),
+]
+
+ECON_FEEDS = [
+    ("https://www.hankyung.com/feed/economy",                "한국경제"),
+    ("https://www.mk.co.kr/rss/40300001/",                   "매일경제"),
+    ("https://www.edaily.co.kr/rss/rss.asp?mallCd=00",      "이데일리"),
+    ("https://www.sedaily.com/rss/rss_economy.xml",          "서울경제"),
+    ("https://finance.yahoo.com/rss/headline",               "Yahoo Finance"),
+]
+
+KR_FEEDS = [
+    ("https://imnews.imbc.com/rss/news/news_00.xml",         "MBC뉴스"),
+    ("https://news.sbs.co.kr/news/newsflash/rssFeed.do",     "SBS뉴스"),
+    ("https://www.yonhapnewstv.co.kr/browse/feed/",          "연합뉴스TV"),
+    ("https://world.kbs.co.kr/rss/rss_news.htm?lang=k",     "KBS월드"),
+    ("https://www.khan.co.kr/rss/rssdata/kh_total.xml",     "경향신문"),
+]
+
 
 def is_business_day() -> bool:
     today = date.today()
@@ -198,13 +222,92 @@ def get_universe_scan(portfolio: dict) -> str:
 # 블록 3 — 미국장 분석 데이터 (뉴스 + 섹터 + 주요 종목)
 # ════════════════════════════════════════════════════════════════
 
-def _fetch_news(url: str, label: str, n: int = 3) -> list[str]:
+def _strip_html(text: str) -> str:
+    """HTML 태그 및 개행 제거 후 공백 정규화"""
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'&[a-zA-Z]+;', ' ', text)  # HTML 엔티티
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+
+def _fetch_news_detailed(url: str, label: str, n: int = 6) -> list[dict]:
+    """RSS 피드에서 제목 + 요약 수집. 실패 시 빈 리스트."""
     try:
-        entries = feedparser.parse(url).entries[:n]
-        return [e.get("title", "").strip() for e in entries if e.get("title")]
+        feed = feedparser.parse(url)
+        results = []
+        for e in feed.entries[:n]:
+            title = _strip_html(e.get("title", "")).strip()
+            raw = e.get("summary", e.get("description", ""))
+            summary = _strip_html(raw).strip()
+            # 요약 100자 제한 (단어 경계 유지)
+            if len(summary) > 100:
+                summary = summary[:100].rsplit(' ', 1)[0].rstrip('.,') + "…"
+            if title:
+                results.append({"title": title, "summary": summary, "source": label})
+        return results
     except Exception as e:
         logger.error(f"{label} RSS 실패: {e}")
         return []
+
+
+def _fetch_category_news(feeds: list, target_n: int = 10) -> list[dict]:
+    """여러 피드 수집 → 제목 중복 제거 → target_n개 반환"""
+    seen: set[str] = set()
+    items: list[dict] = []
+    per_feed = max(5, (target_n // max(len(feeds), 1)) + 3)
+    for url, label in feeds:
+        for item in _fetch_news_detailed(url, label, per_feed):
+            key = item["title"][:25].lower()
+            if key not in seen:
+                seen.add(key)
+                items.append(item)
+        if len(items) >= target_n * 2:
+            break
+    return items[:target_n]
+
+
+# ════════════════════════════════════════════════════════════════
+# 뉴스 블록 — 국제 / 경제·주식 / 국내  (각 10건, 상세 요약 포함)
+# ════════════════════════════════════════════════════════════════
+
+def _fmt_news_section(items: list[dict], emoji: str, title: str) -> str:
+    """카테고리 뉴스 목록 → Telegram HTML 포맷"""
+    lines = [f"{emoji} <b>{title}</b>", ""]
+    if not items:
+        lines.append("  • 뉴스를 가져올 수 없습니다.")
+        return "\n".join(lines)
+    for i, item in enumerate(items, 1):
+        src = item.get("source", "")
+        lines.append(f"<b>{i}.</b> {item['title']}  <i>({src})</i>")
+        if item.get("summary"):
+            lines.append(f"   └ {item['summary']}")
+        lines.append("")
+    return "\n".join(lines).rstrip()
+
+
+def get_news_blocks() -> tuple[str, str, str, list[str]]:
+    """
+    3개 뉴스 블록 생성.
+    Returns:
+        (intl_block, econ_block, kr_block, ai_news_list)
+    """
+    logger.info("뉴스 수집 시작 (국제 / 경제·주식 / 국내)")
+    intl  = _fetch_category_news(INTL_FEEDS,  10)
+    econ  = _fetch_category_news(ECON_FEEDS,  10)
+    kr    = _fetch_category_news(KR_FEEDS,    10)
+
+    intl_block = _fmt_news_section(intl,  "🌍", "국제 뉴스")
+    econ_block = _fmt_news_section(econ,  "💹", "경제·주식 뉴스")
+    kr_block   = _fmt_news_section(kr,    "🇰🇷", "국내 뉴스")
+
+    # AI 프롬프트용 핵심 뉴스 (카테고리별 상위 4건)
+    ai_news = (
+        [f"[국제] {i['title']}" for i in intl[:4]]
+        + [f"[경제] {i['title']}" for i in econ[:4]]
+        + [f"[국내] {i['title']}" for i in kr[:4]]
+    )
+    logger.info(f"뉴스 수집 완료 — 국제 {len(intl)} / 경제 {len(econ)} / 국내 {len(kr)}건")
+    return intl_block, econ_block, kr_block, ai_news
 
 
 def _get_sector_rows() -> list[str]:
@@ -251,30 +354,21 @@ def _get_top10_rows() -> tuple[list[str], dict]:
     return rows, summary
 
 
-def get_us_data_block() -> tuple[str, dict]:
+def get_us_data_block(ai_news: list[str] | None = None) -> tuple[str, dict]:
     """
-    블록 3 텍스트 + AI에 넘길 컨텍스트 dict 반환.
-    컨텍스트: { news, sectors, top10 }
-    """
-    # 뉴스
-    news_items = _fetch_news(
-        "https://feeds.bbci.co.uk/korean/rss.xml", "BBC Korea"
-    ) + _fetch_news(
-        "https://www.hankyung.com/feed/economy", "한국경제"
-    )
-    news_lines = [f"  {i+1}. {t}" for i, t in enumerate(news_items[:5])]
+    미국장 분석 블록 (섹터 성과 + 주요 종목 10선).
+    뉴스는 get_news_blocks()에서 별도 처리하므로 여기선 제외.
 
-    # 섹터 테이블
+    Args:
+        ai_news: AI 프롬프트에 주입할 뉴스 헤드라인 리스트
+    Returns:
+        (telegram_text, ctx_dict)
+    """
     sector_rows = _get_sector_rows()
-
-    # 주요 종목 테이블
     top10_rows, top10_summary = _get_top10_rows()
 
     lines = [
         "📌 <b>미국장 분석</b>",
-        "",
-        "📰 <b>주요 뉴스</b>",
-    ] + news_lines + [
         "",
         "📊 <b>섹터 성과</b>",
         "<pre>" + "\n".join(sector_rows) + "</pre>",
@@ -284,7 +378,7 @@ def get_us_data_block() -> tuple[str, dict]:
     ]
 
     ctx = {
-        "news": news_items[:5],
+        "news": ai_news or [],
         "sectors": {sym: {"label": lbl} for sym, lbl in SECTOR_ETFS.items()},
         "top10": top10_summary,
     }
@@ -358,11 +452,13 @@ def run() -> None:
 
     portfolio = _load_portfolio()
 
-    market_block    = get_market_summary()
-    leading_block   = get_leading_stocks(portfolio)
-    universe_block  = get_universe_scan(portfolio)
-    us_block, ctx   = get_us_data_block()
-    ai_block        = get_ai_strategy_block(ctx, portfolio)
+    # 데이터 수집 (순서 유지 — KIS API 레이트리밋 고려)
+    market_block                          = get_market_summary()
+    leading_block                         = get_leading_stocks(portfolio)
+    universe_block                        = get_universe_scan(portfolio)
+    intl_block, econ_block, kr_block, ai_news = get_news_blocks()
+    us_block, ctx                         = get_us_data_block(ai_news=ai_news)
+    ai_block                              = get_ai_strategy_block(ctx, portfolio)
 
     header = (
         f"🌅 <b>모닝 브리핑 │ {today_str} ({day_of_week})</b>\n"
@@ -370,10 +466,14 @@ def run() -> None:
     )
     footer = "━━━━━━━━━━━━━━━━━━━━\n✅ <b>브리핑 완료</b> │ 좋은 하루 되세요!"
 
+    # 8블록 순서: 시장요약 / 포트폴리오 주도주 / 유니버스 / 국제뉴스 / 경제뉴스 / 국내뉴스 / 미국분석 / AI전략
     blocks = [
         f"{header}\n\n{market_block}",
         leading_block,
         universe_block,
+        intl_block,
+        econ_block,
+        kr_block,
         us_block,
         f"{ai_block}\n\n{footer}",
     ]
