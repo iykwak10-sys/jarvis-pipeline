@@ -1,9 +1,10 @@
 # morning_briefing.py
-"""아침 브리핑 (06:30 KST) — 4블록: 시장요약 / 주도주 / 미국분석데이터 / AI전략"""
+"""아침 브리핑 (06:30 KST) — 8블록: 시장요약 / 주도주 / 유니버스 / 국제뉴스 / 경제주식뉴스 / 국내뉴스 / 미국분석 / AI전략"""
 
 import asyncio
 import csv
 import logging
+import re
 from datetime import date, datetime
 from logging.handlers import RotatingFileHandler
 

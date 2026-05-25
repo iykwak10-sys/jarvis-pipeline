@@ -29,7 +29,6 @@ logging.basicConfig(
     handlers=[
         RotatingFileHandler(LOG_DIR / "scheduler.log", maxBytes=10*1024*1024,
                             backupCount=5, encoding="utf-8"),
-        logging.StreamHandler(),
     ],
 )
 logger = logging.getLogger(__name__)
