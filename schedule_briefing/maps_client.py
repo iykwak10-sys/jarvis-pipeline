@@ -5,6 +5,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Optional
 
 import requests
 
@@ -14,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 PLACES_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 PLACES_DETAIL_URL = "https://maps.googleapis.com/maps/api/place/details/json"
+GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
+DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/json"
 
 # 리뷰 캐시 (당일 유지, 장소명 → 데이터)
 _CACHE_FILE = Path(__file__).parent.parent / "data" / "maps_review_cache.json"
@@ -192,3 +195,186 @@ def describe_place_type(types: list[str]) -> str:
         if t in mapping:
             return mapping[t]
     return "장소"
+
+
+# ── Geocoding & POI search (TMAP 대체) ──────────────────────────
+
+def geocode(address: str) -> Optional[tuple[float, float]]:
+    """주소 → 좌표 변환 (Google Maps Geocoding)
+
+    Returns:
+        (lat, lng) or None
+    """
+    try:
+        key = _api_key()
+    except ValueError:
+        logger.warning("Google Maps API 키 없음 — 지오코딩 생략")
+        return None
+
+    try:
+        resp = requests.get(
+            GEOCODE_URL,
+            params={"address": address, "language": "ko", "region": "kr", "key": key},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        results = data.get("results", [])
+        if not results:
+            logger.warning(f"지오코딩 결과 없음: {address}")
+            return None
+
+        loc = results[0]["geometry"]["location"]
+        return loc["lat"], loc["lng"]
+
+    except Exception as e:
+        logger.warning(f"지오코딩 실패 ({address}): {e}")
+        return None
+
+
+def search_place_coords(keyword: str) -> Optional[tuple[float, float]]:
+    """장소명 검색 → 좌표 (Google Maps Places Text Search)
+
+    Returns:
+        (lat, lng) or None
+    """
+    try:
+        key = _api_key()
+    except ValueError:
+        return None
+
+    try:
+        resp = requests.get(
+            PLACES_SEARCH_URL,
+            params={"query": keyword, "language": "ko", "region": "kr", "key": key},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        results = data.get("results", [])
+        if not results:
+            logger.warning(f"장소 검색 결과 없음: {keyword}")
+            return None
+
+        loc = results[0]["geometry"]["location"]
+        return loc["lat"], loc["lng"]
+
+    except Exception as e:
+        logger.warning(f"장소 검색 실패 ({keyword}): {e}")
+        return None
+
+
+def get_travel_time(
+    origin_lat: float,
+    origin_lng: float,
+    dest_lat: float,
+    dest_lng: float,
+    departure_dt=None,  # datetime, 미사용 (Google Maps는 현재 교통상황 기반)
+) -> dict:
+    """자동차 + 대중교통 소요시간 계산 (Google Maps Directions API)
+
+    Returns:
+        {
+            car_minutes: int,
+            transit_minutes: int | None,
+            recommended_minutes: int,
+            mode: str,  # "자동차" | "대중교통"
+            car_ok: bool,
+            transit_ok: bool,
+        }
+    """
+    try:
+        key = _api_key()
+    except ValueError:
+        logger.warning("Google Maps API 키 없음 — 경로 계산 불가")
+        return _fallback_travel()
+
+    car_minutes = None
+    transit_minutes = None
+
+    # 자동차 경로
+    try:
+        resp = requests.get(
+            DIRECTIONS_URL,
+            params={
+                "origin": f"{origin_lat},{origin_lng}",
+                "destination": f"{dest_lat},{dest_lng}",
+                "mode": "driving",
+                "departure_time": "now",
+                "traffic_model": "best_guess",
+                "language": "ko",
+                "key": key,
+            },
+            timeout=10,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        routes = data.get("routes", [])
+        if routes:
+            duration_sec = routes[0]["legs"][0]["duration"]["value"]
+            car_minutes = max(1, round(duration_sec / 60))
+    except Exception as e:
+        logger.warning(f"Google Maps 자동차 경로 실패: {e}")
+
+    # 대중교통 경로
+    try:
+        resp = requests.get(
+            DIRECTIONS_URL,
+            params={
+                "origin": f"{origin_lat},{origin_lng}",
+                "destination": f"{dest_lat},{dest_lng}",
+                "mode": "transit",
+                "language": "ko",
+                "key": key,
+            },
+            timeout=10,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        routes = data.get("routes", [])
+        if routes:
+            duration_sec = routes[0]["legs"][0]["duration"]["value"]
+            transit_minutes = max(1, round(duration_sec / 60))
+    except Exception as e:
+        logger.warning(f"Google Maps 대중교통 경로 실패: {e}")
+
+    car_ok = car_minutes is not None
+    transit_ok = transit_minutes is not None
+
+    if car_ok and transit_ok:
+        if transit_minutes <= car_minutes:
+            recommended = transit_minutes
+            mode = "대중교통"
+        else:
+            recommended = car_minutes
+            mode = "자동차"
+    elif car_ok:
+        recommended = car_minutes
+        mode = "자동차"
+    elif transit_ok:
+        recommended = transit_minutes
+        mode = "대중교통"
+    else:
+        return _fallback_travel()
+
+    return {
+        "car_minutes": car_minutes,
+        "transit_minutes": transit_minutes,
+        "recommended_minutes": recommended,
+        "mode": mode,
+        "car_ok": car_ok,
+        "transit_ok": transit_ok,
+    }
+
+
+def _fallback_travel() -> dict:
+    return {
+        "car_minutes": 30,
+        "transit_minutes": None,
+        "recommended_minutes": 30,
+        "mode": "기본값",
+        "car_ok": False,
+        "transit_ok": False,
+    }

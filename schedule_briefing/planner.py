@@ -22,7 +22,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from core.config import LOG_DIR
-from schedule_briefing import calendar_client, tmap_client, schedule_db, location_cache
+from schedule_briefing import calendar_client, maps_client, schedule_db, location_cache
 
 logging.basicConfig(
     level=logging.INFO,
@@ -105,7 +105,7 @@ def run() -> None:
 
             # TMAP 소요시간 계산 (출발 예정 시각 기준)
             depart_estimate = start_dt - timedelta(minutes=BUFFER_MINUTES)
-            travel_info = tmap_client.get_travel_time(
+            travel_info = maps_client.get_travel_time(
                 origin_lat, origin_lng,
                 dest_lat, dest_lng,
                 depart_estimate,
@@ -157,14 +157,14 @@ def run() -> None:
 
 
 def _resolve_destination(location_text: str) -> tuple[float, float] | None:
-    """장소 텍스트 → 좌표 (POI 검색 → 지오코딩 순서로 시도)"""
-    # 1차: POI 키워드 검색 (장소명)
-    coords = tmap_client.pois_search(location_text)
+    """장소 텍스트 → 좌표 (장소 검색 → 지오코딩 순서로 시도)"""
+    # 1차: 장소명 검색 (Google Maps Places)
+    coords = maps_client.search_place_coords(location_text)
     if coords:
         return coords
 
-    # 2차: 지오코딩 (주소 형식)
-    coords = tmap_client.geocode_address(location_text)
+    # 2차: 지오코딩 (Google Maps Geocoding)
+    coords = maps_client.geocode(location_text)
     if coords:
         return coords
 
@@ -205,7 +205,7 @@ def _add_return_home_if_applicable(events: list[dict], origin_lat: float, origin
 
     try:
         end_dt = last_event["end_dt"]
-        return_info = tmap_client.get_travel_time(dest_lat, dest_lng, home_lat, home_lng, end_dt)
+        return_info = maps_client.get_travel_time(dest_lat, dest_lng, home_lat, home_lng, end_dt)
         alert["return_home_minutes"] = return_info["recommended_minutes"]
         alert["return_home_mode"] = return_info["mode"]
         schedule_db.upsert_alert(event_id, alert)
@@ -268,7 +268,7 @@ def run_tomorrow() -> None:
         if dest_coords:
             dest_lat, dest_lng = dest_coords
             start_dt = first_event["start_dt"]
-            travel_info = tmap_client.get_travel_time(
+            travel_info = maps_client.get_travel_time(
                 origin_lat, origin_lng, dest_lat, dest_lng, start_dt,
             )
             travel_min = travel_info["recommended_minutes"]
