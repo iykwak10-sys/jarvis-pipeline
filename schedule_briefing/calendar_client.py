@@ -4,10 +4,12 @@
 import json
 import logging
 import os
+import threading
 from datetime import datetime, timezone
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse, parse_qs
 
 import requests as http_requests
 from google.auth.transport.requests import Request
@@ -20,13 +22,12 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 _PROJECT_ROOT = Path(__file__).parent.parent
 _CREDENTIALS_DIR = _PROJECT_ROOT / "credentials"
-# Desktop 타입 클라이언트 우선, 없으면 기존 Web 클라이언트
 _DESKTOP_CLIENT = _CREDENTIALS_DIR / "calendar_desktop_client.json"
 _WEB_CLIENT = _CREDENTIALS_DIR / "client_secret_609042792231-jjm8ugkepf8tv7u50upa7gpbonl9fc1v.apps.googleusercontent.com.json"
 _TOKEN_FILE = _CREDENTIALS_DIR / "calendar_token.json"
 
-# Web 클라이언트용 고정 리디렉션 (OOB 대체)
-_MANUAL_REDIRECT = "urn:ietf:wg:oauth:2.0:oob"
+_LOCAL_PORT = 8090
+_LOCAL_REDIRECT = f"http://localhost:{_LOCAL_PORT}/"
 
 
 def _get_client_secret_path() -> Path:
@@ -61,19 +62,40 @@ def _auth_desktop(client_path: Path) -> Credentials:
     return flow.run_local_server(port=8090, open_browser=True)
 
 
-def _auth_web_manual(client_path: Path) -> Credentials:
-    """Web 클라이언트 — 수동 인증 코드 입력 방식
-    사용자가 브라우저에서 인증 → 코드를 터미널에 붙여넣기
+def _auth_web_local_server(client_path: Path) -> Credentials:
+    """Web 클라이언트 — 로컬 서버로 리디렉션 받아 인증
+
+    사전 조건: Google Cloud Console에서 Web 클라이언트의
+    '승인된 리디렉션 URI'에 http://localhost:8090/ 추가 필요
     """
     data = json.loads(client_path.read_text())
     client_info = data["web"]
     client_id = client_info["client_id"]
     client_secret = client_info["client_secret"]
 
-    # 인증 URL 생성 (redirect_uri = OOB)
+    auth_code_result = {"code": None, "error": None}
+
+    class _Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            qs = parse_qs(urlparse(self.path).query)
+            if "code" in qs:
+                auth_code_result["code"] = qs["code"][0]
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write("✅ 인증 완료! 이 창을 닫아도 됩니다.".encode("utf-8"))
+            else:
+                auth_code_result["error"] = qs.get("error", ["unknown"])[0]
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(f"❌ 인증 실패: {auth_code_result['error']}".encode("utf-8"))
+
+        def log_message(self, *args):
+            pass
+
     auth_params = {
         "client_id": client_id,
-        "redirect_uri": _MANUAL_REDIRECT,
+        "redirect_uri": _LOCAL_REDIRECT,
         "response_type": "code",
         "scope": " ".join(SCOPES),
         "access_type": "offline",
@@ -82,24 +104,30 @@ def _auth_web_manual(client_path: Path) -> Credentials:
     auth_url = f"https://accounts.google.com/o/oauth2/auth?{urlencode(auth_params)}"
 
     print("\n" + "=" * 60)
-    print("📅 Google Calendar 최초 인증이 필요합니다.")
+    print("📅 Google Calendar 최초 인증")
     print("=" * 60)
-    print(f"\n1. 아래 URL을 브라우저에서 열어주세요:\n\n{auth_url}\n")
-    print("2. Google 계정으로 로그인 후 '허용'을 클릭하세요.")
-    print("3. 표시되는 인증 코드를 아래에 붙여넣어 주세요.\n")
+    print(f"\n아래 URL을 브라우저에서 열어주세요:\n\n{auth_url}\n")
+    print(f"(리디렉션 대기 중: localhost:{_LOCAL_PORT})\n")
 
-    code = input("인증 코드 입력: ").strip()
-    if not code:
-        raise ValueError("인증 코드가 입력되지 않았습니다.")
+    server = HTTPServer(("localhost", _LOCAL_PORT), _Handler)
+    server.timeout = 120
+    server.handle_request()
+    server.server_close()
 
-    # 토큰 교환
+    if not auth_code_result["code"]:
+        raise ValueError(
+            f"인증 실패: {auth_code_result.get('error', '타임아웃')}\n"
+            f"Google Cloud Console → 사용자 인증 정보 → Web 클라이언트 →\n"
+            f"'승인된 리디렉션 URI'에 {_LOCAL_REDIRECT} 가 등록되어 있는지 확인하세요."
+        )
+
     token_resp = http_requests.post(
         "https://oauth2.googleapis.com/token",
         data={
-            "code": code,
+            "code": auth_code_result["code"],
             "client_id": client_id,
             "client_secret": client_secret,
-            "redirect_uri": _MANUAL_REDIRECT,
+            "redirect_uri": _LOCAL_REDIRECT,
             "grant_type": "authorization_code",
         },
         timeout=10,
@@ -135,8 +163,8 @@ def _get_service():
                 logger.info("Desktop OAuth 클라이언트로 인증 시작...")
                 creds = _auth_desktop(client_path)
             elif client_type == "web":
-                logger.info("Web OAuth 클라이언트 — 수동 인증 모드...")
-                creds = _auth_web_manual(client_path)
+                logger.info("Web OAuth 클라이언트 — 로컬 서버 인증 모드...")
+                creds = _auth_web_local_server(client_path)
             else:
                 raise ValueError(f"알 수 없는 OAuth 클라이언트 타입: {client_path}")
 
