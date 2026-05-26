@@ -1,6 +1,8 @@
 # schedule_briefing/calendar_client.py
 """Google Calendar 연동 — 오늘 남은 일정 조회"""
 
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -231,4 +233,62 @@ def get_todays_events(max_results: int = 20) -> list[dict]:
 
     except Exception as e:
         logger.error(f"Google Calendar 조회 실패: {e}")
+        return []
+
+
+def get_tomorrow_events(max_results: int = 20) -> list[dict]:
+    """내일 하루 종일 일정 조회
+
+    Returns:
+        list of {
+            id, summary, location, description,
+            start_dt (datetime, KST), end_dt (datetime, KST),
+            has_location (bool)
+        }
+    """
+    try:
+        service = _get_service()
+        from datetime import timedelta
+        now = datetime.now(timezone.utc)
+        tomorrow = now + timedelta(days=1)
+
+        tomorrow_start = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+        tomorrow_end = tomorrow.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+
+        result = service.events().list(
+            calendarId="primary",
+            timeMin=tomorrow_start,
+            timeMax=tomorrow_end,
+            maxResults=max_results,
+            singleEvents=True,
+            orderBy="startTime",
+        ).execute()
+
+        events = []
+        for item in result.get("items", []):
+            start_raw = item["start"].get("dateTime") or item["start"].get("date")
+            end_raw = item["end"].get("dateTime") or item["end"].get("date")
+
+            if "T" not in start_raw:
+                continue
+
+            start_dt = datetime.fromisoformat(start_raw)
+            end_dt = datetime.fromisoformat(end_raw)
+
+            location = item.get("location", "").strip()
+            events.append({
+                "id": item["id"],
+                "summary": item.get("summary", "(제목 없음)"),
+                "location": location,
+                "description": item.get("description", ""),
+                "start_dt": start_dt,
+                "end_dt": end_dt,
+                "has_location": bool(location),
+            })
+
+        logger.info(f"내일 캘린더: {len(events)}개 일정 (장소 있음: {sum(1 for e in events if e['has_location'])}개)")
+        return events
+
+    except Exception as e:
+        logger.error(f"Google Calendar 내일 조회 실패: {e}")
         return []

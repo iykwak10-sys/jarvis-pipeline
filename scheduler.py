@@ -163,6 +163,12 @@ def job_schedule_dispatcher() -> None:
     run_script("schedule_briefing/dispatcher.py")
 
 
+def job_tomorrow_briefing() -> None:
+    """내일 사전 브리핑 — 매일 밤 21시"""
+    logger.info("🌙 내일 사전 브리핑 실행")
+    run_script("schedule_briefing/planner.py", "--mode", "tomorrow")
+
+
 # ── 스케줄 등록 및 메인 루프 ─────────────────────────────────────────────────
 def main() -> None:
     acquire_pid_lock()
@@ -187,12 +193,15 @@ def main() -> None:
     schedule.every(30).minutes.do(job_schedule_planner)   # 30분마다 다음 일정 계획
     schedule.every(1).minutes.do(job_schedule_dispatcher) # 1분마다 발송 시각 확인
 
+    # Phase 5 — 내일 사전 브리핑 (매일 밤 21시)
+    schedule.every().day.at("21:00").do(job_tomorrow_briefing)
+
     logger.info("🚀 Jarvis 스케줄러 시작")
     logger.info("  06:30 아침 브리핑 | 06:05 미국장 마감 알림 | 09:00 헬스체크")
     logger.info("  10:00/13:00/14:30 급등락 알림 | 15:35 마감 수집")
     logger.info("  5분 간격 장중 실시간 수집")
     logger.info("  ⚡ 장중 주도주 모니터: 09:10(초기) / 10:30 / 13:30 / 15:00")
-    logger.info("  📅 일정 브리핑: 30분마다 플래너 | 1분마다 디스패처")
+    logger.info("  📅 일정 브리핑: 30분마다 플래너 | 1분마다 디스패처 | 21:00 내일 사전 브리핑")
 
     while True:
         schedule.run_pending()

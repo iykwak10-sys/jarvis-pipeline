@@ -1,6 +1,8 @@
 # schedule_briefing/tmap_client.py
 """TMAP API — 미래 시각 기준 소요시간 계산 (자동차 + 대중교통)"""
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 

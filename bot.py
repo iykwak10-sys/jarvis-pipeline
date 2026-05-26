@@ -17,6 +17,9 @@ from core import portfolio, notifier
 from core.bot_handlers import register_handlers
 from core.config import LOG_DIR, JARVIS_CHAT_ID
 
+# ── 위치 캐시 연동 ──
+from schedule_briefing.location_cache import save_location, get_current_location
+
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
@@ -131,6 +134,28 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             await update.message.reply_text(response[:4000])
 
 
+async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """iOS 단축어 등에서 전송된 실시간 위치 저장"""
+    loc = update.message.location
+    lat = loc.latitude
+    lng = loc.longitude
+    chat_id = update.effective_chat.id
+
+    logger.info(f"📍 위치 수신: chat_id={chat_id}, ({lat:.5f}, {lng:.5f})")
+    try:
+        save_location(lat, lng, source="telegram")
+        await update.message.reply_text(
+            f"📍 위치 저장 완료\n"
+            f"위도: {lat:.5f}\n"
+            f"경도: {lng:.5f}\n"
+            f"일정 브리핑에 반영됩니다."
+        )
+        logger.info(f"위치 저장 완료: ({lat:.5f}, {lng:.5f})")
+    except Exception as e:
+        await update.message.reply_text(f"⚠️ 위치 저장 실패: {e}")
+        logger.error(f"위치 저장 오류: {e}")
+
+
 def main() -> None:
     # ── 단일 인스턴스 잠금 획득 ──
     lock_fd = acquire_bot_lock()
@@ -147,6 +172,9 @@ def main() -> None:
 
     # 일반 메시지 핸들러 (Hermes AI 응답)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
+    # 위치 메시지 핸들러 (iOS 단축어 연동)
+    app.add_handler(MessageHandler(filters.LOCATION, handle_location))
 
     logger.info("Jarvis 봇 시작 — /add /remove /list /p /일반메시지 대기 중")
     app.run_polling(allowed_updates=Update.ALL_TYPES)

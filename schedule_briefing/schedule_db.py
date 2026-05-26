@@ -1,6 +1,8 @@
 # schedule_briefing/schedule_db.py
 """알림 예약 DB — JSON 파일 기반 CRUD"""
 
+from __future__ import annotations
+
 import json
 import logging
 from datetime import datetime
