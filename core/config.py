@@ -93,7 +93,8 @@ NOTION_STOCK_DB_ID: Optional[str] = get("NOTION_STOCK_DB_ID")
 NOTION_ANALYSIS_DB_ID: Optional[str] = get("NOTION_ANALYSIS_DB_ID")
 
 # ── 일정 브리핑 ─────────────────────────────────────────────────
-TMAP_APP_KEY: Optional[str] = get("TMAP_APP_KEY")
+KAKAO_REST_API_KEY: Optional[str] = get("KAKAO_REST_API_KEY")
+TMAP_APP_KEY: Optional[str] = get("TMAP_APP_KEY")          # 구 키 — deprecated
 GOOGLE_MAPS_API_KEY: Optional[str] = get("GOOGLE_MAPS_API_KEY")
 
 # 집 기본 위치 (Home Assistant 없을 때 폴백)
