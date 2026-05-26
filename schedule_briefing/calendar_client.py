@@ -1,25 +1,120 @@
 # schedule_briefing/calendar_client.py
 """Google Calendar 연동 — 오늘 남은 일정 조회"""
 
+import json
 import logging
 import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlencode
 
+import requests as http_requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 logger = logging.getLogger(__name__)
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
-# 자격증명 파일 경로 (기존 프로젝트 규칙 따라 credentials/ 사용)
 _PROJECT_ROOT = Path(__file__).parent.parent
-_CLIENT_SECRET = _PROJECT_ROOT / "credentials" / "client_secret_609042792231-jjm8ugkepf8tv7u50upa7gpbonl9fc1v.apps.googleusercontent.com.json"
-_TOKEN_FILE = _PROJECT_ROOT / "credentials" / "calendar_token.json"
+_CREDENTIALS_DIR = _PROJECT_ROOT / "credentials"
+# Desktop 타입 클라이언트 우선, 없으면 기존 Web 클라이언트
+_DESKTOP_CLIENT = _CREDENTIALS_DIR / "calendar_desktop_client.json"
+_WEB_CLIENT = _CREDENTIALS_DIR / "client_secret_609042792231-jjm8ugkepf8tv7u50upa7gpbonl9fc1v.apps.googleusercontent.com.json"
+_TOKEN_FILE = _CREDENTIALS_DIR / "calendar_token.json"
+
+# Web 클라이언트용 고정 리디렉션 (OOB 대체)
+_MANUAL_REDIRECT = "urn:ietf:wg:oauth:2.0:oob"
+
+
+def _get_client_secret_path() -> Path:
+    """Desktop 클라이언트 우선, 없으면 Web 클라이언트"""
+    if _DESKTOP_CLIENT.exists():
+        return _DESKTOP_CLIENT
+    if _WEB_CLIENT.exists():
+        return _WEB_CLIENT
+    raise FileNotFoundError(
+        f"Google OAuth 클라이언트 시크릿 없음.\n"
+        f"  방법 1 (추천): Google Cloud Console → 사용자 인증 정보 →\n"
+        f"    OAuth 2.0 클라이언트 ID 만들기 → '데스크톱 앱' 선택 →\n"
+        f"    JSON 다운로드 → {_DESKTOP_CLIENT} 에 저장\n"
+        f"  방법 2: 기존 Web 클라이언트로 수동 인증 (아래 안내 따름)"
+    )
+
+
+def _detect_client_type(path: Path) -> str:
+    """클라이언트 JSON 파일에서 타입 감지"""
+    data = json.loads(path.read_text())
+    if "installed" in data:
+        return "desktop"
+    if "web" in data:
+        return "web"
+    return "unknown"
+
+
+def _auth_desktop(client_path: Path) -> Credentials:
+    """Desktop 클라이언트 — 로컬 서버 브라우저 인증"""
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    flow = InstalledAppFlow.from_client_secrets_file(str(client_path), SCOPES)
+    return flow.run_local_server(port=8090, open_browser=True)
+
+
+def _auth_web_manual(client_path: Path) -> Credentials:
+    """Web 클라이언트 — 수동 인증 코드 입력 방식
+    사용자가 브라우저에서 인증 → 코드를 터미널에 붙여넣기
+    """
+    data = json.loads(client_path.read_text())
+    client_info = data["web"]
+    client_id = client_info["client_id"]
+    client_secret = client_info["client_secret"]
+
+    # 인증 URL 생성 (redirect_uri = OOB)
+    auth_params = {
+        "client_id": client_id,
+        "redirect_uri": _MANUAL_REDIRECT,
+        "response_type": "code",
+        "scope": " ".join(SCOPES),
+        "access_type": "offline",
+        "prompt": "consent",
+    }
+    auth_url = f"https://accounts.google.com/o/oauth2/auth?{urlencode(auth_params)}"
+
+    print("\n" + "=" * 60)
+    print("📅 Google Calendar 최초 인증이 필요합니다.")
+    print("=" * 60)
+    print(f"\n1. 아래 URL을 브라우저에서 열어주세요:\n\n{auth_url}\n")
+    print("2. Google 계정으로 로그인 후 '허용'을 클릭하세요.")
+    print("3. 표시되는 인증 코드를 아래에 붙여넣어 주세요.\n")
+
+    code = input("인증 코드 입력: ").strip()
+    if not code:
+        raise ValueError("인증 코드가 입력되지 않았습니다.")
+
+    # 토큰 교환
+    token_resp = http_requests.post(
+        "https://oauth2.googleapis.com/token",
+        data={
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": _MANUAL_REDIRECT,
+            "grant_type": "authorization_code",
+        },
+        timeout=10,
+    )
+    token_resp.raise_for_status()
+    token_data = token_resp.json()
+
+    return Credentials(
+        token=token_data["access_token"],
+        refresh_token=token_data.get("refresh_token"),
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=client_id,
+        client_secret=client_secret,
+        scopes=SCOPES,
+    )
 
 
 def _get_service():
@@ -33,14 +128,20 @@ def _get_service():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            if not _CLIENT_SECRET.exists():
-                raise FileNotFoundError(
-                    f"Google OAuth 클라이언트 시크릿 없음: {_CLIENT_SECRET}\n"
-                    "Google Cloud Console에서 OAuth 자격증명을 다운로드하세요."
-                )
-            flow = InstalledAppFlow.from_client_secrets_file(str(_CLIENT_SECRET), SCOPES)
-            creds = flow.run_local_server(port=0)
+            client_path = _get_client_secret_path()
+            client_type = _detect_client_type(client_path)
+
+            if client_type == "desktop":
+                logger.info("Desktop OAuth 클라이언트로 인증 시작...")
+                creds = _auth_desktop(client_path)
+            elif client_type == "web":
+                logger.info("Web OAuth 클라이언트 — 수동 인증 모드...")
+                creds = _auth_web_manual(client_path)
+            else:
+                raise ValueError(f"알 수 없는 OAuth 클라이언트 타입: {client_path}")
+
         _TOKEN_FILE.write_text(creds.to_json())
+        logger.info(f"✅ Calendar 토큰 저장 완료: {_TOKEN_FILE}")
 
     return build("calendar", "v3", credentials=creds)
 

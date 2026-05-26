@@ -8,6 +8,12 @@
   5. 발송 완료 표시
 """
 
+import sys
+from pathlib import Path
+
+# 프로젝트 루트를 sys.path에 추가 (직접 실행 시에도 core 모듈 임포트 가능)
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import logging
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
