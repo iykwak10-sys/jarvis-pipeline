@@ -5,7 +5,7 @@ import logging
 from typing import Optional
 
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, MessageHandler, filters
 
 from core import portfolio, notifier
 from core.kis_client import KISClient
@@ -115,6 +115,33 @@ async def cmd_price(update: Update, context: ContextTypes.DEFAULT_TYPE,
         await update.message.reply_text("현재가 리포트 전송 완료")
 
 
+async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE,
+                          allowed_chat_id: int) -> None:
+    """iOS 단축어 또는 직접 전송된 위치 메시지 처리 → location_cache에 저장"""
+    if not auth(update, allowed_chat_id):
+        return
+
+    msg = update.message
+    if not msg or not msg.location:
+        return
+
+    lat = msg.location.latitude
+    lng = msg.location.longitude
+
+    try:
+        from schedule_briefing.location_cache import save_location
+        save_location(lat, lng, source="telegram")
+        await msg.reply_text(
+            f"📍 위치 업데이트 완료\n"
+            f"({lat:.4f}, {lng:.4f})\n"
+            f"다음 일정 플래너에서 이 위치를 출발지로 사용합니다."
+        )
+        logger.info(f"위치 수신 및 저장: ({lat:.4f}, {lng:.4f})")
+    except Exception as e:
+        logger.error(f"위치 저장 실패: {e}")
+        await msg.reply_text("위치 저장 중 오류가 발생했습니다.")
+
+
 def register_handlers(app, allowed_chat_id: int) -> None:
     """Application에 모든 핸들러 등록 (allowed_chat_id 고정)"""
     from telegram.ext import CommandHandler
@@ -129,4 +156,8 @@ def register_handlers(app, allowed_chat_id: int) -> None:
     app.add_handler(CommandHandler("remove", _wrap(cmd_remove)))
     app.add_handler(CommandHandler("list", _wrap(cmd_list)))
     app.add_handler(CommandHandler("p", _wrap(cmd_price)))
-    logger.info("공통 핸들러 등록 완료: /add /remove /list /p")
+
+    # 위치 메시지 핸들러 (iOS 단축어 → 현재 위치 업데이트)
+    app.add_handler(MessageHandler(filters.LOCATION, _wrap(handle_location)))
+
+    logger.info("공통 핸들러 등록 완료: /add /remove /list /p + 위치 메시지")

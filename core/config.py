@@ -91,3 +91,12 @@ RAPHAEL_CLAUDE_SKILL_DIR: str = get(
 NOTION_TOKEN: Optional[str] = get("NOTION_TOKEN")
 NOTION_STOCK_DB_ID: Optional[str] = get("NOTION_STOCK_DB_ID")
 NOTION_ANALYSIS_DB_ID: Optional[str] = get("NOTION_ANALYSIS_DB_ID")
+
+# ── 일정 브리핑 ─────────────────────────────────────────────────
+TMAP_APP_KEY: Optional[str] = get("TMAP_APP_KEY")
+GOOGLE_MAPS_API_KEY: Optional[str] = get("GOOGLE_MAPS_API_KEY")
+
+# 집 기본 위치 (Home Assistant 없을 때 폴백)
+HOME_LAT: str = get("HOME_LAT", "37.5665")
+HOME_LNG: str = get("HOME_LNG", "126.9780")
+HOME_ADDRESS: str = get("HOME_ADDRESS", "서울시")
