@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 google_credentials.json
 credentials/
 data/.kis_token.json

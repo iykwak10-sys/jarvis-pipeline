@@ -140,10 +140,15 @@ def get_weather_context(lat: float, lng: float) -> dict:
 
 
 def _get_base_time(now: datetime) -> datetime:
-    """기상청 초단기예보 base_time 계산 (매시 30분)"""
+    """기상청 초단기예보 base_time 계산 (매시 30분 발표, 발표 후 ~10분 뒤 사용 가능)
+
+    예) 14:25 → 13:30 사용, 14:45 → 14:30 사용
+    자정 경계(00:00~00:39)에는 전날 23:30 발표 사용.
+    """
     minute = now.minute
     if minute < 40:
-        base = now.replace(hour=now.hour - 1, minute=30, second=0, microsecond=0)
+        # 한 시간 전 30분 발표 — 자정 경계는 timedelta로 안전 처리
+        base = (now - timedelta(hours=1)).replace(minute=30, second=0, microsecond=0)
     else:
         base = now.replace(minute=30, second=0, microsecond=0)
     return base
