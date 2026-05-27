@@ -190,7 +190,7 @@ def get_leading_stocks(portfolio: dict) -> str:
         results = scan_leading(
             list(portfolio.keys()),
             name_map=portfolio,
-            min_score=6,
+            min_score=9,
             portfolio_codes=set(portfolio.keys()),
         )
         return fmt_leading(results, title="주도주 스캐너 [포트폴리오]")
@@ -206,7 +206,7 @@ def get_universe_scan(portfolio: dict) -> str:
         result = scan_market(
             portfolio_codes=set(portfolio.keys()),
             name_map=portfolio,
-            min_score=6,
+            min_score=9,
         )
         return format_universe_telegram(result)
     except Exception as e:
