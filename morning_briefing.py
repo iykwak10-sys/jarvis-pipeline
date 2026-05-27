@@ -60,28 +60,23 @@ SECTOR_ETFS = {
     "XLRE": "부동산",
 }
 
-# ── 뉴스 RSS 피드 소스 ───────────────────────────────────────────
+# ── 뉴스 RSS 피드 소스 (동작 검증된 URL만 수록) ──────────────────
 INTL_FEEDS = [
-    ("https://feeds.bbci.co.uk/korean/rss.xml",              "BBC코리아"),
-    ("https://rss.dw.com/rdf/rss-ko-all",                    "DW한국어"),
-    ("https://www.rfi.fr/ko/rss",                            "RFI한국어"),
-    ("https://feeds.reuters.com/reuters/worldNews",           "Reuters"),
+    ("https://feeds.bbci.co.uk/korean/rss.xml",                  "BBC코리아"),
+    ("https://www.yonhapnewstv.co.kr/browse/feed/?cat=71",       "연합뉴스TV-국제"),
 ]
 
 ECON_FEEDS = [
-    ("https://www.hankyung.com/feed/economy",                "한국경제"),
-    ("https://www.mk.co.kr/rss/40300001/",                   "매일경제"),
-    ("https://www.edaily.co.kr/rss/rss.asp?mallCd=00",      "이데일리"),
-    ("https://www.sedaily.com/rss/rss_economy.xml",          "서울경제"),
-    ("https://finance.yahoo.com/rss/headline",               "Yahoo Finance"),
+    ("https://www.mk.co.kr/rss/40300001/",                       "매일경제"),
+    ("https://www.mk.co.kr/rss/30100041/",                       "매일경제-경제"),
+    ("https://www.mk.co.kr/rss/50200011/",                       "매일경제-주식"),
+    ("https://rss.donga.com/economy.xml",                        "동아일보-경제"),
 ]
 
 KR_FEEDS = [
-    ("https://imnews.imbc.com/rss/news/news_00.xml",         "MBC뉴스"),
-    ("https://news.sbs.co.kr/news/newsflash/rssFeed.do",     "SBS뉴스"),
-    ("https://www.yonhapnewstv.co.kr/browse/feed/",          "연합뉴스TV"),
-    ("https://world.kbs.co.kr/rss/rss_news.htm?lang=k",     "KBS월드"),
-    ("https://www.khan.co.kr/rss/rssdata/kh_total.xml",     "경향신문"),
+    ("https://www.yonhapnewstv.co.kr/browse/feed/",              "연합뉴스TV"),
+    ("https://rss.donga.com/total.xml",                          "동아일보"),
+    ("https://rss.donga.com/politics.xml",                       "동아일보-정치"),
 ]
 
 
