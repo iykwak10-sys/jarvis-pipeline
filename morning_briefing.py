@@ -7,6 +7,7 @@ import logging
 import re
 from datetime import date, datetime
 from logging.handlers import RotatingFileHandler
+from typing import List, Optional
 
 import feedparser
 import holidays
@@ -354,7 +355,7 @@ def _get_top10_rows() -> tuple[list[str], dict]:
     return rows, summary
 
 
-def get_us_data_block(ai_news: list[str] | None = None) -> tuple[str, dict]:
+def get_us_data_block(ai_news: Optional[List[str]] = None) -> tuple[str, dict]:
     """
     미국장 분석 블록 (섹터 성과 + 주요 종목 10선).
     뉴스는 get_news_blocks()에서 별도 처리하므로 여기선 제외.
