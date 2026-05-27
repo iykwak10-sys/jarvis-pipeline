@@ -115,3 +115,16 @@ def is_already_planned(event_id: str) -> bool:
     """이미 예약된 알림인지 확인"""
     alerts = _load()
     return any(a["event_id"] == event_id and not a.get("sent") for a in alerts)
+
+
+def get_active_alert(event_id: str) -> dict | None:
+    """미발송 상태의 알림 1건 조회 (event_id 기준)
+
+    Returns:
+        알림 dict 또는 None — 발송됐거나 존재하지 않으면 None
+    """
+    alerts = _load()
+    return next(
+        (a for a in alerts if a["event_id"] == event_id and not a.get("sent")),
+        None,
+    )

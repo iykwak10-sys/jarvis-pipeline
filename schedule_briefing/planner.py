@@ -3,7 +3,7 @@
 흐름:
   1. Google Calendar 오늘 남은 일정 조회
   2. 장소 있는 일정만 필터
-  3. 게이트: 출발 2시간 이내 일정만 TMAP 호출
+  3. 게이트: 출발 2시간 이내 일정만 Kakao 경로 API 호출
   4. 소요시간 계산 → 알림 시각 = start - travel - 30분
   5. schedule_db에 예약 저장
 """
@@ -41,8 +41,8 @@ logger = logging.getLogger(__name__)
 
 # ── 상수 ──────────────────────────────────────────────────────────
 BUFFER_MINUTES = 30      # 이동시간 외 여유시간
-TMAP_GATE_HOURS = 2      # 이 시간 이내 일정만 TMAP API 호출
-FALLBACK_TRAVEL_MIN = 30 # TMAP 실패 시 기본 이동시간
+ROUTE_GATE_HOURS = 2     # 이 시간 이내 일정만 경로 API 호출 (Kakao Mobility)
+FALLBACK_TRAVEL_MIN = 30 # 경로 계산 실패 시 기본 이동시간
 
 
 def run() -> None:
@@ -83,7 +83,7 @@ def run() -> None:
         hours_until = (start_dt - now).total_seconds() / 3600
 
         # 게이트: 2시간 이내 일정만 Kakao 경로 API 호출
-        if hours_until > TMAP_GATE_HOURS:
+        if hours_until > ROUTE_GATE_HOURS:
             logger.info(f"⏳ 경로 게이트 통과 안 됨 ({hours_until:.1f}시간 후): {summary}")
             continue
 
@@ -192,8 +192,7 @@ def _add_return_home_if_applicable(events: list[dict], origin_lat: float, origin
 
     event_id = last_event["id"]
     # 이미 예약된 알림이어야 함
-    alerts = schedule_db._load()
-    alert = next((a for a in alerts if a["event_id"] == event_id and not a.get("sent")), None)
+    alert = schedule_db.get_active_alert(event_id)
     if not alert:
         return
 
