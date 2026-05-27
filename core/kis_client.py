@@ -20,7 +20,7 @@ PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
 INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
 INVESTOR_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor"
 DAILY_PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-price"
-VOLUME_RANK_URL = f"{BASE_URL}/uapi/domestic-stock/v1/ranking/volume"
+VOLUME_RANK_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/volume-rank"
 TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
 
 logger = logging.getLogger(__name__)
@@ -248,24 +248,33 @@ class KISClient:
         return closes
 
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
-    def get_top_trade_value_codes(self, market: str = "J", top_n: int = 50) -> list:
+    def get_top_trade_value_codes(self, market: str = "J", top_n: int = 30) -> list:
         """거래대금 상위 종목 코드 리스트 반환 (유니버스 확장용)
 
         Args:
             market: "J"=KOSPI, "Q"=KOSDAQ
-            top_n: 반환할 최대 종목 수 (API 기본 30개 제한)
+            top_n: 반환할 최대 종목 수 (KIS API 응답 상한 30개 고정 — 페이지네이션 미지원)
 
         Returns:
-            list[str]: 6자리 종목코드 리스트 (거래대금 내림차순)
+            list[str]: 6자리 종목코드 리스트 (거래대금 내림차순, ETF/레버리지 제외)
+
+        Notes:
+            KIS volume-rank 엔드포인트는 fid_cond_mrkt_div_code="J" 만 허용.
+            시장 구분은 fid_input_iscd로 수행: 0001=KOSPI 전체, 1001=KOSDAQ 전체.
+            fid_blng_cls_code=3 → 순수 주식만 반환 (ETF·레버리지·인버스 제외).
         """
+        # KIS API는 항상 J, 시장 구분은 fid_input_iscd 로
+        _iscd_map = {"J": "0001", "Q": "1001"}
+        fid_input_iscd = _iscd_map.get(market, "0001")
+
         headers = self._headers()
         headers["tr_id"] = "FHPST01710000"
         resp = requests.get(VOLUME_RANK_URL, headers=headers, params={
-            "fid_cond_mrkt_cls_code": market,
+            "fid_cond_mrkt_div_code": "J",        # 항상 "J" (KOSPI/KOSDAQ 공통)
             "fid_cond_scr_div_code": "20171",
-            "fid_input_iscd": "0000",
+            "fid_input_iscd": fid_input_iscd,      # 0001=KOSPI, 1001=KOSDAQ
             "fid_div_cls_code": "0",
-            "fid_blng_cls_code": "0",
+            "fid_blng_cls_code": "3",              # 순수 주식만 (ETF 제외)
             "fid_trgt_cls_code": "111111111",
             "fid_trgt_exls_cls_code": "0000000000",
             "fid_input_price_1": "",

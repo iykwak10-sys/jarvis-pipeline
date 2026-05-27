@@ -24,7 +24,9 @@ from core.leading_stock_scanner import (
 logger = logging.getLogger(__name__)
 
 # KOSPI 상위 N + KOSDAQ 상위 M 합산으로 유니버스 구성
-KOSPI_TOP_N = 50
+# ⚠️ KIS volume-rank API 응답 상한 = 30건/호출, 페이지네이션 미지원
+#    → 실질 최대 유니버스: KOSPI 30 + KOSDAQ 30 = 60종목
+KOSPI_TOP_N = 30
 KOSDAQ_TOP_M = 30
 
 
@@ -70,14 +72,14 @@ def _fetch_universe(kis) -> Tuple[List[str], int, int]:
 def scan_market(
     portfolio_codes: Optional[Set[str]] = None,
     name_map: Optional[Dict[str, str]] = None,
-    min_score: int = 6,
+    min_score: int = 9,
 ) -> UniverseScanResult:
     """시장 전체 주도주 스캔 실행
 
     Args:
         portfolio_codes: 포트폴리오 보유 코드 집합 (포트폴리오 플래그용)
         name_map:        {code: name} 종목명 매핑
-        min_score:       최소 가중 점수 (기본 6/15)
+        min_score:       최소 가중 점수 (기본 9/15)
 
     Returns:
         UniverseScanResult (portfolio_hits, new_candidates 분리)
