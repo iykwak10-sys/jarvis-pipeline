@@ -22,7 +22,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from core.config import LOG_DIR
-from schedule_briefing import calendar_client, maps_client, schedule_db, location_cache
+from schedule_briefing import calendar_client, maps_client, tmap_client, schedule_db, location_cache
 
 logging.basicConfig(
     level=logging.INFO,
@@ -82,16 +82,16 @@ def run() -> None:
         location_text = event["location"]
         hours_until = (start_dt - now).total_seconds() / 3600
 
-        # 게이트: 2시간 이내 일정만 TMAP 호출
+        # 게이트: 2시간 이내 일정만 Kakao 경로 API 호출
         if hours_until > TMAP_GATE_HOURS:
-            logger.info(f"⏳ TMAP 게이트 통과 안 됨 ({hours_until:.1f}시간 후): {summary}")
+            logger.info(f"⏳ 경로 게이트 통과 안 됨 ({hours_until:.1f}시간 후): {summary}")
             continue
 
         if hours_until < 0:
             logger.info(f"⏭️ 이미 지난 일정 스킵: {summary}")
             continue
 
-        logger.info(f"🗺️ TMAP 호출: {summary} @ {location_text} ({hours_until:.1f}시간 후)")
+        logger.info(f"🗺️ 카카오 경로 호출: {summary} @ {location_text} ({hours_until:.1f}시간 후)")
 
         # 목적지 좌표 조회 (POI 검색 → 지오코딩 폴백)
         dest_coords = _resolve_destination(location_text)
@@ -103,9 +103,9 @@ def run() -> None:
         else:
             dest_lat, dest_lng = dest_coords
 
-            # TMAP 소요시간 계산 (출발 예정 시각 기준)
+            # 카카오 소요시간 계산 (출발 예정 시각 기준)
             depart_estimate = start_dt - timedelta(minutes=BUFFER_MINUTES)
-            travel_info = maps_client.get_travel_time(
+            travel_info = tmap_client.get_travel_time(
                 origin_lat, origin_lng,
                 dest_lat, dest_lng,
                 depart_estimate,
@@ -157,13 +157,18 @@ def run() -> None:
 
 
 def _resolve_destination(location_text: str) -> tuple[float, float] | None:
-    """장소 텍스트 → 좌표 (장소 검색 → 지오코딩 순서로 시도)"""
-    # 1차: 장소명 검색 (Google Maps Places)
-    coords = maps_client.search_place_coords(location_text)
+    """장소 텍스트 → 좌표 (카카오 POI 검색 → 카카오 지오코딩 → Google 지오코딩 순서로 시도)"""
+    # 1차: 카카오 장소명 검색 (POI)
+    coords = tmap_client.pois_search(location_text)
     if coords:
         return coords
 
-    # 2차: 지오코딩 (Google Maps Geocoding)
+    # 2차: 카카오 주소 지오코딩
+    coords = tmap_client.geocode_address(location_text)
+    if coords:
+        return coords
+
+    # 3차: Google Maps 지오코딩 (폴백)
     coords = maps_client.geocode(location_text)
     if coords:
         return coords
@@ -205,7 +210,7 @@ def _add_return_home_if_applicable(events: list[dict], origin_lat: float, origin
 
     try:
         end_dt = last_event["end_dt"]
-        return_info = maps_client.get_travel_time(dest_lat, dest_lng, home_lat, home_lng, end_dt)
+        return_info = tmap_client.get_travel_time(dest_lat, dest_lng, home_lat, home_lng, end_dt)
         alert["return_home_minutes"] = return_info["recommended_minutes"]
         alert["return_home_mode"] = return_info["mode"]
         schedule_db.upsert_alert(event_id, alert)
@@ -268,7 +273,7 @@ def run_tomorrow() -> None:
         if dest_coords:
             dest_lat, dest_lng = dest_coords
             start_dt = first_event["start_dt"]
-            travel_info = maps_client.get_travel_time(
+            travel_info = tmap_client.get_travel_time(
                 origin_lat, origin_lng, dest_lat, dest_lng, start_dt,
             )
             travel_min = travel_info["recommended_minutes"]
