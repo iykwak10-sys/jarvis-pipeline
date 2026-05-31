@@ -4,6 +4,7 @@
 google_credentials.json
 credentials/
 data/.kis_token.json
+kis-mcp/.kis_token.json
 logs/
 __pycache__/
 *.pyc
