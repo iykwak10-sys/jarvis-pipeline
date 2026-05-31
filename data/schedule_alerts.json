@@ -1,22 +1,5 @@
 [
   {
-    "summary": "팀 미팅",
-    "location": "강남역 3번 출구",
-    "start_dt": "2026-05-26T18:10:27.952865",
-    "alert_dt": "2026-05-26T17:09:27.952865",
-    "travel_minutes": 25,
-    "travel_mode": "대중교통",
-    "origin_lat": 37.5665,
-    "origin_lng": 126.978,
-    "dest_lat": 37.4979,
-    "dest_lng": 127.0276,
-    "location_is_default": true,
-    "planned_at": "2026-05-26T17:10:27.952865",
-    "event_id": "test-event-001",
-    "sent": true,
-    "sent_at": "2026-05-26T17:11:02.478212"
-  },
-  {
     "summary": "둔산동 스벅미팅",
     "location": "스타벅스 둔산은하수점, 대한민국 대전광역시 서구 둔산2동 1010",
     "description": "",
