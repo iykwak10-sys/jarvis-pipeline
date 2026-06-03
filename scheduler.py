@@ -4,6 +4,7 @@
 import atexit
 import logging
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -49,8 +50,55 @@ def acquire_pid_lock() -> None:
 
 
 # ── 봇 프로세스 관리 ──────────────────────────────────────────────────────────
+def _terminate_stale_bot() -> None:
+    """이전 스케줄러가 남긴 bot.py 인스턴스를 정리.
+
+    launchd keepalive 재시작 시 고아 bot.py가 살아남아 같은 토큰으로 polling하면
+    Telegram이 'Conflict: terminated by other getUpdates request'를 반복 발생시킨다.
+    새 봇을 띄우기 전 BOT_PID_FILE에 기록된 기존 인스턴스를 종료해 단일 폴러를 보장한다.
+    """
+    if not BOT_PID_FILE.exists():
+        return
+    try:
+        old_pid = int(BOT_PID_FILE.read_text().strip())
+    except (ValueError, OSError):
+        BOT_PID_FILE.unlink(missing_ok=True)
+        return
+    try:
+        os.kill(old_pid, 0)  # 살아있는지 확인
+    except OSError:
+        BOT_PID_FILE.unlink(missing_ok=True)
+        return
+    # PID 재사용 방지 — 실제 우리 bot.py인지 커맨드라인으로 확인
+    try:
+        cmd = subprocess.run(
+            ["ps", "-p", str(old_pid), "-o", "command="],
+            capture_output=True, text=True, timeout=5,
+        ).stdout
+    except Exception:
+        cmd = ""
+    if "bot.py" not in cmd:
+        BOT_PID_FILE.unlink(missing_ok=True)
+        return
+    logger.warning(f"기존 Telegram 봇(PID {old_pid}) 종료 — Conflict 방지")
+    try:
+        os.kill(old_pid, signal.SIGTERM)
+        for _ in range(10):  # 최대 5초 대기
+            time.sleep(0.5)
+            try:
+                os.kill(old_pid, 0)
+            except OSError:
+                break
+        else:
+            os.kill(old_pid, signal.SIGKILL)  # 안 죽으면 강제 종료
+    except OSError:
+        pass
+    BOT_PID_FILE.unlink(missing_ok=True)
+
+
 def start_bot() -> None:
-    """bot.py를 백그라운드 프로세스로 시작"""
+    """bot.py를 백그라운드 프로세스로 시작 (기존 인스턴스 정리 후)"""
+    _terminate_stale_bot()
     proc = subprocess.Popen(
         [sys.executable, str(BASE_DIR / "bot.py")],
         stdout=open(LOG_DIR / "bot.log", "a"),

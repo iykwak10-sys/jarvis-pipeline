@@ -15,6 +15,8 @@
 상태 파일: data/intraday_scan_state.json
 """
 
+from __future__ import annotations  # PEP 604 union (str | None) 호환 — Python 3.9 launchd 실행 대응
+
 import argparse
 import csv
 import json
