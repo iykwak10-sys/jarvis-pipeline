@@ -226,7 +226,10 @@ def job_tomorrow_briefing() -> None:
 # ── 스케줄 등록 및 메인 루프 ─────────────────────────────────────────────────
 def main() -> None:
     acquire_pid_lock()
-    start_bot()
+    # bot.py 비활성화 — 동일 Telegram 토큰(8777824856)을 Hermes 게이트웨이
+    # (ai.hermes.gateway)가 primary로 폴링 중이라 함께 띄우면 영구 Conflict 발생.
+    # 종목 명령은 Hermes 게이트웨이로 일원화. 전용 토큰 발급 시 아래 줄 복원.
+    # start_bot()
 
     schedule.every(5).minutes.do(job_realtime)
     schedule.every().day.at("06:30").do(job_morning_briefing)
