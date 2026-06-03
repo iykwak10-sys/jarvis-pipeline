@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Optional
 
 # ── SSOT CSV 경로 ────────────────────────────────────────────────
-SSOT_CSV = Path("/Users/kwaksmacmini/개인투자비서 Agent/data/portfolio.csv")
+SSOT_CSV = Path("/Users/kwaksmacmini/01_Execution_Field/개인투자비서 Agent/data/portfolio.csv")
 LOCK_PATH = "/tmp/jarvis_portfolio.lock"
 logger = logging.getLogger(__name__)
 
