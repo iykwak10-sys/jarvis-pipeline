@@ -234,7 +234,8 @@ def main() -> None:
     schedule.every(5).minutes.do(job_realtime)
     schedule.every().day.at("06:30").do(job_morning_briefing)
     schedule.every().day.at("07:00").do(job_news_briefing)
-    schedule.every().day.at("06:05").do(job_us_alert)
+    # 06:05 미국장 마감 수동 분석 유도 알림은 Hermes 아침 투자 브리핑과 중복되어 비활성화.
+    # schedule.every().day.at("06:05").do(job_us_alert)
     schedule.every().day.at("09:00").do(job_health_check)
     schedule.every().day.at("10:00").do(job_price_alert)
     schedule.every().day.at("13:00").do(job_price_alert)
