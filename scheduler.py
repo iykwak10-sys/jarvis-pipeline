@@ -256,7 +256,7 @@ def main() -> None:
     schedule.every().day.at("22:00").do(job_tomorrow_briefing)
 
     logger.info("🚀 Jarvis 스케줄러 시작")
-    logger.info("  06:30 아침 브리핑 | 06:05 미국장 마감 알림 | 07:00 뉴스 브리핑 | 09:00 헬스체크")
+    logger.info("  06:30 아침 브리핑 | 07:00 뉴스 브리핑 | 09:00 헬스체크")
     logger.info("  10:00/13:00/14:30 급등락 알림 | 15:35 마감 수집")
     logger.info("  5분 간격 장중 실시간 수집")
     logger.info("  ⚡ 장중 주도주 모니터: 09:10(초기) / 10:30 / 13:30 / 15:00")
