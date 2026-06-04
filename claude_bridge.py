@@ -164,10 +164,41 @@ def find_projects(name: str, max_depth: int = 3) -> list[Path]:
     return hits[:20]
 
 
+def _whisper_transcribe_module():
+    """mlx_whisper.transcribe 서브모듈 객체를 명시적으로 반환.
+    (__init__ 가 동명 함수로 이름을 가려서 import ... as 는 함수에 바인딩됨)"""
+    import importlib
+
+    return importlib.import_module("mlx_whisper.transcribe")
+
+
+def _ensure_model_cache() -> None:
+    """mlx_whisper.transcribe 가 호출마다 모델을 재로드(~1.2s 낭비)하지 않도록
+    내부 load_model 을 lru_cache 로 감싸 프로세스에 모델을 상주시킨다 (1회만 패치)."""
+    from functools import lru_cache
+
+    _twm = _whisper_transcribe_module()
+    if not getattr(_twm.load_model, "_bridge_cached", False):
+        cached = lru_cache(maxsize=2)(_twm.load_model)
+        cached._bridge_cached = True
+        _twm.load_model = cached
+
+
+def warm_whisper() -> None:
+    """모델을 미리 메모리에 올려 첫 음성 메시지의 콜드 지연을 제거."""
+    try:
+        _ensure_model_cache()
+        _whisper_transcribe_module().load_model(WHISPER_MODEL)
+        log.info("whisper 모델 프리로드 완료: %s", WHISPER_MODEL)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("whisper 프리로드 실패(첫 음성 시 로드됨): %s", exc)
+
+
 def transcribe(audio_path: str) -> str:
-    """mlx-whisper 로 로컬 STT (Apple Silicon, API 비용 없음)."""
+    """mlx-whisper 로 로컬 STT (Apple Silicon, API 비용 없음). 모델은 상주 캐시."""
     import mlx_whisper  # 지연 임포트 (시작 속도 ↑)
 
+    _ensure_model_cache()
     result = mlx_whisper.transcribe(audio_path, path_or_hf_repo=WHISPER_MODEL)
     return (result.get("text") or "").strip()
 
@@ -445,7 +476,11 @@ def main():
     if not ALLOWED_CHAT:
         raise SystemExit("CLAUDE_BRIDGE_CHAT_ID(또는 JARVIS_CHAT_ID)가 .env에 없습니다.")
 
-    app = Application.builder().token(BOT_TOKEN).build()
+    async def _post_init(application):
+        # STT 모델을 백그라운드로 미리 로드 (첫 음성 콜드 지연 제거, 폴링은 즉시 시작)
+        asyncio.create_task(asyncio.to_thread(warm_whisper))
+
+    app = Application.builder().token(BOT_TOKEN).post_init(_post_init).build()
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("help", cmd_start))
     app.add_handler(CommandHandler("projects", cmd_projects))
