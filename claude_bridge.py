@@ -124,6 +124,43 @@ def list_projects() -> list[Path]:
     return out[:40]
 
 
+_SKIP_DIRS = {
+    "node_modules", "venv", ".venv", "__pycache__", ".git", "Library",
+    "site-packages", ".cache", "dist", "build", ".next", "worktrees",
+}
+
+
+def find_projects(name: str, max_depth: int = 3) -> list[Path]:
+    """PROJECTS_ROOT 하위를 깊이 제한으로 탐색해 이름이 일치하는 디렉터리를 찾는다.
+    완전일치(대소문자 무시) 우선, git repo 우선 정렬."""
+    name_l = name.lower()
+    exact: list[Path] = []
+    partial: list[Path] = []
+
+    def walk(base: Path, depth: int):
+        if depth > max_depth:
+            return
+        try:
+            entries = list(base.iterdir())
+        except (PermissionError, OSError):
+            return
+        for p in entries:
+            if not p.is_dir() or p.name.startswith(".") or p.name in _SKIP_DIRS:
+                continue
+            nl = p.name.lower()
+            if nl == name_l:
+                exact.append(p)
+            elif name_l in nl:
+                partial.append(p)
+            walk(p, depth + 1)
+
+    walk(PROJECTS_ROOT, 1)
+    hits = exact if exact else partial
+    # git repo를 앞쪽으로
+    hits.sort(key=lambda p: (not (p / ".git").exists(), len(str(p))))
+    return hits[:20]
+
+
 # ---------------------------------------------------------------- commands
 
 
@@ -156,7 +193,11 @@ async def cmd_projects(update: Update, _ctx):
     for p in projs:
         git = "🌿" if (p / ".git").exists() else "  "
         lines.append(f"{git} {p.name}")
-    lines += ["", "선택: `/cd <이름>`"]
+    lines += [
+        "",
+        "선택: `/cd <이름>` — 중첩 폴더도 이름만으로 자동 검색됩니다.",
+        "예: `/cd jarvis-pipeline` 또는 `/cd 01_Execution_Field/jarvis-pipeline`",
+    ]
     await reply(update, "\n".join(lines), parse_mode=ParseMode.MARKDOWN)
 
 
@@ -166,15 +207,26 @@ async def cmd_cd(update: Update, ctx):
     if not ctx.args:
         await reply(update, "사용법: /cd <프로젝트이름>")
         return
-    name = " ".join(ctx.args)
-    target = (PROJECTS_ROOT / name).expanduser()
+    name = " ".join(ctx.args).strip()
+    # 1) 절대/상대(중첩) 경로 직접 입력 지원
+    if name.startswith("/") or name.startswith("~"):
+        target = Path(name).expanduser()
+    else:
+        target = (PROJECTS_ROOT / name).expanduser()
+    # 2) 직접 경로가 없으면 이름으로 재귀 검색 (git repo 우선)
     if not target.is_dir():
-        # 부분일치 검색
-        cands = [p for p in list_projects() if name.lower() in p.name.lower()]
+        cands = await asyncio.to_thread(find_projects, name)
         if len(cands) == 1:
             target = cands[0]
+        elif len(cands) > 1:
+            lines = [f"❓ '{name}' 후보가 여러 개입니다. 정확히 골라주세요:", ""]
+            for p in cands[:15]:
+                rel = p.relative_to(PROJECTS_ROOT) if PROJECTS_ROOT in p.parents else p
+                lines.append(f"`/cd {rel}`")
+            await reply(update, "\n".join(lines), parse_mode=ParseMode.MARKDOWN)
+            return
         else:
-            await reply(update, f"❌ '{name}' 프로젝트를 찾지 못했습니다.")
+            await reply(update, f"❌ '{name}' 프로젝트를 찾지 못했습니다.\n`/projects` 로 목록을 보거나 전체 경로로 `/cd <경로>` 하세요.")
             return
     s = st(update.effective_chat.id)
     await update.effective_chat.send_action(ChatAction.TYPING)
