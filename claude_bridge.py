@@ -21,6 +21,7 @@ import logging
 import os
 import shlex
 import subprocess
+import tempfile
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -57,6 +58,8 @@ BOT_TOKEN = os.getenv("CLAUDE_BRIDGE_BOT_TOKEN") or os.getenv("JARVIS_BOT_TOKEN"
 ALLOWED_CHAT = str(os.getenv("CLAUDE_BRIDGE_CHAT_ID") or os.getenv("JARVIS_CHAT_ID") or "")
 PROJECTS_ROOT = Path(os.getenv("CLAUDE_BRIDGE_PROJECTS") or Path.home()).expanduser()
 TG_LIMIT = 3900  # 4096 안전 마진
+# Apple Silicon 로컬 STT (API 비용 없음). 첫 사용 시 모델 자동 다운로드.
+WHISPER_MODEL = os.getenv("CLAUDE_BRIDGE_WHISPER_MODEL", "mlx-community/whisper-large-v3-turbo")
 
 
 @dataclass
@@ -159,6 +162,14 @@ def find_projects(name: str, max_depth: int = 3) -> list[Path]:
     # git repo를 앞쪽으로
     hits.sort(key=lambda p: (not (p / ".git").exists(), len(str(p))))
     return hits[:20]
+
+
+def transcribe(audio_path: str) -> str:
+    """mlx-whisper 로 로컬 STT (Apple Silicon, API 비용 없음)."""
+    import mlx_whisper  # 지연 임포트 (시작 속도 ↑)
+
+    result = mlx_whisper.transcribe(audio_path, path_or_hf_repo=WHISPER_MODEL)
+    return (result.get("text") or "").strip()
 
 
 # ---------------------------------------------------------------- commands
