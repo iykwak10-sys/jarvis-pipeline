@@ -20,3 +20,9 @@ venv/
 __pycache__/
 *.egg-info/
 .cache/
+
+# Host-specific runtime state (절대 동기화 금지)
+*.pid
+*.lock
+.host_id
+host.local
