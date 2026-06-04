@@ -41,8 +41,22 @@ def acquire_pid_lock() -> None:
         try:
             old_pid = int(PID_FILE.read_text().strip())
             os.kill(old_pid, 0)
-            logger.warning(f"스케줄러 이미 실행 중 (PID {old_pid}) — 종료")
-            sys.exit(0)
+            # PID 재사용 방지 — 실제 우리 scheduler.py인지 커맨드라인으로 확인.
+            # 스케줄러가 죽은 뒤 OS가 같은 PID를 다른 프로세스(예: assistantd)에
+            # 재할당하면 os.kill(pid, 0)이 통과해 가드가 오판하므로 명령어까지 검증한다.
+            try:
+                cmd = subprocess.run(
+                    ["ps", "-p", str(old_pid), "-o", "command="],
+                    capture_output=True, text=True, timeout=5,
+                ).stdout
+            except Exception:
+                cmd = ""
+            if "scheduler.py" in cmd:
+                logger.warning(f"스케줄러 이미 실행 중 (PID {old_pid}) — 종료")
+                sys.exit(0)
+            logger.warning(
+                f"스테일 PID {old_pid} (재사용된 프로세스: {cmd.strip() or '?'}) — 락 회수"
+            )
         except (ProcessLookupError, ValueError, OSError):
             pass
     PID_FILE.write_text(str(os.getpid()))
