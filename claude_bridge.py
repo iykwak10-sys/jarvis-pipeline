@@ -181,17 +181,27 @@ async def cmd_start(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
         return
     await reply(
         update,
-        "🤖 *Claude Code 브리지*\n\n"
-        "이 봇으로 맥미니의 Claude Code를 원격 구동합니다.\n\n"
-        "*명령어*\n"
-        "/projects — 프로젝트 목록\n"
-        "/cd <이름> — 프로젝트 선택(자동 worktree 격리)\n"
-        "/pwd — 현재 작업 위치\n"
-        "/new — 대화 세션 초기화\n"
-        "/stop — 실행 중단\n"
-        "/diff — 변경사항 보기\n"
-        "/commit <메시지> — 커밋\n\n"
-        "그 외 일반 메시지는 Claude에게 그대로 전달됩니다.",
+        "🤖 *Claude Code 브리지*\n"
+        "맥미니의 Claude Code를 텔레그램에서 원격 구동합니다.\n"
+        "\n"
+        "━━━ 📂 *프로젝트* ━━━\n"
+        "`/projects` — 프로젝트 목록 보기\n"
+        "`/cd <이름>` — 프로젝트 선택 (중첩 폴더 자동 검색, worktree 격리)\n"
+        "`/pwd` — 현재 작업 위치·세션 확인\n"
+        "\n"
+        "━━━ 💬 *대화* ━━━\n"
+        "일반 텍스트 / 🎤 음성 — Claude에게 그대로 전달\n"
+        "`/new` — 대화 세션 초기화 (맥락 리셋)\n"
+        "`/stop` — 진행 중 작업 중단\n"
+        "\n"
+        "━━━ 🌿 *Git* ━━━\n"
+        "`/diff` — 변경사항 보기\n"
+        "`/commit <메시지>` — 변경사항 커밋\n"
+        "\n"
+        "━━━ 💡 *팁* ━━━\n"
+        "• `/cd` 와 작업 지시를 *한 메시지에 두 줄*로 보내면 선택 후 바로 실행됩니다.\n"
+        "• 음성 메시지를 보내면 자동으로 받아써서(STT) 작업합니다.\n"
+        "• 같은 프로젝트에서 계속 메시지를 보내면 대화 맥락이 이어집니다.",
         parse_mode=ParseMode.MARKDOWN,
     )
 
@@ -327,6 +337,7 @@ async def run_claude(update: Update, s: ChatState, prompt: str):
         return
     s.busy = True
     s.cancel = False
+    started = time.monotonic()
     options = ClaudeAgentOptions(
         cwd=str(s.workdir),
         permission_mode="bypassPermissions",
@@ -368,14 +379,12 @@ async def run_claude(update: Update, s: ChatState, prompt: str):
             elif isinstance(message, ResultMessage):
                 s.session_id = message.session_id
                 await flush()
-                cost = getattr(message, "total_cost_usd", None)
-                turns = getattr(message, "num_turns", None)
-                tail = "✅ 완료"
-                if cost is not None:
-                    tail += f" · ${cost:.4f}"
-                if turns is not None:
-                    tail += f" · {turns}턴"
-                await reply(update, tail)
+                elapsed = time.monotonic() - started
+                if elapsed >= 60:
+                    dur = f"{int(elapsed // 60)}분 {int(elapsed % 60)}초"
+                else:
+                    dur = f"{elapsed:.1f}초"
+                await reply(update, f"✅ 완료 · ⏱ {dur}")
         await flush()
     except Exception as exc:  # noqa: BLE001
         log.exception("query 실패")
@@ -390,6 +399,41 @@ async def on_message(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
         return
     s = st(update.effective_chat.id)
     await run_claude(update, s, update.effective_message.text)
+
+
+async def on_voice(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    """음성/오디오 메시지 → 로컬 STT → Claude 실행."""
+    if not authorized(update):
+        await reply(update, "⛔ 허용되지 않은 chat_id 입니다.")
+        return
+    s = st(update.effective_chat.id)
+    msg = update.effective_message
+    media = msg.voice or msg.audio
+    if not media:
+        return
+
+    await update.effective_chat.send_action(ChatAction.TYPING)
+    tmp = tempfile.NamedTemporaryFile(suffix=".oga", delete=False)
+    tmp.close()
+    try:
+        tg_file = await ctx.bot.get_file(media.file_id)
+        await tg_file.download_to_drive(tmp.name)
+        text = await asyncio.to_thread(transcribe, tmp.name)
+    except Exception as exc:  # noqa: BLE001
+        log.exception("STT 실패")
+        await reply(update, f"❌ 음성 인식 실패: {exc}")
+        return
+    finally:
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+
+    if not text:
+        await reply(update, "🎤 음성에서 텍스트를 인식하지 못했습니다.")
+        return
+    await reply(update, f"🎤 인식: _{text}_", parse_mode=ParseMode.MARKDOWN)
+    await run_claude(update, s, text)
 
 
 # ---------------------------------------------------------------- main
@@ -412,6 +456,7 @@ def main():
     app.add_handler(CommandHandler("diff", cmd_diff))
     app.add_handler(CommandHandler("commit", cmd_commit))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_message))
+    app.add_handler(MessageHandler(filters.VOICE | filters.AUDIO, on_voice))
 
     log.info("Claude bridge 시작. projects_root=%s allowed_chat=%s", PROJECTS_ROOT, ALLOWED_CHAT)
     app.run_polling(allowed_updates=Update.ALL_TYPES)
