@@ -13,3 +13,10 @@ __pycache__/
 .vercel
 .env*.local
 data/*.json
+
+# Python 가상환경 / 캐시 (git-sync clean 보호)
+venv/
+.venv/
+__pycache__/
+*.egg-info/
+.cache/
