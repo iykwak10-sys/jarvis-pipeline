@@ -215,7 +215,39 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         logger.error(f"위치 저장 오류: {e}")
 
 
+# 운영 머신 LocalHostName. 빈 문자열이면 가드 비활성화.
+# 활성화하려면 예: "kwak-mac-mini" — `scutil --get LocalHostName` 결과와 동일하게.
+OPERATING_HOST = ""
+
+
+def _host_guard() -> None:
+    """봇은 OPERATING_HOST와 일치하는 머신에서만 폴링한다.
+
+    같은 토큰을 두 머신이 동시에 폴링하면 Telegram이 Conflict를 영구 발생시킨다.
+    JARVIS_OPERATING_HOST 환경변수 또는 OPERATING_HOST 상수로 운영 머신을 지정.
+    """
+    import subprocess as _sp
+    expected = os.environ.get("JARVIS_OPERATING_HOST", OPERATING_HOST).strip()
+    if not expected:
+        return
+    try:
+        actual = _sp.check_output(
+            ["scutil", "--get", "LocalHostName"], text=True, timeout=2
+        ).strip()
+    except Exception:
+        actual = os.uname().nodename.split(".")[0]
+    if actual != expected:
+        logger.error(
+            "Host guard: this is '%s' but JARVIS_OPERATING_HOST='%s'. Refusing to start.",
+            actual, expected,
+        )
+        raise SystemExit(2)
+
+
 def main() -> None:
+    # ── 머신 가드 (잘못된 기기에서 폴링 방지) ──
+    _host_guard()
+
     # ── 단일 인스턴스 잠금 획득 ──
     lock_fd = acquire_bot_lock()
     if lock_fd is None:
