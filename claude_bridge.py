@@ -204,10 +204,15 @@ async def cmd_projects(update: Update, _ctx):
 async def cmd_cd(update: Update, ctx):
     if not authorized(update):
         return
-    if not ctx.args:
+    # 전체 텍스트에서 첫 줄만 프로젝트 이름으로, 줄바꿈 뒤는 즉시 실행할 지시로 분리
+    raw = (update.effective_message.text or "").split("\n", 1)
+    first_line = raw[0]
+    followup = raw[1].strip() if len(raw) > 1 else ""
+    # "/cd " 접두 제거
+    name = first_line.split(None, 1)[1].strip() if len(first_line.split(None, 1)) > 1 else ""
+    if not name:
         await reply(update, "사용법: /cd <프로젝트이름>")
         return
-    name = " ".join(ctx.args).strip()
     # 1) 절대/상대(중첩) 경로 직접 입력 지원
     if name.startswith("/") or name.startswith("~"):
         target = Path(name).expanduser()
@@ -233,11 +238,15 @@ async def cmd_cd(update: Update, ctx):
     workdir, branch = await asyncio.to_thread(make_worktree, target)
     s.project, s.workdir, s.branch, s.session_id = target, workdir, branch, None
     extra = f"\n🌿 worktree 브랜치: `{branch}`" if branch else "\n⚠️ git repo 아님 — 원본에서 직접 실행"
+    tail = "" if followup else "\n\n이제 메시지를 보내면 작업을 시작합니다."
     await reply(
         update,
-        f"✅ 선택: *{target.name}*\n작업 위치: `{workdir}`{extra}\n\n이제 메시지를 보내면 작업을 시작합니다.",
+        f"✅ 선택: *{target.name}*\n작업 위치: `{workdir}`{extra}{tail}",
         parse_mode=ParseMode.MARKDOWN,
     )
+    # /cd 와 같은 메시지에 작업 지시가 함께 왔으면 바로 실행
+    if followup:
+        await run_claude(update, s, followup)
 
 
 async def cmd_pwd(update: Update, _ctx):
@@ -297,19 +306,14 @@ async def cmd_commit(update: Update, ctx):
 # ---------------------------------------------------------------- core: run claude
 
 
-async def on_message(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
-    if not authorized(update):
-        await reply(update, "⛔ 허용되지 않은 chat_id 입니다.")
-        return
-    s = st(update.effective_chat.id)
+async def run_claude(update: Update, s: ChatState, prompt: str):
+    """선택된 프로젝트(worktree)에서 Claude를 실행하고 결과를 텔레그램으로 스트리밍."""
     if not s.workdir:
         await reply(update, "먼저 /projects → /cd <이름> 으로 프로젝트를 선택하세요.")
         return
     if s.busy:
         await reply(update, "⏳ 이전 작업이 아직 진행 중입니다. /stop 으로 중단할 수 있어요.")
         return
-
-    prompt = update.effective_message.text
     s.busy = True
     s.cancel = False
     options = ClaudeAgentOptions(
@@ -367,6 +371,14 @@ async def on_message(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
         await reply(update, f"❌ 오류: {exc}")
     finally:
         s.busy = False
+
+
+async def on_message(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
+    if not authorized(update):
+        await reply(update, "⛔ 허용되지 않은 chat_id 입니다.")
+        return
+    s = st(update.effective_chat.id)
+    await run_claude(update, s, update.effective_message.text)
 
 
 # ---------------------------------------------------------------- main
