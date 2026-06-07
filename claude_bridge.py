@@ -147,7 +147,7 @@ def find_projects(name: str, max_depth: int = 3) -> list[Path]:
     exact: list[Path] = []
     partial: list[Path] = []
 
-    def walk(base: Path, depth: int):
+    def walk(base: Path, depth: int, allow_hidden: bool = False):
         if depth > max_depth:
             return
         try:
@@ -155,7 +155,10 @@ def find_projects(name: str, max_depth: int = 3) -> list[Path]:
         except (PermissionError, OSError):
             return
         for p in entries:
-            if not p.is_dir() or p.name.startswith(".") or p.name in _SKIP_DIRS:
+            if not p.is_dir() or p.name in _SKIP_DIRS:
+                continue
+            # depth=1(최상위)에서만 숨김 폴더 허용, 이하는 일반 폴더만
+            if p.name.startswith(".") and not allow_hidden:
                 continue
             nl = p.name.lower()
             if nl == name_l:
@@ -164,7 +167,7 @@ def find_projects(name: str, max_depth: int = 3) -> list[Path]:
                 partial.append(p)
             walk(p, depth + 1)
 
-    walk(PROJECTS_ROOT, 1)
+    walk(PROJECTS_ROOT, 1, allow_hidden=True)
     hits = exact if exact else partial
     # git repo를 앞쪽으로
     hits.sort(key=lambda p: (not (p / ".git").exists(), len(str(p))))
@@ -262,8 +265,10 @@ async def cmd_cd(update: Update, ctx):
     else:
         target = (PROJECTS_ROOT / name).expanduser()
     # 2) 직접 경로가 없으면 이름으로 재귀 검색 (git repo 우선)
+    # "00Raphael/HermesBrain" 처럼 경로 구분자 포함 시 마지막 컴포넌트로 검색
+    search_name = name.split("/")[-1] if "/" in name else name
     if not target.is_dir():
-        cands = await asyncio.to_thread(find_projects, name)
+        cands = await asyncio.to_thread(find_projects, search_name)
         if len(cands) == 1:
             target = cands[0]
         elif len(cands) > 1:
@@ -274,7 +279,7 @@ async def cmd_cd(update: Update, ctx):
             await reply(update, "\n".join(lines), parse_mode=ParseMode.MARKDOWN)
             return
         else:
-            await reply(update, f"❌ '{name}' 프로젝트를 찾지 못했습니다.\n`/projects` 로 목록을 보거나 전체 경로로 `/cd <경로>` 하세요.")
+            await reply(update, f"❌ '{search_name}' 프로젝트를 찾지 못했습니다.\n`/projects` 로 목록을 보거나 전체 경로로 `/cd <경로>` 하세요.")
             return
     s = st(update.effective_chat.id)
     await update.effective_chat.send_action(ChatAction.TYPING)
@@ -352,8 +357,8 @@ async def cmd_commit(update: Update, ctx):
 async def run_claude(update: Update, s: ChatState, prompt: str):
     """선택된 프로젝트(worktree)에서 Claude를 실행하고 결과를 텔레그램으로 스트리밍."""
     if not s.workdir:
-        await reply(update, "먼저 /projects → /cd <이름> 으로 프로젝트를 선택하세요.")
-        return
+        # 프로젝트 미선택 시 홈 디렉터리에서 실행
+        s.workdir = Path.home()
     if s.busy:
         await reply(update, "⏳ 이전 작업이 아직 진행 중입니다. /stop 으로 중단할 수 있어요.")
         return
