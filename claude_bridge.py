@@ -92,6 +92,13 @@ async def reply(update: Update, text: str, **kw):
         await update.effective_message.reply_text(text[i : i + TG_LIMIT], **kw)
 
 
+def escape_md_v1(text: str) -> str:
+    """Telegram Markdown v1 특수문자 이스케이프 (_*`[)."""
+    for ch in ('_', '*', '`', '['):
+        text = text.replace(ch, f'\\{ch}')
+    return text
+
+
 def run_git(args: list[str], cwd: Path) -> tuple[int, str]:
     p = subprocess.run(
         ["git", *args], cwd=str(cwd), capture_output=True, text=True
@@ -387,7 +394,7 @@ async def run_claude(update: Update, s: ChatState, prompt: str):
                         elif name in ("Edit", "Write", "Read"):
                             detail = (block.input or {}).get("file_path", "")
                         await flush()
-                        await reply(update, f"🔧 `{name}` {detail}", parse_mode=ParseMode.MARKDOWN)
+                        await reply(update, f"🔧 `{name}` {escape_md_v1(detail)}", parse_mode=ParseMode.MARKDOWN)
                 # 길어지면 중간 flush
                 if sum(len(b) for b in buffer) > TG_LIMIT or time.monotonic() - last_flush > 8:
                     await flush()
@@ -447,7 +454,7 @@ async def on_voice(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     if not text:
         await reply(update, "🎤 음성에서 텍스트를 인식하지 못했습니다.")
         return
-    await reply(update, f"🎤 인식: _{text}_", parse_mode=ParseMode.MARKDOWN)
+    await reply(update, f"🎤 인식: _{escape_md_v1(text)}_", parse_mode=ParseMode.MARKDOWN)
     await run_claude(update, s, text)
 
 
