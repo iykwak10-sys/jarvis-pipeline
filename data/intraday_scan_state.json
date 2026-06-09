@@ -1,76 +1,217 @@
 {
-  "date": "2026-06-08",
-  "scan_time": "15:01",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-06-09",
+  "scan_time": "09:11",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "001740": {
-      "name": "001740",
-      "score": 9,
+    "402340": {
+      "name": "402340",
+      "score": 7,
       "passed": [
         "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "000660": {
+      "name": "000660",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "009150": {
+      "name": "009150",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "001740": {
+      "name": "001740",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "005935": {
+      "name": "005935",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "319660": {
+      "name": "319660",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "095610": {
+      "name": "095610",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "126640": {
+      "name": "126640",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
         "장중강도",
         "신고가근접",
         "신고가돌파"
       ],
       "is_portfolio": false
     },
-    "035420": {
-      "name": "035420",
-      "score": 8,
+    "000270": {
+      "name": "000270",
+      "score": 5,
       "passed": [
-        "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
         "장중강도",
-        "신고가근접"
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "079550": {
+      "name": "079550",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "036930",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "010170": {
+      "name": "010170",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "043260": {
+      "name": "043260",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
     "080220": {
       "name": "080220",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "017670": {
-      "name": "017670",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "018260": {
-      "name": "018260",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "066430": {
-      "name": "066430",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "403870": {
+      "name": "403870",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "067310": {
+      "name": "067310",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "089030": {
+      "name": "089030",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "178320": {
+      "name": "178320",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "240810": {
+      "name": "240810",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
         "장중강도",
         "RSI적정"
       ],
