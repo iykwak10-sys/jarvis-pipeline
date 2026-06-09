@@ -222,7 +222,7 @@ def _format_initial(results: list[StockScore], scan_label: str) -> str:
         lines.append("\n🆕 <b>신규 후보</b>")
         for s in new_hits[:5]:  # 최대 5종목
             lines.append(
-                f"  {s.name} ({s.code}) — <b>{s.score}/{MAX_SCORE}</b>\n"
+                f"  {s.name} — <b>{s.score}/{MAX_SCORE}</b>\n"
                 f"  └ {' · '.join(s.passed[:5])}"
             )
         if len(new_hits) > 5:
@@ -245,7 +245,7 @@ def _format_delta(
     if new_entries:
         parts.append("\n🆕 <b>신규 레이더 진입</b>")
         for s in new_entries[:4]:
-            parts.append(f"  • {s.name} ({s.code}){_pf(s)} — {s.score}/{MAX_SCORE}점")
+            parts.append(f"  • {s.name}{_pf(s)} — {s.score}/{MAX_SCORE}점")
 
     if improved:
         parts.append("\n⬆️ <b>점수 상승</b>")
@@ -264,7 +264,7 @@ def _format_delta(
     if exited:
         parts.append("\n🔕 <b>레이더 이탈</b>")
         for code, name, prev_score in exited[:3]:
-            parts.append(f"  • {name} ({code}) — {prev_score}점 → 조건 미충족")
+            parts.append(f"  • {name} — {prev_score}점 → 조건 미충족")
 
     return "\n".join(parts)
 
