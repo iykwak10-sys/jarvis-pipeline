@@ -86,10 +86,18 @@ def _load_portfolio() -> dict:
     return mapping
 
 
-def _fetch_universe_codes(kis: KISClient, portfolio_codes: set) -> list:
-    """KOSPI + KOSDAQ 거래대금 상위 종목 코드 + 포트폴리오 코드 합산"""
+def _fetch_universe_codes(kis: KISClient, portfolio_codes: set) -> tuple[list, dict]:
+    """KOSPI + KOSDAQ 거래대금 상위 종목 코드 + 포트폴리오 코드 합산
+
+    Returns:
+        (codes, universe_names)
+          codes:          스캔 대상 6자리 코드 리스트 (포트폴리오 우선)
+          universe_names: {code: name} — 거래대금 순위 API가 제공한 종목명.
+                          종목코드 대신 종목명으로 고정 송출하기 위한 매핑.
+    """
     codes = []
     seen = set()
+    universe_names: dict = {}
 
     # 포트폴리오 먼저 (항상 포함)
     for c in portfolio_codes:
@@ -99,17 +107,19 @@ def _fetch_universe_codes(kis: KISClient, portfolio_codes: set) -> list:
 
     for market, top_n in [("J", KOSPI_TOP_N), ("Q", KOSDAQ_TOP_N)]:
         try:
-            fetched = kis.get_top_trade_value_codes(market=market, top_n=top_n)
-            for c in fetched:
-                if c not in seen:
-                    seen.add(c)
-                    codes.append(c)
+            fetched = kis.get_top_trade_value(market=market, top_n=top_n)
+            for item in fetched:
+                code = item["code"]
+                universe_names[code] = item["name"]  # 종목명 고정 매핑
+                if code not in seen:
+                    seen.add(code)
+                    codes.append(code)
             logger.info(f"{'KOSPI' if market=='J' else 'KOSDAQ'} 유니버스 {len(fetched)}종목 수집")
         except Exception as e:
             logger.warning(f"유니버스 수집 실패 ({market}): {e}")
         time.sleep(0.3)
 
-    return codes
+    return codes, universe_names
 
 
 # ── 상태 파일 I/O ─────────────────────────────────────────────────────────────
@@ -281,17 +291,21 @@ def run(is_initial: bool, scan_label: str) -> None:
     kis = KISClient()
 
     # 유니버스 구성
-    codes = _fetch_universe_codes(kis, portfolio_codes)
+    codes, universe_names = _fetch_universe_codes(kis, portfolio_codes)
     if not codes:
         logger.warning("스캔 대상 종목 없음 — 종료")
         return
+
+    # 종목명 매핑: 유니버스 순위 API 종목명 + 포트폴리오 종목명(우선)
+    # → 모든 종목이 종목코드 대신 종목명으로 고정 송출되도록 보장
+    name_map = {**universe_names, **portfolio}
 
     logger.info(f"[{scan_label}] {len(codes)}종목 스캔 시작 (initial={is_initial})")
 
     # 스캔 실행
     results = scan(
         codes=codes,
-        name_map=portfolio,
+        name_map=name_map,
         min_score=MIN_SCORE,
         portfolio_codes=portfolio_codes,
     )

@@ -263,18 +263,33 @@ class KISClient:
             시장 구분은 fid_input_iscd로 수행: 0001=KOSPI 전체, 1001=KOSDAQ 전체.
             fid_blng_cls_code=3 → 순수 주식만 반환 (ETF·레버리지·인버스 제외).
         """
-        # KIS API는 항상 J, 시장 구분은 fid_input_iscd 로
+        return [r["code"] for r in self.get_top_trade_value(market=market, top_n=top_n)]
+
+    @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
+    def get_top_trade_value(self, market: str = "J", top_n: int = 30) -> list:
+        """거래대금 상위 종목 [{code, name}] 반환 (유니버스 이름 고정용)
+
+        volume-rank 응답에 포함된 hts_kor_isnm(종목명)을 함께 반환해,
+        장중 주도주 모니터가 종목코드 대신 종목명으로 고정 송출하도록 보장한다.
+
+        Args:
+            market: "J"=KOSPI, "Q"=KOSDAQ
+            top_n: 반환할 최대 종목 수
+
+        Returns:
+            list[dict]: [{"code": 6자리코드, "name": 종목명}] (거래대금 내림차순)
+        """
         _iscd_map = {"J": "0001", "Q": "1001"}
         fid_input_iscd = _iscd_map.get(market, "0001")
 
         headers = self._headers()
         headers["tr_id"] = "FHPST01710000"
         resp = requests.get(VOLUME_RANK_URL, headers=headers, params={
-            "fid_cond_mrkt_div_code": "J",        # 항상 "J" (KOSPI/KOSDAQ 공통)
+            "fid_cond_mrkt_div_code": "J",
             "fid_cond_scr_div_code": "20171",
-            "fid_input_iscd": fid_input_iscd,      # 0001=KOSPI, 1001=KOSDAQ
+            "fid_input_iscd": fid_input_iscd,
             "fid_div_cls_code": "0",
-            "fid_blng_cls_code": "3",              # 순수 주식만 (ETF 제외)
+            "fid_blng_cls_code": "3",
             "fid_trgt_cls_code": "111111111",
             "fid_trgt_exls_cls_code": "0000000000",
             "fid_input_price_1": "",
@@ -284,14 +299,16 @@ class KISClient:
         }, timeout=10)
         resp.raise_for_status()
         items = resp.json().get("output", [])
-        # acml_tr_pbmn(거래대금) 기준 내림차순 정렬
         items_sorted = sorted(
             items,
             key=lambda x: _si(x.get("acml_tr_pbmn", 0)),
             reverse=True,
         )
-        return [
-            item["mksc_shrn_iscd"]
-            for item in items_sorted[:top_n]
-            if item.get("mksc_shrn_iscd")
-        ]
+        result = []
+        for item in items_sorted[:top_n]:
+            code = item.get("mksc_shrn_iscd")
+            if not code:
+                continue
+            name = (item.get("hts_kor_isnm") or "").strip() or code
+            result.append({"code": code, "name": name})
+        return result

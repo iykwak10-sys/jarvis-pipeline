@@ -265,8 +265,13 @@ def scan(
     for code in codes:
         try:
             price = kis.get_price_full(code)
-            if not price.get("name") or price["name"] == code:
-                price["name"] = nm.get(code, code)
+            # 종목명 고정: name_map(순위 API·포트폴리오)이 있으면 항상 우선,
+            # 없을 때만 시세 API 종목명 → 그래도 없으면 코드로 폴백
+            mapped = nm.get(code)
+            if mapped:
+                price["name"] = mapped
+            elif not price.get("name"):
+                price["name"] = code
 
             history = kis.get_investor_history(code)
             closes = kis.get_daily_close_prices(code, n=70)  # MA60+여유분
