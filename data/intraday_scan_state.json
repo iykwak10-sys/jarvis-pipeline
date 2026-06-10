@@ -1,15 +1,16 @@
 {
   "date": "2026-06-10",
-  "scan_time": "10:31",
-  "scan_label": "10:30",
+  "scan_time": "13:31",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "093370": {
       "name": "후성",
-      "score": 8,
+      "score": 9,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "신고가근접",
@@ -17,50 +18,51 @@
       ],
       "is_portfolio": false
     },
-    "010120": {
-      "name": "LS ELECTRIC",
+    "279570": {
+      "name": "케이뱅크",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "319660": {
+      "name": "피에스케이",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "267260": {
-      "name": "HD현대일렉트릭",
+    "031980": {
+      "name": "피에스케이홀딩스",
       "score": 7,
       "passed": [
-        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
     "095610": {
       "name": "테스",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "036930": {
-      "name": "주성엔지니어링",
       "score": 6,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "RSI적정"
+        "신고가근접"
       ],
       "is_portfolio": false
     },
@@ -76,70 +78,24 @@
       ],
       "is_portfolio": false
     },
-    "031980": {
-      "name": "피에스케이홀딩스",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "402340": {
-      "name": "SK스퀘어",
+    "079550": {
+      "name": "LIG디펜스앤에어로스페이스",
       "score": 5,
       "passed": [
         "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "등락률",
+        "시총필터"
       ],
       "is_portfolio": false
     },
-    "240810": {
-      "name": "원익IPS",
+    "036930": {
+      "name": "주성엔지니어링",
       "score": 5,
       "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "319660": {
-      "name": "피에스케이",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "357880": {
-      "name": "SKAI",
-      "score": 5,
-      "passed": [
-        "등락률",
+        "거래대금",
         "거래량급증",
         "시총필터",
         "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "089970": {
-      "name": "브이엠",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
       ],
       "is_portfolio": false
     }
