@@ -101,6 +101,9 @@ class KISClient:
             KIS_APP_KEY,
             KIS_APP_SECRET,
         )
+        # 커넥션 풀·DNS 캐시 재사용 — 매 호출 DNS 재조회로 인한
+        # NameResolutionError 연쇄(2026-06 collector 타임아웃 원인) 완화
+        self._session = requests.Session()
 
     def _headers(self) -> dict:
         return {
@@ -114,7 +117,7 @@ class KISClient:
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def get_price(self, code: str) -> dict:
         """단일 종목 현재가 조회. 반환: {code, close, change, change_pct, volume, high, low, open}"""
-        resp = requests.get(PRICE_URL, headers=self._headers(), params={
+        resp = self._session.get(PRICE_URL, headers=self._headers(), params={
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
@@ -141,7 +144,7 @@ class KISClient:
         today = datetime.now().strftime("%Y%m%d")
         headers = self._headers()
         headers["tr_id"] = "FHKUP03500100"
-        resp = requests.get(INDEX_URL, headers=headers, params={
+        resp = self._session.get(INDEX_URL, headers=headers, params={
             "fid_cond_mrkt_div_code": "U",
             "fid_input_iscd": iscd,
             "fid_input_date_1": today,
@@ -159,17 +162,39 @@ class KISClient:
             "sign": output.get("prdy_vrss_sign", "3"),  # 3=보합
         }
 
-    def get_prices(self, codes: list) -> list:
-        """여러 종목 배치 조회 (0.1초 간격, 초당 20건 제한 준수)"""
+    @staticmethod
+    def _dummy_price(code: str) -> dict:
+        """조회 실패 종목의 close=0 더미 (기존 폴백 형식 유지)"""
+        return {"code": code, "close": 0, "change": 0,
+                "change_pct": 0.0, "volume": 0,
+                "high": 0, "low": 0, "open": 0}
+
+    def get_prices(self, codes: list, fail_fast_after: int = 3) -> list:
+        """여러 종목 배치 조회 (0.1초 간격, 초당 20건 제한 준수)
+
+        연속 fail_fast_after개 종목 실패 시 조기 중단한다 — 네트워크 장애 시
+        종목당 재시도(3회×10초)가 직렬 누적되어 scheduler 타임아웃을 유발하는
+        것을 방지 (2026-06-05~10 collector 120초 타임아웃 5회 관측).
+        중단 시 잔여 종목은 close=0 더미로 채워 결과 길이를 보존한다.
+        """
         results = []
-        for code in codes:
+        consec_fail = 0
+        for i, code in enumerate(codes):
             try:
                 results.append(self.get_price(code))
+                consec_fail = 0
             except Exception as e:
                 logger.error(f"종목 {code} 조회 실패: {e}")
-                results.append({"code": code, "close": 0, "change": 0,
-                                 "change_pct": 0.0, "volume": 0,
-                                 "high": 0, "low": 0, "open": 0})
+                results.append(self._dummy_price(code))
+                consec_fail += 1
+                if consec_fail >= fail_fast_after:
+                    remaining = codes[i + 1:]
+                    logger.error(
+                        f"연속 {consec_fail}종목 실패 — 조기 중단, "
+                        f"잔여 {len(remaining)}종목 더미 처리"
+                    )
+                    results.extend(self._dummy_price(c) for c in remaining)
+                    break
             time.sleep(0.1)
         return results
 
@@ -179,7 +204,7 @@ class KISClient:
         추가 필드: acml_tr_pbmn(거래대금), prdy_vol(전일거래량),
                    d250_hgpr(52주고가), hts_avls(시가총액억), name(종목명)
         """
-        resp = requests.get(PRICE_URL, headers=self._headers(), params={
+        resp = self._session.get(PRICE_URL, headers=self._headers(), params={
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
@@ -207,7 +232,7 @@ class KISClient:
         """
         headers = self._headers()
         headers["tr_id"] = "FHKST01010900"
-        resp = requests.get(INVESTOR_URL, headers=headers, params={
+        resp = self._session.get(INVESTOR_URL, headers=headers, params={
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
@@ -232,7 +257,7 @@ class KISClient:
         """
         headers = self._headers()
         headers["tr_id"] = "FHKST01010400"
-        resp = requests.get(DAILY_PRICE_URL, headers=headers, params={
+        resp = self._session.get(DAILY_PRICE_URL, headers=headers, params={
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
             "fid_input_date_1": "",
@@ -284,7 +309,7 @@ class KISClient:
 
         headers = self._headers()
         headers["tr_id"] = "FHPST01710000"
-        resp = requests.get(VOLUME_RANK_URL, headers=headers, params={
+        resp = self._session.get(VOLUME_RANK_URL, headers=headers, params={
             "fid_cond_mrkt_div_code": "J",
             "fid_cond_scr_div_code": "20171",
             "fid_input_iscd": fid_input_iscd,
