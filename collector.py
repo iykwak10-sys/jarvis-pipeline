@@ -68,8 +68,11 @@ def collect(closing: bool = False) -> list:
     logger.info(f"JSON 저장: {output_file.name}")
 
     if closing:
-        # Notion 저장
-        notion_saver.save_stock_prices(today, stocks_data)
+        # Notion 저장 — 실패해도 Telegram 마감 리포트는 전송되어야 함
+        try:
+            notion_saver.save_stock_prices(today, stocks_data)
+        except Exception as e:
+            logger.error(f"Notion 저장 실패 (마감 리포트는 계속 진행): {e}")
         # Telegram 마감 리포트
         notifier.send_portfolio_report(stocks_data)
         logger.info("마감 수집 완료 (Notion + Telegram)")

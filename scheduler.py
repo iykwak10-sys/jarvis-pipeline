@@ -139,19 +139,29 @@ def is_trading_day() -> bool:
 is_weekday = is_trading_day
 
 
+# 스크립트별 타임아웃(초). collector는 종목당 재시도(3회×10초)가 직렬 누적되므로
+# 네트워크 불안정 시 120초를 초과할 수 있음 (2026-06-05~10 타임아웃 5회 관측)
+SCRIPT_TIMEOUTS = {
+    "collector.py": 300,
+    "intraday_monitor.py": 300,
+}
+DEFAULT_TIMEOUT = 120
+
+
 def run_script(script: str, *args: str) -> None:
     """스크립트를 subprocess로 실행"""
+    timeout = SCRIPT_TIMEOUTS.get(script, DEFAULT_TIMEOUT)
     try:
         result = subprocess.run(
             [sys.executable, str(BASE_DIR / script), *args],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True, text=True, timeout=timeout,
         )
         if result.returncode == 0:
             logger.info(f"✅ {script} 완료")
         else:
             logger.error(f"❌ {script} 실패:\n{result.stderr[:500]}")
     except subprocess.TimeoutExpired:
-        logger.error(f"❌ {script} 타임아웃 (120초)")
+        logger.error(f"❌ {script} 타임아웃 ({timeout}초)")
     except Exception as e:
         logger.error(f"❌ {script} 예외: {e}")
 
