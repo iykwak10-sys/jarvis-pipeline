@@ -22,6 +22,7 @@ INVESTOR_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor"
 DAILY_PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-price"
 VOLUME_RANK_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/volume-rank"
 TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
+EXPIRED_TOKEN_MSG_CD = "EGW00123"  # "기간이 만료된 token 입니다" — 서버측 무효화 신호
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,20 @@ class TokenManager:
                 pass
         return False
 
+    def invalidate(self) -> None:
+        """메모리·파일 캐시 폐기 — 다음 get_token()이 새로 발급한다.
+
+        같은 app key를 쓰는 다른 프로세스가 새 토큰을 발급하면 KIS가
+        기존 토큰을 서버측에서 즉시 무효화하므로, 로컬 expires_at이
+        미래여도 토큰이 죽어 있을 수 있다 (2026-06-11 마감수집 0/17 장애).
+        """
+        self._token = None
+        self._expires = None
+        try:
+            TOKEN_CACHE.unlink(missing_ok=True)
+        except OSError:
+            pass
+
     @retry(max_attempts=3, base_delay=1.0, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def _issue_token(self) -> str:
         resp = requests.post(TOKEN_URL, json={
@@ -114,6 +129,27 @@ class KISClient:
             "tr_id": "FHKST01010100",
         }
 
+    def _raise_for_status(self, resp) -> None:
+        """오류 응답 처리 + 서버측 토큰 만료(EGW00123) 자가 치유.
+
+        같은 app key로 다른 프로세스가 새 토큰을 발급하면 KIS는 기존
+        토큰을 즉시 무효화한다. 이때 로컬 캐시 expires_at은 여전히
+        미래이므로 TTL 검사로는 감지할 수 없다 — 응답 msg_cd로 감지해
+        캐시를 폐기하면 @retry 재시도가 _headers()→get_token()에서
+        새 토큰을 발급받아 자동 복구된다.
+        """
+        if resp.status_code >= 400:
+            try:
+                msg_cd = resp.json().get("msg_cd")
+            except ValueError:
+                msg_cd = None
+            if msg_cd == EXPIRED_TOKEN_MSG_CD:
+                logger.warning(
+                    "서버측 토큰 만료(EGW00123) 감지 — 캐시 폐기, 재시도에서 재발급"
+                )
+                self._token_mgr.invalidate()
+        resp.raise_for_status()
+
     @retry(max_attempts=3, base_delay=0.5, exceptions=(ConnectionError, Timeout, requests.RequestException))
     def get_price(self, code: str) -> dict:
         """단일 종목 현재가 조회. 반환: {code, close, change, change_pct, volume, high, low, open}"""
@@ -121,7 +157,7 @@ class KISClient:
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         output = resp.json().get("output", {})
         return {
             "code": code,
@@ -208,7 +244,7 @@ class KISClient:
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         o = resp.json().get("output", {})
         return {
             "code": code,
@@ -236,7 +272,7 @@ class KISClient:
             "fid_cond_mrkt_div_code": "J",
             "fid_input_iscd": code,
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         items = resp.json().get("output", [])
         return [
             {
@@ -265,7 +301,7 @@ class KISClient:
             "fid_period_div_code": "D",
             "fid_org_adj_prc": "1",
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         items = resp.json().get("output", [])[:n]
         closes = [_sf(item.get("stck_clpr")) for item in items]
         closes = [c for c in closes if c > 0]
@@ -322,7 +358,7 @@ class KISClient:
             "fid_vol_cnt": "",
             "fid_input_date_1": "",
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         items = resp.json().get("output", [])
         items_sorted = sorted(
             items,

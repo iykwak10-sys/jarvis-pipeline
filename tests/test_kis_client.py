@@ -5,10 +5,17 @@
 네트워크·환경변수 불필요 (KISClient.__new__로 __init__ 우회).
 """
 
+import json
+import shutil
+import tempfile
 import unittest
+from datetime import datetime, timedelta
+from pathlib import Path
 from unittest.mock import patch
 
-from core.kis_client import KISClient
+import requests
+
+from core.kis_client import KISClient, TokenManager
 
 
 def _bare_client() -> KISClient:
@@ -89,6 +96,118 @@ class TestTopTradeValueDelegation(unittest.TestCase):
         with patch.object(KISClient, "get_top_trade_value", return_value=fake):
             codes = client.get_top_trade_value_codes(market="J", top_n=2)
         self.assertEqual(codes, ["005930", "000660"])
+
+
+class _FakeResponse:
+    def __init__(self, status_code: int, body: dict):
+        self.status_code = status_code
+        self._body = body
+
+    def json(self) -> dict:
+        return self._body
+
+    def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise requests.HTTPError(f"{self.status_code} Server Error")
+
+
+class _TokenAwareSession:
+    """authorization 헤더의 토큰에 따라 응답이 갈리는 가짜 세션.
+
+    stale 토큰 → KIS 실제 장애 응답(HTTP 500 + EGW00123),
+    fresh 토큰 → 정상 시세 응답.
+    """
+
+    def __init__(self, fresh_token: str):
+        self.fresh_token = fresh_token
+        self.calls: list = []
+
+    def get(self, url, headers=None, params=None, timeout=None):
+        token = (headers or {}).get("authorization", "")
+        self.calls.append(token)
+        if token == f"Bearer {self.fresh_token}":
+            return _FakeResponse(200, {"output": {
+                "stck_prpr": "299000", "prdy_vrss": "-3500",
+                "prdy_ctrt": "-1.16", "acml_vol": "12345",
+                "stck_hgpr": "301000", "stck_lwpr": "297000",
+                "stck_oprc": "300000",
+            }})
+        return _FakeResponse(500, {
+            "rt_cd": "1", "msg_cd": "EGW00123",
+            "msg1": "기간이 만료된 token 입니다.",
+        })
+
+
+class TestServerSideTokenExpiryRecovery(unittest.TestCase):
+    """2026-06-11 마감수집 0/17 장애 회귀.
+
+    같은 app key를 쓰는 다른 프로세스가 새 토큰을 발급하면 KIS가 기존
+    토큰을 서버측에서 즉시 무효화한다(EGW00123). 로컬 캐시 expires_at이
+    미래라도 토큰은 이미 죽어 있으므로, 클라이언트는 EGW00123 응답을
+    감지해 캐시를 버리고 재발급으로 스스로 복구해야 한다.
+    """
+
+    def setUp(self):
+        patcher = patch("core.retry.time.sleep")  # 재시도 백오프 제거
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp, True)
+        self.cache_path = tmp / ".kis_token.json"
+        self.cache_path.write_text(
+            json.dumps({"token": "stale", "expires_at": "2999-01-01T00:00:00"}),
+            encoding="utf-8",
+        )
+        cache_patcher = patch("core.kis_client.TOKEN_CACHE", self.cache_path)
+        cache_patcher.start()
+        self.addCleanup(cache_patcher.stop)
+
+        env_patcher = patch.dict(
+            "os.environ", {"KIS_APP_KEY": "k", "KIS_APP_SECRET": "s"}
+        )
+        env_patcher.start()
+        self.addCleanup(env_patcher.stop)
+
+    def _client_with_stale_token(self):
+        client = _bare_client()
+        tm = TokenManager("k", "s")
+        tm._token = "stale"
+        tm._expires = datetime.now() + timedelta(hours=12)  # 로컬상 '유효'
+
+        def _issue_fresh():
+            tm._token = "fresh"
+            tm._expires = datetime.now() + timedelta(hours=24)
+            return "fresh"
+
+        tm._issue_token = _issue_fresh
+        client._token_mgr = tm
+        session = _TokenAwareSession(fresh_token="fresh")
+        client._session = session
+        return client, session
+
+    def test_get_price_recovers_from_egw00123(self):
+        client, session = self._client_with_stale_token()
+        result = client.get_price("005930")
+        self.assertEqual(result["close"], 299000)
+        # stale 토큰으로 실패 → 캐시 폐기 → fresh 토큰 재발급으로 성공
+        self.assertIn("Bearer stale", session.calls)
+        self.assertEqual(session.calls[-1], "Bearer fresh")
+
+    def test_egw00123_deletes_cache_file(self):
+        client, _ = self._client_with_stale_token()
+        client.get_price("005930")
+        self.assertFalse(self.cache_path.exists(),
+                         "무효화된 토큰 캐시 파일이 삭제되어야 한다")
+
+    def test_invalidate_clears_memory_and_file(self):
+        tm = TokenManager("k", "s")
+        tm._token = "stale"
+        tm._expires = datetime.now() + timedelta(hours=12)
+        tm.invalidate()
+        self.assertIsNone(tm._token)
+        self.assertIsNone(tm._expires)
+        self.assertFalse(self.cache_path.exists())
 
 
 if __name__ == "__main__":
