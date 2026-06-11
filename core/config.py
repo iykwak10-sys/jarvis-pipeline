@@ -20,7 +20,9 @@ def _ensure_loaded():
     if not _env_loaded:
         env_path = PROJECT_ROOT / ".env"
         if env_path.exists():
-            load_dotenv(env_path)
+            # This project owns the canonical KIS credentials. Long-lived shells
+            # may retain an older key, so project configuration must win.
+            load_dotenv(env_path, override=True)
         _env_loaded = True
 
 
