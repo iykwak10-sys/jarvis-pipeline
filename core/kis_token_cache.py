@@ -95,6 +95,7 @@ class SharedTokenCache:
     def _locked(self) -> Iterator[None]:
         self.cache_path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         with self.lock_path.open("a+", encoding="utf-8") as lock_file:
+            os.fchmod(lock_file.fileno(), 0o600)
             fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
             try:
                 yield
