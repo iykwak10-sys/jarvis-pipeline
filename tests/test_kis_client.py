@@ -200,10 +200,11 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
         self.assertIn("Bearer stale", session.calls)
         self.assertEqual(session.calls[-1], "Bearer fresh")
 
-    def test_egw00123_deletes_cache_file(self):
+    def test_egw00123_replaces_invalidated_cache_with_fresh_token(self):
         client, _ = self._client_with_stale_token()
         client.get_price("005930")
-        cache = json.loads(self.cache_path.read_text(encoding="utf-8"))
+        document = json.loads(self.cache_path.read_text(encoding="utf-8"))
+        cache = tm._shared_cache._entry_unlocked(document)
         self.assertEqual(cache["token"], "fresh")
         self.assertFalse(cache["invalidated"])
 
@@ -218,7 +219,8 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
         tm.invalidate()
         self.assertIsNone(tm._token)
         self.assertIsNone(tm._expires)
-        self.assertTrue(json.loads(self.cache_path.read_text())["invalidated"])
+        document = json.loads(self.cache_path.read_text())
+        self.assertTrue(tm._shared_cache._entry_unlocked(document)["invalidated"])
 
 
 class TestSharedTokenCache(unittest.TestCase):
@@ -256,13 +258,26 @@ class TestSharedTokenCache(unittest.TestCase):
 
     def test_stale_consumer_cannot_invalidate_newer_shared_token(self):
         manager = SharedTokenCache("k", BASE_URL, lambda: {}, self.cache_path, 0)
-        manager._write_unlocked({
+        manager._write_entry_unlocked({}, {
             "token": "new", "expires_at": "2999-01-01T00:00:00+00:00",
             "issued_at": "2026-06-11T10:00:00+00:00", "base_url": BASE_URL,
             "app_key_hash": manager.app_key_hash, "invalidated": False,
         })
         self.assertFalse(manager.invalidate("old"))
         self.assertEqual(manager.get_token(), "new")
+
+    def test_different_app_keys_do_not_overwrite_each_other(self):
+        first = SharedTokenCache(
+            "key-a", BASE_URL, lambda: {"access_token": "a", "expires_in": 86400},
+            self.cache_path, 0,
+        )
+        second = SharedTokenCache(
+            "key-b", BASE_URL, lambda: {"access_token": "b", "expires_in": 86400},
+            self.cache_path, 0,
+        )
+        self.assertEqual(first.get_token(), "a")
+        self.assertEqual(second.get_token(), "b")
+        self.assertEqual(first.get_token(), "a")
 
 
 if __name__ == "__main__":

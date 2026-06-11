@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """KIS (한국투자증권) MCP 서버 - Claude Code에서 KIS API 직접 호출"""
 
-import json
 import os
 import sys
 import time
@@ -192,7 +191,6 @@ def get_index_price(iscd: str = "0001") -> dict:
         sign: '1'=상한 '2'=상승 '3'=보합 '4'=하한 '5'=하락
     """
     today = datetime.now().strftime("%Y%m%d")
-    headers = _headers("FHKUP03500100")
     data = _get(INDEX_URL, "FHKUP03500100", {
         "fid_cond_mrkt_div_code": "U",
         "fid_input_iscd": iscd,

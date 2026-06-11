@@ -39,6 +39,9 @@ class SharedTokenCache:
     ) -> None:
         self.app_key_hash = hashlib.sha256(app_key.encode("utf-8")).hexdigest()
         self.base_url = base_url.rstrip("/")
+        self.entry_key = hashlib.sha256(
+            f"{self.app_key_hash}|{self.base_url}".encode("utf-8")
+        ).hexdigest()
         self.issue_token = issue_token
         self.cache_path = Path(cache_path).expanduser()
         self.lock_path = self.cache_path.with_suffix(self.cache_path.suffix + ".lock")
@@ -48,30 +51,44 @@ class SharedTokenCache:
         while True:
             wait_seconds = 0.0
             with self._locked():
-                cached = self._read_unlocked()
+                document = self._read_unlocked()
+                cached = self._entry_unlocked(document)
                 token = self._valid_token(cached)
                 if token:
                     return token
 
-                issued_at = self._timestamp(cached.get("issued_at")) if cached else None
-                if issued_at is not None:
-                    wait_seconds = self.min_issue_interval - (time.time() - issued_at)
+                last_attempt_at = (
+                    self._timestamp(cached.get("last_attempt_at") or cached.get("issued_at"))
+                    if cached else None
+                )
+                if last_attempt_at is not None:
+                    wait_seconds = self.min_issue_interval - (time.time() - last_attempt_at)
 
                 if wait_seconds <= 0:
+                    attempt_at = datetime.now(timezone.utc).isoformat()
+                    pending = dict(cached)
+                    pending.update({
+                        "base_url": self.base_url,
+                        "app_key_hash": self.app_key_hash,
+                        "invalidated": True,
+                        "last_attempt_at": attempt_at,
+                    })
+                    self._write_entry_unlocked(document, pending)
                     data = self.issue_token()
-                    return self._store_issued_token_unlocked(data)
+                    return self._store_issued_token_unlocked(document, data)
 
             time.sleep(max(wait_seconds, 0.05))
 
     def invalidate(self, failed_token: str | None) -> bool:
         """Invalidate only if the shared cache still contains the failed token."""
         with self._locked():
-            cached = self._read_unlocked()
+            document = self._read_unlocked()
+            cached = self._entry_unlocked(document)
             if not cached or cached.get("token", cached.get("access_token")) != failed_token:
                 return False
             cached["invalidated"] = True
             cached["invalidated_at"] = datetime.now(timezone.utc).isoformat()
-            self._write_unlocked(cached)
+            self._write_entry_unlocked(document, cached)
             return True
 
     @contextmanager
@@ -102,16 +119,33 @@ class SharedTokenCache:
             return None
         return cached.get("token", cached.get("access_token"))
 
-    def _store_issued_token_unlocked(self, data: dict) -> str:
+    def _entry_unlocked(self, document: dict) -> dict:
+        entries = document.get("entries")
+        if isinstance(entries, dict):
+            entry = entries.get(self.entry_key, {})
+            return dict(entry) if isinstance(entry, dict) else {}
+        if document.get("app_key_hash") == self.app_key_hash:
+            return dict(document)
+        return {}
+
+    def _write_entry_unlocked(self, document: dict, entry: dict) -> None:
+        entries = document.get("entries") if isinstance(document, dict) else None
+        if not isinstance(entries, dict):
+            entries = {}
+        entries[self.entry_key] = entry
+        self._write_unlocked({"version": 1, "entries": entries})
+
+    def _store_issued_token_unlocked(self, document: dict, data: dict) -> str:
         token = data.get("access_token") or data.get("token")
         if not token:
             raise RuntimeError("KIS token response did not include access_token")
         now = datetime.now(timezone.utc)
         expires_at = self._response_expiry(data, now)
-        self._write_unlocked({
+        self._write_entry_unlocked(document, {
             "token": token,
             "expires_at": expires_at.isoformat(),
             "issued_at": now.isoformat(),
+            "last_attempt_at": now.isoformat(),
             "base_url": self.base_url,
             "app_key_hash": self.app_key_hash,
             "invalidated": False,
