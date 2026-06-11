@@ -187,7 +187,7 @@ class KISClient:
             "fid_input_date_2": today,
             "fid_period_div_code": "D",
         }, timeout=10)
-        resp.raise_for_status()
+        self._raise_for_status(resp)
         data = resp.json()
         output = data.get("output1") or data.get("output") or {}
         return {
