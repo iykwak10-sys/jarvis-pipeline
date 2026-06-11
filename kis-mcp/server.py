@@ -13,6 +13,16 @@ import requests
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
+PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from core.kis_token_cache import (  # noqa: E402
+    SHARED_TOKEN_CACHE,
+    SharedTokenCache,
+    is_expired_token_error,
+)
+
 # .env 로드: 서버 디렉토리 -> 부모(jarvis-pipeline) -> 절대경로 순서로 탐색
 _env_paths = [
     Path(__file__).parent / ".env",
@@ -28,7 +38,7 @@ BASE_URL = "https://openapi.koreainvestment.com:9443"
 TOKEN_URL = f"{BASE_URL}/oauth2/tokenP"
 PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price"
 INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
-TOKEN_CACHE = Path(__file__).parent / ".kis_token.json"
+TOKEN_CACHE = SHARED_TOKEN_CACHE
 
 mcp = FastMCP("kis-api")
 
@@ -36,26 +46,20 @@ mcp = FastMCP("kis-api")
 
 _token: Optional[str] = None
 _expires: Optional[datetime] = None
+_token_cache: SharedTokenCache | None = None
 
 
 def _load_cached_token() -> bool:
     global _token, _expires
-    if not TOKEN_CACHE.exists():
-        return False
     try:
-        cache = json.loads(TOKEN_CACHE.read_text(encoding="utf-8"))
-        exp = datetime.fromisoformat(cache["expires_at"])
-        if datetime.now() < exp - timedelta(minutes=10):
-            _token = cache["token"]
-            _expires = exp
-            return True
+        _token = _get_token_cache().get_token()
+        _expires = datetime.now() + timedelta(hours=12)
+        return True
     except Exception:
-        pass
-    return False
+        return False
 
 
-def _issue_token() -> str:
-    global _token, _expires
+def _request_token() -> dict:
     app_key = os.environ["KIS_APP_KEY"]
     app_secret = os.environ["KIS_APP_SECRET"]
     resp = requests.post(TOKEN_URL, json={
@@ -64,23 +68,50 @@ def _issue_token() -> str:
         "appsecret": app_secret,
     }, timeout=10)
     resp.raise_for_status()
-    data = resp.json()
-    _token = data["access_token"]
-    _expires = datetime.now() + timedelta(seconds=86400)
-    TOKEN_CACHE.write_text(json.dumps({
-        "token": _token,
-        "expires_at": _expires.isoformat(),
-    }, ensure_ascii=False), encoding="utf-8")
-    return _token
+    return resp.json()
+
+
+def _get_token_cache() -> SharedTokenCache:
+    global _token_cache
+    if _token_cache is None:
+        _token_cache = SharedTokenCache(
+            os.environ["KIS_APP_KEY"], BASE_URL, _request_token, TOKEN_CACHE
+        )
+    return _token_cache
+
+
+def _issue_token() -> str:
+    return _get_token_cache().get_token()
 
 
 def get_token() -> str:
     global _token, _expires
     if _token and _expires and datetime.now() < _expires - timedelta(minutes=10):
         return _token
-    if _load_cached_token():
-        return _token
-    return _issue_token()
+    _token = _issue_token()
+    _expires = datetime.now() + timedelta(hours=12)
+    return _token
+
+
+def _get(path: str, tr_id: str, params: dict):
+    global _token, _expires
+    for attempt in range(2):
+        token = get_token()
+        resp = requests.get(
+            path, headers=_headers(tr_id), params=params, timeout=10
+        )
+        try:
+            payload = resp.json()
+        except ValueError:
+            payload = {}
+        if is_expired_token_error(payload) and attempt == 0:
+            _get_token_cache().invalidate(token)
+            _token = None
+            _expires = None
+            continue
+        resp.raise_for_status()
+        return payload
+    raise RuntimeError("KIS token recovery exhausted")
 
 
 def _headers(tr_id: str = "FHKST01010100") -> dict:
@@ -105,12 +136,11 @@ def get_stock_price(code: str) -> dict:
     Returns:
         close, change, change_pct, volume, high, low, open 포함 딕셔너리
     """
-    resp = requests.get(PRICE_URL, headers=_headers(), params={
+    data = _get(PRICE_URL, "FHKST01010100", {
         "fid_cond_mrkt_div_code": "J",
         "fid_input_iscd": code,
-    }, timeout=10)
-    resp.raise_for_status()
-    output = resp.json().get("output", {})
+    })
+    output = data.get("output", {})
     return {
         "code": code,
         "close": int(output.get("stck_prpr", 0)),
@@ -163,15 +193,13 @@ def get_index_price(iscd: str = "0001") -> dict:
     """
     today = datetime.now().strftime("%Y%m%d")
     headers = _headers("FHKUP03500100")
-    resp = requests.get(INDEX_URL, headers=headers, params={
+    data = _get(INDEX_URL, "FHKUP03500100", {
         "fid_cond_mrkt_div_code": "U",
         "fid_input_iscd": iscd,
         "fid_input_date_1": today,
         "fid_input_date_2": today,
         "fid_period_div_code": "D",
-    }, timeout=10)
-    resp.raise_for_status()
-    data = resp.json()
+    })
     output = data.get("output1") or data.get("output") or {}
     index_names = {"0001": "KOSPI", "1001": "KOSDAQ", "2001": "KOSPI200"}
     return {

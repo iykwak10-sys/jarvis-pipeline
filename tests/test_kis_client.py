@@ -8,6 +8,7 @@
 import json
 import shutil
 import tempfile
+import threading
 import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -15,7 +16,8 @@ from unittest.mock import patch
 
 import requests
 
-from core.kis_client import KISClient, TokenManager
+from core.kis_client import BASE_URL, KISClient, TokenManager
+from core.kis_token_cache import SharedTokenCache
 
 
 def _bare_client() -> KISClient:
@@ -159,10 +161,6 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
             json.dumps({"token": "stale", "expires_at": "2999-01-01T00:00:00"}),
             encoding="utf-8",
         )
-        cache_patcher = patch("core.kis_client.TOKEN_CACHE", self.cache_path)
-        cache_patcher.start()
-        self.addCleanup(cache_patcher.stop)
-
         env_patcher = patch.dict(
             "os.environ", {"KIS_APP_KEY": "k", "KIS_APP_SECRET": "s"}
         )
@@ -172,6 +170,12 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
     def _client_with_stale_token(self):
         client = _bare_client()
         tm = TokenManager("k", "s")
+        tm._shared_cache = SharedTokenCache(
+            "k", "https://openapi.koreainvestment.com:9443",
+            lambda: {"access_token": "fresh", "expires_in": 86400},
+            cache_path=self.cache_path,
+            min_issue_interval=0,
+        )
         tm._token = "stale"
         tm._expires = datetime.now() + timedelta(hours=12)  # 로컬상 '유효'
 
@@ -180,7 +184,9 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
             tm._expires = datetime.now() + timedelta(hours=24)
             return "fresh"
 
-        tm._issue_token = _issue_fresh
+        tm._shared_cache.issue_token = lambda: {
+            "access_token": _issue_fresh(), "expires_in": 86400
+        }
         client._token_mgr = tm
         session = _TokenAwareSession(fresh_token="fresh")
         client._session = session
@@ -197,17 +203,66 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
     def test_egw00123_deletes_cache_file(self):
         client, _ = self._client_with_stale_token()
         client.get_price("005930")
-        self.assertFalse(self.cache_path.exists(),
-                         "무효화된 토큰 캐시 파일이 삭제되어야 한다")
+        cache = json.loads(self.cache_path.read_text(encoding="utf-8"))
+        self.assertEqual(cache["token"], "fresh")
+        self.assertFalse(cache["invalidated"])
 
     def test_invalidate_clears_memory_and_file(self):
         tm = TokenManager("k", "s")
+        tm._shared_cache = SharedTokenCache(
+            "k", "https://openapi.koreainvestment.com:9443",
+            lambda: {}, cache_path=self.cache_path, min_issue_interval=0,
+        )
         tm._token = "stale"
         tm._expires = datetime.now() + timedelta(hours=12)
         tm.invalidate()
         self.assertIsNone(tm._token)
         self.assertIsNone(tm._expires)
-        self.assertFalse(self.cache_path.exists())
+        self.assertTrue(json.loads(self.cache_path.read_text())["invalidated"])
+
+
+class TestSharedTokenCache(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.cache_path = self.tmp / "token_cache.json"
+
+    def test_concurrent_consumers_issue_only_once(self):
+        calls = 0
+        calls_lock = threading.Lock()
+
+        def issue():
+            nonlocal calls
+            with calls_lock:
+                calls += 1
+            return {"access_token": "shared", "expires_in": 86400}
+
+        managers = [
+            SharedTokenCache("k", BASE_URL, issue, self.cache_path, 0)
+            for _ in range(4)
+        ]
+        results = [None] * len(managers)
+        threads = [
+            threading.Thread(target=lambda i=i: results.__setitem__(i, managers[i].get_token()))
+            for i in range(len(managers))
+        ]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+        self.assertEqual(results, ["shared"] * 4)
+        self.assertEqual(calls, 1)
+
+    def test_stale_consumer_cannot_invalidate_newer_shared_token(self):
+        manager = SharedTokenCache("k", BASE_URL, lambda: {}, self.cache_path, 0)
+        manager._write_unlocked({
+            "token": "new", "expires_at": "2999-01-01T00:00:00+00:00",
+            "issued_at": "2026-06-11T10:00:00+00:00", "base_url": BASE_URL,
+            "app_key_hash": manager.app_key_hash, "invalidated": False,
+        })
+        self.assertFalse(manager.invalidate("old"))
+        self.assertEqual(manager.get_token(), "new")
 
 
 if __name__ == "__main__":

@@ -1,18 +1,21 @@
 # core/kis_client.py
 """한국투자증권(KIS) REST API 클라이언트 및 토큰 관리"""
 
-import json
 import logging
 import os
 import time
 from datetime import datetime, timedelta
-from pathlib import Path
 from typing import Optional
 
 import requests
 from requests.exceptions import ConnectionError, Timeout
 
 from core.retry import retry
+from core.kis_token_cache import (
+    EXPIRED_TOKEN_MSG_CD,
+    SHARED_TOKEN_CACHE,
+    SharedTokenCache,
+)
 
 BASE_URL = "https://openapi.koreainvestment.com:9443"
 TOKEN_URL=f"{BASE_URL}/oauth2/tokenP"
@@ -21,8 +24,7 @@ INDEX_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-index-price"
 INVESTOR_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor"
 DAILY_PRICE_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-price"
 VOLUME_RANK_URL = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/volume-rank"
-TOKEN_CACHE=Path(__file__).parent.parent / "data" / ".kis_token.json"
-EXPIRED_TOKEN_MSG_CD = "EGW00123"  # "기간이 만료된 token 입니다" — 서버측 무효화 신호
+TOKEN_CACHE = SHARED_TOKEN_CACHE
 
 logger = logging.getLogger(__name__)
 
@@ -51,26 +53,23 @@ class TokenManager:
         self.app_secret = app_secret
         self._token: Optional[str] = None
         self._expires: Optional[datetime] = None
+        self._shared_cache = SharedTokenCache(
+            app_key=app_key,
+            base_url=BASE_URL,
+            issue_token=self._request_token,
+            cache_path=TOKEN_CACHE,
+        )
 
     def get_token(self) -> str:
         if self._is_valid():
             return self._token
-        return self._issue_token()
+        self._token = self._shared_cache.get_token()
+        self._expires = datetime.now() + timedelta(hours=12)
+        return self._token
 
     def _is_valid(self) -> bool:
         if self._token and self._expires and datetime.now() < self._expires - timedelta(minutes=10):
             return True
-        if TOKEN_CACHE.exists():
-            try:
-                cache = json.loads(TOKEN_CACHE.read_text(encoding="utf-8"))
-                exp = datetime.fromisoformat(cache["expires_at"])
-                if datetime.now() < exp - timedelta(minutes=10):
-                    self._token = cache["token"]
-                    self._expires = exp
-                    logger.info("캐시된 KIS 토큰 사용")
-                    return True
-            except Exception:
-                pass
         return False
 
     def invalidate(self) -> None:
@@ -80,31 +79,25 @@ class TokenManager:
         기존 토큰을 서버측에서 즉시 무효화하므로, 로컬 expires_at이
         미래여도 토큰이 죽어 있을 수 있다 (2026-06-11 마감수집 0/17 장애).
         """
+        failed_token = self._token
         self._token = None
         self._expires = None
-        try:
-            TOKEN_CACHE.unlink(missing_ok=True)
-        except OSError:
-            pass
+        self._shared_cache.invalidate(failed_token)
 
     @retry(max_attempts=3, base_delay=1.0, exceptions=(ConnectionError, Timeout, requests.RequestException))
-    def _issue_token(self) -> str:
+    def _request_token(self) -> dict:
         resp = requests.post(TOKEN_URL, json={
             "grant_type": "client_credentials",
             "appkey": self.app_key,
             "appsecret": self.app_secret,
         }, timeout=10)
         resp.raise_for_status()
-        data = resp.json()
-        self._token = data["access_token"]
-        self._expires = datetime.now() + timedelta(seconds=86400)
-        TOKEN_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        TOKEN_CACHE.write_text(json.dumps({
-            "token": self._token,
-            "expires_at": self._expires.isoformat(),
-        }, ensure_ascii=False), encoding="utf-8")
         logger.info("KIS 토큰 발급 완료")
-        return self._token
+        return resp.json()
+
+    def _issue_token(self) -> str:
+        """Backward-compatible entry point used by existing tests/callers."""
+        return self.get_token()
 
 
 class KISClient:
