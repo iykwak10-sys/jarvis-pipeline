@@ -176,6 +176,14 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
             cache_path=self.cache_path,
             min_issue_interval=0,
         )
+        tm._shared_cache._write_entry_unlocked({}, {
+            "token": "stale", "expires_at": "2999-01-01T00:00:00+00:00",
+            "issued_at": "2026-06-11T00:00:00+00:00",
+            "last_attempt_at": "2026-06-11T00:00:00+00:00",
+            "base_url": BASE_URL,
+            "app_key_hash": tm._shared_cache.app_key_hash,
+            "invalidated": False,
+        })
         tm._token = "stale"
         tm._expires = datetime.now() + timedelta(hours=12)  # 로컬상 '유효'
 
@@ -204,7 +212,7 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
         client, _ = self._client_with_stale_token()
         client.get_price("005930")
         document = json.loads(self.cache_path.read_text(encoding="utf-8"))
-        cache = tm._shared_cache._entry_unlocked(document)
+        cache = client._token_mgr._shared_cache._entry_unlocked(document)
         self.assertEqual(cache["token"], "fresh")
         self.assertFalse(cache["invalidated"])
 
@@ -214,6 +222,14 @@ class TestServerSideTokenExpiryRecovery(unittest.TestCase):
             "k", "https://openapi.koreainvestment.com:9443",
             lambda: {}, cache_path=self.cache_path, min_issue_interval=0,
         )
+        tm._shared_cache._write_entry_unlocked({}, {
+            "token": "stale", "expires_at": "2999-01-01T00:00:00+00:00",
+            "issued_at": "2026-06-11T00:00:00+00:00",
+            "last_attempt_at": "2026-06-11T00:00:00+00:00",
+            "base_url": BASE_URL,
+            "app_key_hash": tm._shared_cache.app_key_hash,
+            "invalidated": False,
+        })
         tm._token = "stale"
         tm._expires = datetime.now() + timedelta(hours=12)
         tm.invalidate()
