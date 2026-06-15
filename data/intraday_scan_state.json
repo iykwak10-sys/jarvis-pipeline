@@ -1,7 +1,7 @@
 {
   "date": "2026-06-15",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "018880": {
@@ -18,27 +18,38 @@
       ],
       "is_portfolio": false
     },
-    "003490": {
-      "name": "대한항공",
-      "score": 9,
+    "204320": {
+      "name": "HL만도",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도",
         "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "204320": {
-      "name": "HL만도",
-      "score": 9,
+    "003490": {
+      "name": "대한항공",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
         "거래량급증",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "329180": {
+      "name": "HD현대중공업",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
         "시총필터",
         "장중강도",
         "신고가근접",
@@ -52,8 +63,8 @@
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "신고가근접",
         "RSI적정"
       ],
@@ -71,6 +82,18 @@
       ],
       "is_portfolio": false
     },
+    "009150": {
+      "name": "삼성전기",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "011070": {
       "name": "LG이노텍",
       "score": 7,
@@ -79,6 +102,18 @@
         "등락률",
         "시총필터",
         "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "475150": {
+      "name": "SK이터닉스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -95,6 +130,18 @@
       ],
       "is_portfolio": false
     },
+    "093370": {
+      "name": "후성",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
     "028260": {
       "name": "삼성물산",
       "score": 7,
@@ -107,8 +154,20 @@
       ],
       "is_portfolio": false
     },
-    "329180": {
-      "name": "HD현대중공업",
+    "298040": {
+      "name": "효성중공업",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "105560": {
+      "name": "KB금융",
       "score": 7,
       "passed": [
         "거래대금",
@@ -119,20 +178,32 @@
       ],
       "is_portfolio": false
     },
-    "089030": {
-      "name": "테크윙",
+    "042660": {
+      "name": "한화오션",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "신고가근접",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "009150": {
-      "name": "삼성전기",
+    "439960": {
+      "name": "코스모로보틱스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "005380": {
+      "name": "현대차",
       "score": 6,
       "passed": [
         "거래대금",
@@ -153,68 +224,26 @@
       ],
       "is_portfolio": false
     },
-    "005380": {
-      "name": "현대차",
+    "178320": {
+      "name": "서진시스템",
       "score": 6,
       "passed": [
         "거래대금",
-        "등락률",
         "시총필터",
+        "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "064400": {
-      "name": "LG씨엔에스",
+    "330860": {
+      "name": "네패스아크",
       "score": 6,
       "passed": [
-        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "353200": {
-      "name": "대덕전자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "001820": {
-      "name": "삼화콘덴서",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "298040": {
-      "name": "효성중공업",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "028050": {
-      "name": "삼성E&A",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -241,6 +270,17 @@
       ],
       "is_portfolio": false
     },
+    "267260": {
+      "name": "HD현대일렉트릭",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "047040": {
       "name": "대우건설",
       "score": 5,
@@ -261,6 +301,17 @@
       ],
       "is_portfolio": false
     },
+    "089030": {
+      "name": "테크윙",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "240810": {
       "name": "원익IPS",
       "score": 5,
@@ -268,6 +319,17 @@
         "거래대금",
         "시총필터",
         "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "032820": {
+      "name": "우리기술",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
