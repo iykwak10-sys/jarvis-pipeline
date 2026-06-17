@@ -1,24 +1,59 @@
 {
   "date": "2026-06-17",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
     "402340": {
       "name": "SK스퀘어",
-      "score": 8,
+      "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "장중강도",
         "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "403870": {
-      "name": "HPSP",
+    "042660": {
+      "name": "한화오션",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "088350": {
+      "name": "한화생명",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "080220": {
+      "name": "제주반도체",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "347850": {
+      "name": "디앤디파마텍",
       "score": 7,
       "passed": [
         "거래대금",
@@ -41,68 +76,32 @@
       ],
       "is_portfolio": false
     },
-    "009150": {
-      "name": "삼성전기",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "034730": {
-      "name": "SK",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "240810": {
-      "name": "원익IPS",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "067310": {
-      "name": "하나마이크론",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "005290": {
-      "name": "동진쎄미켐",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "005930": {
       "name": "삼성전자",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "000500": {
+      "name": "가온전선",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "009150": {
+      "name": "삼성전기",
       "score": 5,
       "passed": [
         "거래대금",
@@ -112,69 +111,69 @@
       ],
       "is_portfolio": false
     },
-    "042660": {
-      "name": "한화오션",
+    "475150": {
+      "name": "SK이터닉스",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "015760": {
-      "name": "한국전력",
+    "012450": {
+      "name": "한화에어로스페이스",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "088350": {
-      "name": "한화생명",
+    "079550": {
+      "name": "LIG디펜스앤에어로스페이스",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "010690": {
-      "name": "화신",
+    "329180": {
+      "name": "HD현대중공업",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "036930": {
-      "name": "주성엔지니어링",
+    "035420": {
+      "name": "NAVER",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "319660": {
-      "name": "피에스케이",
+    "082740": {
+      "name": "한화엔진",
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "신고가근접"
+        "RSI적정"
       ],
       "is_portfolio": false
     }
