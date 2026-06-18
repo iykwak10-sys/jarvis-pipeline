@@ -256,7 +256,8 @@ def main() -> None:
     # start_bot()
 
     schedule.every(5).minutes.do(job_realtime)
-    schedule.every().day.at("06:30").do(job_morning_briefing)
+    # 06:30 모닝 브리핑은 Hermes 통합 모닝 브리핑(cron 52f01a1aaab2, 05:55)으로 흡수되어 비활성화 (2026-06-18).
+    # schedule.every().day.at("06:30").do(job_morning_briefing)
     schedule.every().day.at("07:00").do(job_news_briefing)
     # 06:05 미국장 마감 수동 분석 유도 알림은 Hermes 아침 투자 브리핑과 중복되어 비활성화.
     # schedule.every().day.at("06:05").do(job_us_alert)
