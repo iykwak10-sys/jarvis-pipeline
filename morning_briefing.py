@@ -4,6 +4,7 @@
 import asyncio
 import csv
 import logging
+import math
 import re
 from datetime import date, datetime
 from logging.handlers import RotatingFileHandler
@@ -94,6 +95,25 @@ def _arrow(pct: float) -> str:
     return "🔺" if pct >= 0 else "🔽"
 
 
+def _last_two(close, sym) -> tuple:
+    """심볼의 마지막 2개 유효(non-NaN) 종가 (prev, curr) 반환.
+
+    yfinance가 최신 행을 간헐적으로 NaN으로 반환해도(WTI·VIX 등)
+    유효한 직전 값으로 폴백하도록 dropna 후 마지막 2개를 사용한다.
+    값이 부족하면 (None, None).
+    """
+    try:
+        s = close[sym].dropna()
+    except Exception:
+        return None, None
+    if len(s) < 2:
+        return None, None
+    prev, curr = float(s.iloc[-2]), float(s.iloc[-1])
+    if math.isnan(prev) or math.isnan(curr):
+        return None, None
+    return prev, curr
+
+
 # ════════════════════════════════════════════════════════════════
 # 블록 1 — 시장 요약 (미국+국내+환율+원자재)
 # ════════════════════════════════════════════════════════════════
@@ -105,15 +125,14 @@ def get_market_summary() -> str:
     # 미국 증시
     us = {"^GSPC": "S&P500 ", "^IXIC": "나스닥 ", "^DJI": "다우   ", "^SOX": "반도체 "}
     try:
-        d = yf.download(list(us), period="2d", interval="1d", progress=False, auto_adjust=True)
-        c, p = d["Close"].iloc[-1], d["Close"].iloc[-2]
+        d = yf.download(list(us), period="5d", interval="1d", progress=False, auto_adjust=True)
         for sym, label in us.items():
-            try:
-                cv, pv = float(c[sym]), float(p[sym])
-                pct = (cv - pv) / pv * 100
-                rows.append(f"{_arrow(pct)} {label} {cv:>10,.2f}   {pct:>+6.2f}%")
-            except Exception:
+            pv, cv = _last_two(d["Close"], sym)
+            if cv is None:
                 rows.append(f"  {label}  -")
+                continue
+            pct = (cv - pv) / pv * 100
+            rows.append(f"{_arrow(pct)} {label} {cv:>10,.2f}   {pct:>+6.2f}%")
     except Exception as e:
         logger.error(f"미국증시: {e}")
         rows.append("  미국증시 조회 실패")
@@ -144,16 +163,15 @@ def get_market_summary() -> str:
         "^VIX":     ("VIX     ", 1.0,   " "),
     }
     try:
-        d = yf.download(list(fx_commod), period="2d", interval="1d", progress=False, auto_adjust=True)
-        c, p = d["Close"].iloc[-1], d["Close"].iloc[-2]
+        d = yf.download(list(fx_commod), period="5d", interval="1d", progress=False, auto_adjust=True)
         for sym, (label, mult, unit) in fx_commod.items():
-            try:
-                cv = float(c[sym]) * mult
-                pv = float(p[sym]) * mult
-                pct = (cv - pv) / pv * 100
-                rows.append(f"{_arrow(pct)} {label} {cv:>10,.2f}{unit}  {pct:>+6.2f}%")
-            except Exception:
+            pv_raw, cv_raw = _last_two(d["Close"], sym)
+            if cv_raw is None:
                 rows.append(f"  {label}  -")
+                continue
+            cv, pv = cv_raw * mult, pv_raw * mult
+            pct = (cv - pv) / pv * 100
+            rows.append(f"{_arrow(pct)} {label} {cv:>10,.2f}{unit}  {pct:>+6.2f}%")
     except Exception as e:
         logger.error(f"환율/원자재: {e}")
         rows.append("  환율/원자재 조회 실패")
@@ -310,16 +328,14 @@ def _get_sector_rows() -> list[str]:
     """섹터 ETF 등락 테이블 행 반환"""
     rows = []
     try:
-        d = yf.download(list(SECTOR_ETFS), period="2d", interval="1d", progress=False, auto_adjust=True)
-        c, p = d["Close"].iloc[-1], d["Close"].iloc[-2]
+        d = yf.download(list(SECTOR_ETFS), period="5d", interval="1d", progress=False, auto_adjust=True)
         pairs = []
         for sym, label in SECTOR_ETFS.items():
-            try:
-                cv, pv = float(c[sym]), float(p[sym])
-                pct = (cv - pv) / pv * 100
-                pairs.append((label, pct))
-            except Exception:
-                pass
+            pv, cv = _last_two(d["Close"], sym)
+            if cv is None:
+                continue
+            pct = (cv - pv) / pv * 100
+            pairs.append((label, pct))
         pairs.sort(key=lambda x: x[1], reverse=True)
         for label, pct in pairs:
             rows.append(f"{_arrow(pct)} {label:<8} {pct:>+6.2f}%")
@@ -334,16 +350,15 @@ def _get_top10_rows() -> tuple[list[str], dict]:
     rows = []
     summary = {}
     try:
-        d = yf.download(list(US_TOP10), period="2d", interval="1d", progress=False, auto_adjust=True)
-        c, p = d["Close"].iloc[-1], d["Close"].iloc[-2]
+        d = yf.download(list(US_TOP10), period="5d", interval="1d", progress=False, auto_adjust=True)
         for sym, name in US_TOP10.items():
-            try:
-                cv, pv = float(c[sym]), float(p[sym])
-                pct = (cv - pv) / pv * 100
-                rows.append(f"{_arrow(pct)} {sym:<5} {name:<10} {cv:>9,.2f}  {pct:>+6.2f}%")
-                summary[sym] = {"name": name, "close": cv, "pct": pct}
-            except Exception:
+            pv, cv = _last_two(d["Close"], sym)
+            if cv is None:
                 rows.append(f"  {sym:<5} {name:<10}  -")
+                continue
+            pct = (cv - pv) / pv * 100
+            rows.append(f"{_arrow(pct)} {sym:<5} {name:<10} {cv:>9,.2f}  {pct:>+6.2f}%")
+            summary[sym] = {"name": name, "close": cv, "pct": pct}
     except Exception as e:
         logger.error(f"주요종목 10선: {e}")
         rows.append("  데이터 조회 실패")
