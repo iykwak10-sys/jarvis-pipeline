@@ -1,14 +1,15 @@
 {
-  "date": "2026-06-18",
+  "date": "2026-06-19",
   "scan_time": "09:10",
   "scan_label": "09:10",
   "is_initial": true,
   "stocks": {
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 6,
+    "009150": {
+      "name": "삼성전기",
+      "score": 8,
       "passed": [
         "거래대금",
+        "등락률",
         "시총필터",
         "장중강도",
         "신고가근접",
@@ -16,13 +17,121 @@
       ],
       "is_portfolio": false
     },
-    "006340": {
-      "name": "대원전선",
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "010120": {
+      "name": "LS ELECTRIC",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "032830": {
+      "name": "삼성생명",
+      "score": 7,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "신고가돌파",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "080220": {
+      "name": "제주반도체",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "402340": {
+      "name": "SK스퀘어",
       "score": 6,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "028260": {
+      "name": "삼성물산",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "009155": {
+      "name": "삼성전기우",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "034730": {
+      "name": "SK",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "0165X0": {
+      "name": "메리츠제2호스팩",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "078150": {
+      "name": "HB테크놀러지",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -38,8 +147,8 @@
       ],
       "is_portfolio": false
     },
-    "402340": {
-      "name": "SK스퀘어",
+    "005935": {
+      "name": "삼성전자우",
       "score": 5,
       "passed": [
         "거래대금",
@@ -49,19 +158,19 @@
       ],
       "is_portfolio": false
     },
-    "009150": {
-      "name": "삼성전기",
+    "298040": {
+      "name": "효성중공업",
       "score": 5,
       "passed": [
-        "거래대금",
+        "등락률",
         "시총필터",
-        "신고가근접",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "475150": {
-      "name": "SK이터닉스",
+    "062040": {
+      "name": "산일전기",
       "score": 5,
       "passed": [
         "등락률",
