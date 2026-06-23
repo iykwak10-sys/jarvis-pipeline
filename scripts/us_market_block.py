@@ -2,17 +2,25 @@
 """미국·한국 증시 마감 블록 (마크다운, 모바일 가독성).
 
 Hermes 통합 모닝 브리핑(cron 52f01a1aaab2)이 이 stdout을 그대로 임베드한다.
-yfinance 결정론 데이터만 사용하며 jarvis 코드에 의존하지 않는다(자체완결).
+jarvis 코드에 의존하지 않는다(자체완결).
 실행: ~/.briefing-venv/bin/python3 scripts/us_market_block.py
+
+데이터 소스:
+  - 미국 지수·환율·원자재·섹터·종목: yfinance.
+  - 한국 지수(KOSPI/KOSDAQ): Naver 금융 API. yfinance ^KS11/^KQ11는
+    한국 지수를 1영업일 지연 제공해 새벽 브리핑에 전일 종가가 아닌
+    전전일 종가가 찍히는 버그가 있어 Naver로 대체(토큰 불필요).
 
 출력 형식:
   - HTML 태그 없음(Telegram MarkdownV2 변환기와 호환).
   - 섹션 제목은 **굵게**, 지표는 한 줄에 하나(스마트폰 가독성).
-  - KOSPI/KOSDAQ는 전일 종가 등락률(close-to-close)로 표기.
+  - KOSPI/KOSDAQ는 직전 영업일 종가 등락률로 표기.
 """
 
+import json
 import math
 import sys
+import urllib.request
 
 import yfinance as yf
 
@@ -22,9 +30,9 @@ US_INDICES = {
     "^DJI": "다우",
     "^SOX": "반도체 SOX",
 }
-KR_INDICES = {
-    "^KS11": "KOSPI",
-    "^KQ11": "KOSDAQ",
+KR_INDICES = {  # Naver 인덱스 코드 → 표시명
+    "KOSPI": "KOSPI",
+    "KOSDAQ": "KOSDAQ",
 }
 FX_COMMOD = {
     "USDKRW=X": ("달러/원", 1.0, "원"),
@@ -84,6 +92,32 @@ def _index_lines(close, mapping) -> list:
     return lines
 
 
+def _naver_kr_lines() -> list:
+    """Naver 금융에서 KOSPI/KOSDAQ 직전 영업일 종가·등락률 조회.
+
+    yfinance의 한국 지수 1영업일 지연 문제를 피하기 위한 기본 소스.
+    실패 시 빈 리스트를 반환해 호출측이 yfinance로 폴백한다.
+    """
+    lines = []
+    for code, label in KR_INDICES.items():
+        try:
+            req = urllib.request.Request(
+                f"https://m.stock.naver.com/api/index/{code}/price?pageSize=2&page=1",
+                headers={"User-Agent": "Mozilla/5.0",
+                         "Referer": "https://m.stock.naver.com/"},
+            )
+            rows = json.loads(urllib.request.urlopen(req, timeout=10).read())
+            row = rows[0] if isinstance(rows, list) and rows else None
+            if not row:
+                return []
+            close = float(str(row["closePrice"]).replace(",", ""))
+            pct = float(str(row["fluctuationsRatio"]).replace(",", ""))
+            lines.append(f"{_arrow(pct)} {label} {close:,.2f} ({pct:+.2f}%)")
+        except Exception:
+            return []
+    return lines
+
+
 def market_summary() -> str:
     out = ["**📊 시장 요약**", ""]
 
@@ -93,7 +127,12 @@ def market_summary() -> str:
         out += us
         out.append("")
 
-    kr = _index_lines(_download(KR_INDICES), KR_INDICES)
+    kr = _naver_kr_lines()  # Naver 우선 (yfinance는 한국 지수 1일 지연)
+    if not kr:  # 폴백: yfinance ^KS11/^KQ11 (지연 가능)
+        kr = _index_lines(
+            _download({"^KS11": "KOSPI", "^KQ11": "KOSDAQ"}),
+            {"^KS11": "KOSPI", "^KQ11": "KOSDAQ"},
+        )
     if kr:
         out.append("🇰🇷 한국 (전일 종가)")
         out += kr
