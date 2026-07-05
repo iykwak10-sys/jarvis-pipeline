@@ -221,7 +221,7 @@ def _llm_message(
 - 장소: {location} ({place_type})
 - 일정 시각: {start_str}
 - 현재 시각: {now_str}
-- 이동시간: {travel_minutes}분 ({travel_mode} 기준)
+- 이동시간: {travel_minutes}분 ({travel_mode} 기준){alternatives_text}
 {rating_text}
 {opening_text}
 {reviews_text}
