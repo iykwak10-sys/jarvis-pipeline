@@ -99,6 +99,7 @@ def run() -> None:
             logger.warning(f"목적지 좌표 실패 — 기본값 사용: {location_text}")
             travel_minutes = FALLBACK_TRAVEL_MIN
             travel_mode = "기본값"
+            travel_options = {}
             dest_lat, dest_lng = None, None
         else:
             dest_lat, dest_lng = dest_coords
@@ -112,6 +113,7 @@ def run() -> None:
             )
             travel_minutes = travel_info["recommended_minutes"]
             travel_mode = travel_info["mode"]
+            travel_options = travel_info.get("options", {})
 
         # 알림 발송 시각 계산
         alert_dt = start_dt - timedelta(minutes=travel_minutes + BUFFER_MINUTES)
@@ -129,6 +131,7 @@ def run() -> None:
             "alert_dt": alert_dt.isoformat(),
             "travel_minutes": travel_minutes,
             "travel_mode": travel_mode,
+            "travel_options": travel_options,
             "origin_lat": origin_lat,
             "origin_lng": origin_lng,
             "dest_lat": dest_lat,

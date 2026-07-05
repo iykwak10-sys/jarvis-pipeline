@@ -67,6 +67,7 @@ def _send_alert(alert: dict) -> None:
     start_dt = datetime.fromisoformat(alert["start_dt"])
     travel_minutes = alert["travel_minutes"]
     travel_mode = alert["travel_mode"]
+    travel_options = alert.get("travel_options") or {}
     location_is_default = alert.get("location_is_default", True)
     dest_lat = alert.get("dest_lat")
     dest_lng = alert.get("dest_lng")
@@ -95,6 +96,7 @@ def _send_alert(alert: dict) -> None:
         start_dt=start_dt,
         travel_minutes=travel_minutes,
         travel_mode=travel_mode,
+        travel_options=travel_options,
         place_info=place_info,
         place_type=place_type,
         location_is_default=location_is_default,
@@ -123,13 +125,14 @@ def _generate_message(
     return_home_minutes: int | None = None,
     return_home_mode: str = "자동차",
     weather_ctx: dict | None = None,
+    travel_options: dict | None = None,
 ) -> str:
     """LLM 호출해서 자연어 브리핑 메시지 생성. 실패 시 폴백 메시지 반환."""
     try:
         return _llm_message(
             summary, location, description, start_dt, travel_minutes, travel_mode,
             place_info, place_type, location_is_default, dest_lat, dest_lng,
-            return_home_minutes, return_home_mode, weather_ctx,
+            return_home_minutes, return_home_mode, weather_ctx, travel_options,
         )
     except Exception as e:
         logger.warning(f"LLM 메시지 생성 실패 — 폴백 사용: {e}")
@@ -151,6 +154,7 @@ def _llm_message(
     return_home_minutes: int | None = None,
     return_home_mode: str = "자동차",
     weather_ctx: dict | None = None,
+    travel_options: dict | None = None,
 ) -> str:
     """OpenRouter LLM으로 자연어 메시지 생성"""
     import urllib.parse
@@ -190,6 +194,14 @@ def _llm_message(
     weather_text = ""
     if weather_ctx and weather_ctx.get("summary"):
         weather_text = f"\n🌤️ 현재 날씨: {weather_ctx['summary']}"
+
+    # 대안 이동수단 (추천 수단 제외, 다중수단 API 활성화 시에만 데이터 존재)
+    alternatives_text = ""
+    alternatives = {m: t for m, t in (travel_options or {}).items() if m != travel_mode}
+    if alternatives:
+        alternatives_text = "\n다른 수단: " + ", ".join(
+            f"{m} {t}분" for m, t in sorted(alternatives.items(), key=lambda x: x[1])
+        )
 
     system_prompt = """당신은 개인 비서 Jarvis입니다.
 사용자의 일정을 파악하고 출발해야 할 시간을 알려주는 짧고 친근한 메시지를 작성하세요.

@@ -50,37 +50,95 @@ def get_travel_time(
     dest_lng: float,
     departure_dt: datetime,
 ) -> dict:
-    """자동차 소요시간 계산 (미래 출발 시각 기준)
+    """이동수단별 소요시간 계산 → 최단시간 수단 추천
+
+    자동차는 항상 조회. 대중교통/도보/자전거는 카카오 신규 REST API
+    적용일(2026-07-21) 이후 KAKAO_MULTIMODAL=1 로 활성화.
+    추천 정책: 성공한 수단 중 무조건 최단시간 (실패 수단은 후보에서 제외).
 
     Returns:
         {
-            car_minutes: int,
-            transit_minutes: None,          # 카카오는 대중교통 REST API 미제공
+            car_minutes: int | None,
+            transit_minutes: int | None,
+            walk_minutes: int | None,
+            bike_minutes: int | None,
+            options: dict[str, int],        # 성공한 수단별 소요시간(분)
             recommended_minutes: int,
             mode: str,
             car_ok: bool,
             transit_ok: bool,
         }
     """
-    car_minutes = _get_car_time(origin_lat, origin_lng, dest_lat, dest_lng, departure_dt)
-    car_ok = car_minutes is not None
+    args = (origin_lat, origin_lng, dest_lat, dest_lng, departure_dt)
+    options: dict[str, int] = {}
 
-    if car_ok:
-        recommended = car_minutes
-        mode = "자동차"
+    car_minutes = _get_car_time(*args)
+    if car_minutes is not None:
+        options["자동차"] = car_minutes
+
+    transit_minutes = walk_minutes = bike_minutes = None
+    if _multimodal_enabled():
+        transit_minutes = _get_transit_time(*args)
+        walk_minutes = _get_walk_time(*args)
+        bike_minutes = _get_bike_time(*args)
+        for mode_name, minutes in (
+            ("대중교통", transit_minutes),
+            ("도보", walk_minutes),
+            ("자전거", bike_minutes),
+        ):
+            if minutes is not None:
+                options[mode_name] = minutes
+
+    if options:
+        # 최단시간 수단 (동률이면 삽입 순서상 자동차 우선)
+        mode = min(options, key=options.get)
+        recommended = options[mode]
     else:
-        logger.warning("카카오 자동차 경로 실패 — 기본값 30분 사용")
+        logger.warning("모든 이동수단 경로 실패 — 기본값 30분 사용")
         recommended = 30
         mode = "기본값"
 
     return {
         "car_minutes": car_minutes,
-        "transit_minutes": None,    # 카카오 Mobility는 대중교통 미지원
+        "transit_minutes": transit_minutes,
+        "walk_minutes": walk_minutes,
+        "bike_minutes": bike_minutes,
+        "options": options,
         "recommended_minutes": recommended,
         "mode": mode,
-        "car_ok": car_ok,
-        "transit_ok": False,
+        "car_ok": car_minutes is not None,
+        "transit_ok": transit_minutes is not None,
     }
+
+
+def _multimodal_enabled() -> bool:
+    """신규 다중수단 API 활성화 여부 (.env KAKAO_MULTIMODAL=1)"""
+    return config.get_bool("KAKAO_MULTIMODAL", False)
+
+
+# ── 신규 이동수단 fetcher — 2026-07-21 카카오 신규 REST API 적용 후 구현 ──
+# TODO(2026-07-21): developers.kakao.com 확정 스펙(엔드포인트/파라미터/응답 duration
+#                   필드) 확인 후 구현. 스펙 확보 전까지 None 반환 → 추천 후보에서 제외.
+
+def _get_transit_time(
+    o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
+) -> int | None:
+    """대중교통 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
+    return None
+
+
+def _get_walk_time(
+    o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
+) -> int | None:
+    """도보 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
+    return None
+
+
+def _get_bike_time(
+    o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
+) -> int | None:
+    """자전거 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
+    return None
 
 
 def _get_car_time(
