@@ -17,6 +17,7 @@ from typing import Optional
 SSOT_CSV = Path("/Users/kwaksmacmini/01_Execution_Field/개인투자비서 Agent/data/portfolio.csv")
 LOCK_PATH = "/tmp/jarvis_portfolio.lock"
 logger = logging.getLogger(__name__)
+ACTIVE_STATUSES = {"active", "holding", "보유"}
 
 
 class PortfolioLock:
@@ -95,6 +96,9 @@ def load() -> list:
         for row in reader:
             ticker = row.get("ticker", "").strip()
             if not ticker or ticker in ("CASH_KRW", "DEPOSIT_KRW"):
+                continue
+            holding_status = row.get("holding_status", "").strip().lower()
+            if holding_status not in ACTIVE_STATUSES:
                 continue
             stocks.append({
                 "code": ticker,
