@@ -51,5 +51,25 @@
     "sent": false,
     "return_home_minutes": 35,
     "return_home_mode": "자동차"
+  },
+  {
+    "summary": "[월드컵 4강] 잉글랜드 vs 아르헨티나",
+    "location": "메르세데스-벤츠 스타디움",
+    "description": "FIFA 북중미 월드컵 2026 4강전 (준결승 2경기) 장소: 미국 조지아, 메르세데스-벤츠 스타디움 (애틀랜타 스타디움)",
+    "start_dt": "2026-07-16T04:00:00+09:00",
+    "alert_dt": "2026-07-16T03:00:00+09:00",
+    "travel_minutes": 30,
+    "travel_mode": "기본값",
+    "travel_options": {},
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.7553232,
+    "dest_lng": -84.40059049999999,
+    "location_is_default": true,
+    "planned_at": "2026-07-16T02:15:21.365121+09:00",
+    "event_id": "45ciphlcbgs14g4nvkhic12e8o",
+    "sent": false,
+    "return_home_minutes": 30,
+    "return_home_mode": "기본값"
   }
 ]
