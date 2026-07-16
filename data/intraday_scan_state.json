@@ -1,28 +1,18 @@
 {
   "date": "2026-07-16",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:31",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
-    "017670": {
-      "name": "SK텔레콤",
-      "score": 5,
+    "004310": {
+      "name": "현대약품",
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
         "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "000020": {
-      "name": "동화약품",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "장중강도",
-        "신고가근접",
-        "신고가돌파"
       ],
       "is_portfolio": false
     }
