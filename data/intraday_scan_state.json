@@ -1,11 +1,23 @@
 {
   "date": "2026-07-16",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "028300": {
-      "name": "HLB",
+    "042660": {
+      "name": "한화오션",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "017670": {
+      "name": "SK텔레콤",
       "score": 7,
       "passed": [
         "거래대금",
@@ -13,16 +25,6 @@
         "거래량급증",
         "시총필터",
         "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "096770": {
-      "name": "SK이노베이션",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
       ],
       "is_portfolio": false
     },
@@ -36,47 +38,13 @@
       ],
       "is_portfolio": false
     },
-    "042660": {
-      "name": "한화오션",
+    "006660": {
+      "name": "삼성공조",
       "score": 5,
       "passed": [
         "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "353200": {
-      "name": "대덕전자",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "017670": {
-      "name": "SK텔레콤",
-      "score": 5,
-      "passed": [
         "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "279570": {
-      "name": "케이뱅크",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
+        "거래량급증"
       ],
       "is_portfolio": false
     },
@@ -86,6 +54,17 @@
       "passed": [
         "거래대금",
         "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "413630": {
+      "name": "씨피시스템",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
