@@ -17,6 +17,7 @@ import schedule
 
 from core import notifier
 from core.config import LOG_DIR
+from core.log_safety import sanitize_error_message
 
 KR_HOLIDAYS = holidays.KR()
 
@@ -159,7 +160,11 @@ def run_script(script: str, *args: str) -> None:
         if result.returncode == 0:
             logger.info(f"✅ {script} 완료")
         else:
-            logger.error(f"❌ {script} 실패:\n{result.stderr[:500]}")
+            logger.error(
+                "❌ %s 실패:\n%s",
+                script,
+                sanitize_error_message(result.stderr[:500]),
+            )
     except subprocess.TimeoutExpired:
         logger.error(f"❌ {script} 타임아웃 ({timeout}초)")
     except Exception as e:

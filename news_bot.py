@@ -8,6 +8,7 @@ import feedparser
 import requests
 
 from core.config import JARVIS_BOT_TOKEN, JARVIS_CHAT_ID
+from core.log_safety import sanitize_error_message
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +61,7 @@ def send_news() -> bool:
         logger.info("뉴스 브리핑 전송 완료")
         return True
     except Exception as e:
-        logger.error(f"뉴스 브리핑 전송 실패: {e}")
+        logger.error("뉴스 브리핑 전송 실패: %s", sanitize_error_message(str(e)))
         return False
 
 

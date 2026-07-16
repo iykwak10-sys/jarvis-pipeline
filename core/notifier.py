@@ -2,12 +2,12 @@
 """Telegram 알림 전송 모듈"""
 
 import logging
-from pathlib import Path
 
 import requests
 from requests.exceptions import ConnectionError, Timeout
 
 from core.config import JARVIS_BOT_TOKEN, JARVIS_CHAT_ID, JARVIS_TELEGRAM_MODE
+from core.log_safety import sanitize_error_message
 from core.retry import retry
 
 TELEGRAM_URL = "https://api.telegram.org/bot{token}/sendMessage"
@@ -74,7 +74,7 @@ def send(message: str) -> bool:
         resp.raise_for_status()
         return True
     except Exception as e:
-        logger.error(f"Telegram 전송 실패: {e}")
+        logger.error("Telegram 전송 실패: %s", sanitize_error_message(str(e)))
         return False
 
 
