@@ -1,8 +1,8 @@
 {
   "date": "2026-07-17",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
     "042660": {
       "name": "한화오션",
