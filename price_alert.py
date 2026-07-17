@@ -6,6 +6,8 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
+import holidays
+
 from core.config import LOG_DIR
 from core import portfolio, notifier
 from core.kis_client import KISClient
@@ -22,11 +24,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 THRESHOLD = 5.0  # 알림 기준 등락률 (%)
+KR_HOLIDAYS = holidays.KR()
 
 
 def is_market_open() -> bool:
     now = datetime.now()
-    if now.weekday() >= 5:
+    today = now.date()
+    if today.weekday() >= 5:
+        return False
+    if today in KR_HOLIDAYS:
+        logger.info(f"국내 주식시장 휴장일({KR_HOLIDAYS.get(today)}) — 급등락 알림 스킵")
         return False
     market_open = now.replace(hour=9, minute=0, second=0, microsecond=0)
     market_close = now.replace(hour=15, minute=30, second=0, microsecond=0)
