@@ -71,5 +71,27 @@
     "sent": false,
     "return_home_minutes": 30,
     "return_home_mode": "기본값"
+  },
+  {
+    "summary": "골프 라운딩 (천안상록CC)",
+    "location": "천안상록CC",
+    "description": "",
+    "start_dt": "2026-07-18T09:58:00+09:00",
+    "alert_dt": "2026-07-18T09:23:18.995469+09:00",
+    "travel_minutes": 47,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 47
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.74106507361708,
+    "dest_lng": 127.28324080489507,
+    "location_is_default": true,
+    "planned_at": "2026-07-18T09:18:18.995469+09:00",
+    "event_id": "aribhgm8hsnk163sn574m336f0",
+    "sent": false,
+    "return_home_minutes": 49,
+    "return_home_mode": "자동차"
   }
 ]
