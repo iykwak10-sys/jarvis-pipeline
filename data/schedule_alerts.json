@@ -93,5 +93,25 @@
     "sent": false,
     "return_home_minutes": 49,
     "return_home_mode": "자동차"
+  },
+  {
+    "summary": "2026 FIFA 월드컵 결승전: 스페인 vs 아르헨티나",
+    "location": "메트라이프 스타디움 (뉴저지)",
+    "description": "",
+    "start_dt": "2026-07-20T04:00:00+09:00",
+    "alert_dt": "2026-07-20T03:00:00+09:00",
+    "travel_minutes": 30,
+    "travel_mode": "기본값",
+    "travel_options": {},
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 40.8135064,
+    "dest_lng": -74.074457,
+    "location_is_default": true,
+    "planned_at": "2026-07-20T02:18:14.852589+09:00",
+    "event_id": "lv6bbqmip801tvucvl6q6t9eps",
+    "sent": false,
+    "return_home_minutes": 30,
+    "return_home_mode": "기본값"
   }
 ]
