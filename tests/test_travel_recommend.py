@@ -2,7 +2,8 @@
 """tmap_client.get_travel_time 이동수단 추천 로직 테스트 (API mock)
 
 정책: 성공한 수단 중 무조건 최단시간. 실패(None) 수단은 후보 제외.
-전부 실패 시 기본값 30분. KAKAO_MULTIMODAL 꺼짐이면 자동차만.
+전부 실패 시 기본값 30분.
+대중교통은 ODsay 키로 자기-게이팅(항상 시도), 도보/자전거는 KAKAO_MULTIMODAL 플래그.
 """
 
 import sys
@@ -26,13 +27,14 @@ def _patch(monkeypatch, car=None, transit=None, walk=None, bike=None, multimodal
     monkeypatch.setattr(tmap_client, "_multimodal_enabled", lambda: multimodal)
 
 
-def test_car_only_flag_off(monkeypatch):
-    """플래그 꺼짐: 자동차만 조회, 신규 수단 fetcher 호출 금지"""
+def test_car_only_no_transit_no_flag(monkeypatch):
+    """ODsay 키 없음(transit=None) + 도보/자전거 플래그 꺼짐 → 자동차 단독.
+    도보/자전거 fetcher는 호출되면 안 됨."""
     def _forbidden(*a):
-        raise AssertionError("multimodal 꺼짐 상태에서 신규 수단 호출됨")
+        raise AssertionError("walk/bike 플래그 꺼짐 상태에서 호출됨")
 
     monkeypatch.setattr(tmap_client, "_get_car_time", lambda *a: 37)
-    monkeypatch.setattr(tmap_client, "_get_transit_time", _forbidden)
+    monkeypatch.setattr(tmap_client, "_get_transit_time", lambda *a: None)
     monkeypatch.setattr(tmap_client, "_get_walk_time", _forbidden)
     monkeypatch.setattr(tmap_client, "_get_bike_time", _forbidden)
     monkeypatch.setattr(tmap_client, "_multimodal_enabled", lambda: False)
@@ -42,6 +44,17 @@ def test_car_only_flag_off(monkeypatch):
     assert r["recommended_minutes"] == 37
     assert r["options"] == {"자동차": 37}
     assert r["transit_minutes"] is None
+
+
+def test_transit_without_flag(monkeypatch):
+    """대중교통은 플래그와 무관하게 동작 (ODsay 자기-게이팅)"""
+    monkeypatch.setattr(tmap_client, "_get_car_time", lambda *a: 40)
+    monkeypatch.setattr(tmap_client, "_get_transit_time", lambda *a: 33)
+    monkeypatch.setattr(tmap_client, "_multimodal_enabled", lambda: False)
+    r = tmap_client.get_travel_time(*ARGS)
+    assert r["mode"] == "대중교통"
+    assert r["recommended_minutes"] == 33
+    assert r["transit_ok"] is True
 
 
 def test_transit_fastest(monkeypatch):

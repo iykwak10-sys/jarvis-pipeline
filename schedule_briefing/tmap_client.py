@@ -1,13 +1,13 @@
 # schedule_briefing/tmap_client.py
-"""카카오 API — 소요시간 계산 + 장소 검색 / 지오코딩
-  (구 TMAP → Kakao Mobility + Kakao Local 으로 대체)
+"""이동수단별 소요시간 + 장소 검색 / 지오코딩
 
-엔드포인트:
-  자동차 경로  : GET https://apis-navi.kakaomobility.com/v1/directions
-  장소 키워드  : GET https://dapi.kakao.com/v2/local/search/keyword.json
-  주소 → 좌표  : GET https://dapi.kakao.com/v2/local/search/address.json
+  자동차 경로  : Kakao Mobility  GET apis-navi.kakaomobility.com/v1/directions
+  대중교통 경로: ODsay LIVE       GET api.odsay.com/v1/api/searchPubTransPathT
+  장소 키워드  : Kakao Local      GET dapi.kakao.com/v2/local/search/keyword.json
+  주소 → 좌표  : Kakao Local      GET dapi.kakao.com/v2/local/search/address.json
 
-헤더 공통: Authorization: KakaoAK {REST_API_KEY}
+인증: 카카오 = Authorization: KakaoAK {KAKAO_REST_API_KEY} 헤더
+      ODsay  = apiKey 쿼리 파라미터 {ODSAY_API_KEY}
 """
 
 from __future__ import annotations
@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 _MOBILITY_BASE = "https://apis-navi.kakaomobility.com/v1/directions"
 _LOCAL_KEYWORD = "https://dapi.kakao.com/v2/local/search/keyword.json"
 _LOCAL_ADDRESS = "https://dapi.kakao.com/v2/local/search/address.json"
+_ODSAY_PUBTRANS = "https://api.odsay.com/v1/api/searchPubTransPathT"  # 대중교통 (ODsay)
 
 _API_KEY: str | None = None
 
@@ -52,8 +53,10 @@ def get_travel_time(
 ) -> dict:
     """이동수단별 소요시간 계산 → 최단시간 수단 추천
 
-    자동차는 항상 조회. 대중교통/도보/자전거는 카카오 신규 REST API
-    적용일(2026-07-21) 이후 KAKAO_MULTIMODAL=1 로 활성화.
+    - 자동차: 카카오 Mobility (항상 조회)
+    - 대중교통: ODsay LIVE API (ODSAY_API_KEY 있으면 자동 조회, door-to-door)
+    - 도보/자전거: 카카오 제휴 API 전용 — 제휴 계약 전까지 미구현(None).
+      제휴 확보 후 KAKAO_MULTIMODAL=1 로 활성화.
     추천 정책: 성공한 수단 중 무조건 최단시간 (실패 수단은 후보에서 제외).
 
     Returns:
@@ -76,16 +79,17 @@ def get_travel_time(
     if car_minutes is not None:
         options["자동차"] = car_minutes
 
-    transit_minutes = walk_minutes = bike_minutes = None
+    # 대중교통은 ODSAY_API_KEY 유무로 자기-게이팅 (키 없으면 None → 후보 제외)
+    transit_minutes = _get_transit_time(*args)
+    if transit_minutes is not None:
+        options["대중교통"] = transit_minutes
+
+    # 도보/자전거는 카카오 제휴 API 확보 후 KAKAO_MULTIMODAL 플래그로 활성화
+    walk_minutes = bike_minutes = None
     if _multimodal_enabled():
-        transit_minutes = _get_transit_time(*args)
         walk_minutes = _get_walk_time(*args)
         bike_minutes = _get_bike_time(*args)
-        for mode_name, minutes in (
-            ("대중교통", transit_minutes),
-            ("도보", walk_minutes),
-            ("자전거", bike_minutes),
-        ):
+        for mode_name, minutes in (("도보", walk_minutes), ("자전거", bike_minutes)):
             if minutes is not None:
                 options[mode_name] = minutes
 
@@ -116,28 +120,69 @@ def _multimodal_enabled() -> bool:
     return config.get_bool("KAKAO_MULTIMODAL", False)
 
 
-# ── 신규 이동수단 fetcher — 2026-07-21 카카오 신규 REST API 적용 후 구현 ──
-# TODO(2026-07-21): developers.kakao.com 확정 스펙(엔드포인트/파라미터/응답 duration
-#                   필드) 확인 후 구현. 스펙 확보 전까지 None 반환 → 추천 후보에서 제외.
+# ── 대중교통 (ODsay LIVE API) ────────────────────────────────────────────────
 
 def _get_transit_time(
     o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
 ) -> int | None:
-    """대중교통 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
-    return None
+    """대중교통 소요시간 (분) — ODsay LIVE API (지하철+버스, door-to-door)
 
+    첫/끝 도보 구간을 포함한 totalTime을 반환. OPT=4(최소시간)로 조회하고
+    복수 경로 중 최소값 사용 (최단시간 추천 정책과 일치).
+    ODSAY_API_KEY 없으면 None → 추천 후보에서 제외.
+
+    Note: ODsay 서버 키는 호출 IP 화이트리스트 등록 필요 (https://lab.odsay.com).
+    """
+    api_key = config.get("ODSAY_API_KEY", "")
+    if not api_key:
+        return None
+    try:
+        resp = requests.get(
+            _ODSAY_PUBTRANS,
+            params={
+                "apiKey": api_key,
+                "SX": o_lng, "SY": o_lat,      # 출발 경도,위도
+                "EX": d_lng, "EY": d_lat,      # 도착 경도,위도
+                "OPT": 4,                       # 최소시간
+                "SearchPathType": 0,            # 지하철+버스
+            },
+            timeout=8,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        if "error" in data:
+            logger.warning(f"ODsay 대중교통 오류: {data.get('error')}")
+            return None
+
+        paths = data.get("result", {}).get("path", [])
+        times = [p.get("info", {}).get("totalTime", 0) for p in paths]
+        times = [t for t in times if t]
+        if not times:
+            return None
+        return max(1, min(times))
+
+    except Exception as e:
+        logger.warning(f"ODsay 대중교통 실패: {e}")
+        return None
+
+
+# ── 도보/자전거 — 카카오 제휴 API 전용 (제휴 계약 전까지 미구현) ──
+# 2026-07-21 확인: 카카오 대중교통/도보/자전거 길찾기는 공개 REST가 아니라
+# 제휴(파트너십) API. 계약 후 스펙 확보 시 아래 두 함수 구현 + KAKAO_MULTIMODAL=1.
+# 상세: docs/kakao_newapi_spec_probe.md
 
 def _get_walk_time(
     o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
 ) -> int | None:
-    """도보 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
+    """도보 소요시간 (분) — 카카오 제휴 API 확보 전 미구현"""
     return None
 
 
 def _get_bike_time(
     o_lat: float, o_lng: float, d_lat: float, d_lng: float, departure_dt: datetime,
 ) -> int | None:
-    """자전거 소요시간 (분) — 신규 API 스펙 확보 전 미구현"""
+    """자전거 소요시간 (분) — 카카오 제휴 API 확보 전 미구현"""
     return None
 
 
