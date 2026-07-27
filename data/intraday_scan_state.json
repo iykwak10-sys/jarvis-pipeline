@@ -1,68 +1,22 @@
 {
-  "date": "2026-07-23",
-  "scan_time": "10:31",
-  "scan_label": "10:30",
-  "is_initial": false,
+  "date": "2026-07-27",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "475150": {
-      "name": "SK이터닉스",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "006340": {
-      "name": "대원전선",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "035420": {
       "name": "NAVER",
-      "score": 7,
+      "score": 6,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "010120": {
-      "name": "LS ELECTRIC",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "009150": {
-      "name": "삼성전기",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "006360": {
-      "name": "GS건설",
+    "003490": {
+      "name": "대한항공",
       "score": 5,
       "passed": [
         "등락률",
@@ -72,8 +26,8 @@
       ],
       "is_portfolio": false
     },
-    "034730": {
-      "name": "SK",
+    "316140": {
+      "name": "우리금융지주",
       "score": 5,
       "passed": [
         "등락률",
@@ -83,24 +37,13 @@
       ],
       "is_portfolio": false
     },
-    "100090": {
-      "name": "SK오션플랜트",
+    "108860": {
+      "name": "셀바스AI",
       "score": 5,
       "passed": [
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "439960": {
-      "name": "코스모로보틱스",
-      "score": 5,
-      "passed": [
-        "거래대금",
         "거래량급증",
-        "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
