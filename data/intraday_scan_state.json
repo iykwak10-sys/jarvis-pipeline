@@ -1,11 +1,35 @@
 {
   "date": "2026-07-30",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
-    "105560": {
-      "name": "KB금융",
+    "012450": {
+      "name": "한화에어로스페이스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "042660": {
+      "name": "한화오션",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "006400": {
+      "name": "삼성SDI",
       "score": 7,
       "passed": [
         "거래대금",
@@ -16,14 +40,15 @@
       ],
       "is_portfolio": false
     },
-    "068270": {
-      "name": "셀트리온",
-      "score": 6,
+    "009540": {
+      "name": "HD한국조선해양",
+      "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "장중강도"
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -38,85 +63,8 @@
       ],
       "is_portfolio": false
     },
-    "012450": {
-      "name": "한화에어로스페이스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "042660": {
-      "name": "한화오션",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "329180": {
-      "name": "HD현대중공업",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "079550": {
-      "name": "LIG디펜스앤에어로스페이스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "009540": {
-      "name": "HD한국조선해양",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "010140": {
-      "name": "삼성중공업",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "086520": {
-      "name": "에코프로",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "247540": {
-      "name": "에코프로비엠",
+    "373220": {
+      "name": "LG에너지솔루션",
       "score": 5,
       "passed": [
         "등락률",
