@@ -1,63 +1,11 @@
 {
-  "date": "2026-07-31",
-  "scan_time": "09:10",
+  "date": "2026-08-03",
+  "scan_time": "09:11",
   "scan_label": "09:10",
   "is_initial": true,
   "stocks": {
-    "005930": {
-      "name": "삼성전자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": true
-    },
-    "009150": {
-      "name": "삼성전기",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "402340": {
-      "name": "SK스퀘어",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "010120": {
-      "name": "LS ELECTRIC",
+    "010170": {
+      "name": "대한광통신",
       "score": 5,
       "passed": [
         "등락률",
