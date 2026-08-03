@@ -1,22 +1,9 @@
 {
   "date": "2026-08-03",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "439960": {
-      "name": "코스모로보틱스",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "108490": {
       "name": "로보티즈",
       "score": 8,
@@ -30,14 +17,14 @@
       ],
       "is_portfolio": false
     },
-    "010170": {
-      "name": "대한광통신",
+    "439960": {
+      "name": "코스모로보틱스",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -64,6 +51,17 @@
       ],
       "is_portfolio": false
     },
+    "010170": {
+      "name": "대한광통신",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "030530": {
       "name": "원익홀딩스",
       "score": 6,
@@ -76,24 +74,13 @@
       ],
       "is_portfolio": false
     },
-    "388720": {
-      "name": "유일로보틱스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "475150": {
-      "name": "SK이터닉스",
+    "009150": {
+      "name": "삼성전기",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -109,8 +96,8 @@
       ],
       "is_portfolio": false
     },
-    "006340": {
-      "name": "대원전선",
+    "035420": {
+      "name": "NAVER",
       "score": 5,
       "passed": [
         "거래대금",
@@ -125,8 +112,8 @@
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -158,8 +145,8 @@
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
