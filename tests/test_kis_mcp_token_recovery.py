@@ -11,6 +11,10 @@ from core.kis_token_cache import SharedTokenCache
 
 SERVER_PATH = Path(__file__).parent.parent / "kis-mcp" / "server.py"
 
+# server.py imports mcp.server.fastmcp, which needs Python >= 3.10 and is only
+# installed in the kis-venv runtime. Skip elsewhere instead of erroring.
+HAS_MCP = importlib.util.find_spec("mcp") is not None
+
 
 class _Response:
     def __init__(self, body: dict, status_code: int = 200) -> None:
@@ -25,6 +29,7 @@ class _Response:
             raise RuntimeError("HTTP error")
 
 
+@unittest.skipUnless(HAS_MCP, "mcp package not installed")
 class KisMcpTokenRecoveryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
