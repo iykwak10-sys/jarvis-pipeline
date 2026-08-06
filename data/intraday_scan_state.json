@@ -1,138 +1,55 @@
 {
-  "date": "2026-08-05",
-  "scan_time": "10:34",
-  "scan_label": "10:30",
-  "is_initial": false,
+  "date": "2026-08-06",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "477850": {
-      "name": "마키나락스",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "006340": {
-      "name": "대원전선",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "009830": {
-      "name": "한화솔루션",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "010170": {
-      "name": "대한광통신",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "011070": {
-      "name": "LG이노텍",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
     "009150": {
       "name": "삼성전기",
-      "score": 6,
+      "score": 5,
       "passed": [
         "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "047040": {
+      "name": "대우건설",
+      "score": 5,
+      "passed": [
         "등락률",
         "시총필터",
+        "장중강도",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "278470": {
+      "name": "에이피알",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "073240": {
+      "name": "금호타이어",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
       ],
       "is_portfolio": false
     },
     "069540": {
       "name": "빛과전자",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "043260": {
-      "name": "성호전자",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "332570": {
-      "name": "PS일렉트로닉스",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": true
-    },
-    "402340": {
-      "name": "SK스퀘어",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "006360": {
-      "name": "GS건설",
       "score": 5,
       "passed": [
         "등락률",
@@ -142,46 +59,13 @@
       ],
       "is_portfolio": false
     },
-    "017670": {
-      "name": "SK텔레콤",
+    "222800": {
+      "name": "심텍",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
         "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "010060": {
-      "name": "OCI홀딩스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "064400": {
-      "name": "LG씨엔에스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "218410": {
-      "name": "RFHIC",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
