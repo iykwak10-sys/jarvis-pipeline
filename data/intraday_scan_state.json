@@ -1,7 +1,7 @@
 {
   "date": "2026-08-07",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "009830": {
@@ -16,23 +16,60 @@
       ],
       "is_portfolio": false
     },
-    "006400": {
-      "name": "삼성SDI",
-      "score": 6,
+    "017900": {
+      "name": "광전자",
+      "score": 7,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "069540": {
-      "name": "빛과전자",
+    "055550": {
+      "name": "신한지주",
       "score": 6,
       "passed": [
         "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "096770": {
+      "name": "SK이노베이션",
+      "score": 6,
+      "passed": [
         "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "347700": {
+      "name": "스피어",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
         "시총필터",
         "RSI적정"
       ],
@@ -49,14 +86,25 @@
       ],
       "is_portfolio": false
     },
-    "017900": {
-      "name": "광전자",
+    "003670": {
+      "name": "포스코퓨처엠",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "거래량급증",
         "시총필터",
-        "장중강도"
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "322000": {
+      "name": "HD현대에너지솔루션",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -71,24 +119,13 @@
       ],
       "is_portfolio": false
     },
-    "096770": {
-      "name": "SK이노베이션",
+    "214450": {
+      "name": "파마리서치",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "347700": {
-      "name": "스피어",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
