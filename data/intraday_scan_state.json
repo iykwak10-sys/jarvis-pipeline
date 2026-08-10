@@ -1,131 +1,127 @@
 {
-  "date": "2026-08-07",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
-  "is_initial": false,
+  "date": "2026-08-10",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "009830": {
-      "name": "한화솔루션",
+    "009150": {
+      "name": "삼성전기",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "017900": {
-      "name": "광전자",
-      "score": 7,
+    "005930": {
+      "name": "삼성전자",
+      "score": 5,
       "passed": [
         "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "006360": {
+      "name": "GS건설",
+      "score": 5,
+      "passed": [
         "등락률",
-        "거래량급증",
         "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "055550": {
-      "name": "신한지주",
-      "score": 6,
+    "079550": {
+      "name": "LIG디펜스앤에어로스페이스",
+      "score": 5,
       "passed": [
-        "거래대금",
+        "등락률",
         "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "006800": {
+      "name": "미래에셋증권",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "196170": {
+      "name": "알테오젠",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "080220": {
+      "name": "제주반도체",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "222800": {
+      "name": "심텍",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "095610": {
+      "name": "테스",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "222040": {
+      "name": "코스맥스엔비티",
+      "score": 5,
+      "passed": [
+        "등락률",
         "장중강도",
         "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "096770": {
-      "name": "SK이노베이션",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "347700": {
-      "name": "스피어",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "006400": {
-      "name": "삼성SDI",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "010060": {
-      "name": "OCI홀딩스",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "003670": {
-      "name": "포스코퓨처엠",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "322000": {
-      "name": "HD현대에너지솔루션",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "066970": {
-      "name": "엘앤에프",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "214450": {
-      "name": "파마리서치",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
