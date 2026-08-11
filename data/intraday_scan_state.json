@@ -1,7 +1,7 @@
 {
   "date": "2026-08-11",
-  "scan_time": "13:33",
-  "scan_label": "13:30",
+  "scan_time": "15:09",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "002990": {
@@ -17,32 +17,21 @@
       ],
       "is_portfolio": false
     },
-    "005930": {
-      "name": "삼성전자",
-      "score": 7,
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "036930": {
-      "name": "주성엔지니어링",
+    "058610": {
+      "name": "에스피지",
       "score": 7,
       "passed": [
         "거래대금",
@@ -53,8 +42,20 @@
       ],
       "is_portfolio": false
     },
-    "001820": {
-      "name": "삼화콘덴서",
+    "240810": {
+      "name": "원익IPS",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "018260": {
+      "name": "삼성에스디에스",
       "score": 6,
       "passed": [
         "등락률",
@@ -65,8 +66,30 @@
       ],
       "is_portfolio": false
     },
+    "005930": {
+      "name": "삼성전자",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
     "009150": {
       "name": "삼성전기",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "005935": {
+      "name": "삼성전자우",
       "score": 5,
       "passed": [
         "거래대금",
@@ -87,13 +110,35 @@
       ],
       "is_portfolio": false
     },
-    "058610": {
-      "name": "에스피지",
+    "001820": {
+      "name": "삼화콘덴서",
       "score": 5,
       "passed": [
         "거래대금",
         "거래량급증",
         "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "068270": {
+      "name": "셀트리온",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "028260": {
+      "name": "삼성물산",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
