@@ -115,7 +115,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         def _call_hermes(model: str) -> str:
             proc = subprocess.run(
                 ["/Users/kwaksmacmini/.local/bin/hermes", "chat",
-                 "-q", user_text, "-m", model, "-Q"],
+                 "-q", user_text, "-m", model, "--provider", "nous", "-Q"],
                 capture_output=True, text=True, timeout=180,
             )
             return proc.stdout.strip()
