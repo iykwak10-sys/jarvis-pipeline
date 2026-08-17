@@ -120,7 +120,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             )
             return proc.stdout.strip()
 
-        primary_model = "deepseek/deepseek-chat-v4-pro-v2"
+        primary_model = "deepseek/deepseek-v4-flash-0731"
         fallback_model = "deepseek/deepseek-v4-flash"
         raw = _call_hermes(primary_model)
         if not raw:
