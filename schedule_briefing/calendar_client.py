@@ -28,6 +28,10 @@ _DESKTOP_CLIENT = _CREDENTIALS_DIR / "calendar_desktop_client.json"
 _WEB_CLIENT = _CREDENTIALS_DIR / "client_secret_609042792231-jjm8ugkepf8tv7u50upa7gpbonl9fc1v.apps.googleusercontent.com.json"
 _TOKEN_FILE = _CREDENTIALS_DIR / "calendar_token.json"
 
+# 인증 만료 시 재인증 알림 (스로틀 상태 파일)
+_AUTH_ALERT_STATE = _PROJECT_ROOT / "data" / ".calendar_auth_alert"
+_AUTH_ALERT_THROTTLE_HOURS = 12
+
 _LOCAL_PORT = 8090
 _LOCAL_REDIRECT = f"http://localhost:{_LOCAL_PORT}/"
 
@@ -176,6 +180,45 @@ def _get_service():
     return build("calendar", "v3", credentials=creds)
 
 
+def _is_auth_failure(err: Exception) -> bool:
+    """재인증이 필요한 인증 실패인지 판별 (일시적 네트워크 오류와 구분)"""
+    msg = str(err).lower()
+    return (
+        "invalid_grant" in msg
+        or "invalid_rapt" in msg
+        or "token has been expired or revoked" in msg
+    )
+
+
+def _alert_auth_failure(err: Exception) -> None:
+    """캘린더 인증 만료 시 텔레그램으로 재인증 알림 (12시간 스로틀).
+
+    토큰이 죽으면 브리핑이 조용히 빈 상태가 되므로, 사용자가 즉시 인지하도록 알림.
+    """
+    if not _is_auth_failure(err):
+        return
+    try:
+        from datetime import timedelta
+        now = datetime.now()
+        if _AUTH_ALERT_STATE.exists():
+            last = datetime.fromisoformat(_AUTH_ALERT_STATE.read_text().strip())
+            if now - last < timedelta(hours=_AUTH_ALERT_THROTTLE_HOURS):
+                return   # 최근에 이미 알림 보냄 — 스팸 방지
+
+        from core import notifier
+        notifier.send(
+            "⚠️ <b>일정 브리핑 점검 필요</b>\n\n"
+            "Google 캘린더 인증이 만료되어(invalid_grant) 일정 조회가 중단됐습니다.\n"
+            "재인증 전까지 일정 브리핑이 발송되지 않습니다.\n"
+            "캘린더 OAuth 재인증을 진행해 주세요."
+        )
+        _AUTH_ALERT_STATE.parent.mkdir(parents=True, exist_ok=True)
+        _AUTH_ALERT_STATE.write_text(now.isoformat())
+        logger.warning("캘린더 재인증 필요 — 텔레그램 알림 전송됨")
+    except Exception as alert_err:
+        logger.warning(f"재인증 알림 전송 실패: {alert_err}")
+
+
 def get_todays_events(max_results: int = 20) -> list[dict]:
     """오늘 남은 일정 조회 (현재 시각 이후)
 
@@ -233,6 +276,7 @@ def get_todays_events(max_results: int = 20) -> list[dict]:
 
     except Exception as e:
         logger.error(f"Google Calendar 조회 실패: {e}")
+        _alert_auth_failure(e)
         return []
 
 
@@ -291,4 +335,5 @@ def get_tomorrow_events(max_results: int = 20) -> list[dict]:
 
     except Exception as e:
         logger.error(f"Google Calendar 내일 조회 실패: {e}")
+        _alert_auth_failure(e)
         return []
