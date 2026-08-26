@@ -1,69 +1,22 @@
 {
-  "date": "2026-08-25",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
-  "is_initial": false,
+  "date": "2026-08-26",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "0220W0": {
-      "name": "한화머시너리앤서비스홀딩스",
-      "score": 7,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접",
-        "신고가돌파",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "000880": {
-      "name": "한화",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "000720": {
-      "name": "현대건설",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "041190": {
-      "name": "우리기술투자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "034020": {
-      "name": "두산에너빌리티",
+    "005930": {
+      "name": "삼성전자",
       "score": 5,
       "passed": [
         "거래대금",
-        "거래량급증",
         "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": true
     },
-    "005935": {
-      "name": "삼성전자우",
+    "000660": {
+      "name": "SK하이닉스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -71,21 +24,43 @@
         "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": false
+      "is_portfolio": true
     },
-    "006400": {
-      "name": "삼성SDI",
+    "047040": {
+      "name": "대우건설",
       "score": 5,
       "passed": [
-        "거래대금",
+        "등락률",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "052690": {
-      "name": "한전기술",
+    "006360": {
+      "name": "GS건설",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "015760": {
+      "name": "한국전력",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "361610": {
+      "name": "SK아이이테크놀로지",
       "score": 5,
       "passed": [
         "등락률",
@@ -95,12 +70,12 @@
       ],
       "is_portfolio": false
     },
-    "388050": {
-      "name": "지투파워",
+    "014620": {
+      "name": "성광벤드",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
+        "시총필터",
         "장중강도",
         "RSI적정"
       ],
