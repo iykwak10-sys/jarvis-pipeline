@@ -5,6 +5,7 @@ import atexit
 import logging
 import os
 import signal
+import socket
 import subprocess
 import sys
 import time
@@ -148,10 +149,30 @@ SCRIPT_TIMEOUTS = {
 }
 DEFAULT_TIMEOUT = 120
 
+KIS_HOST = "openapi.koreainvestment.com"
+
+
+def wait_for_dns(host: str = KIS_HOST, attempts: int = 20, interval: int = 15) -> bool:
+    """wake 직후 Tailscale MagicDNS(100.100.100.100) 미복구 구간을 대기.
+
+    sleep에서 깨어난 직후 스케줄 job이 실행되면 리졸버가 아직 안 올라와
+    getaddrinfo가 실패한다. 최대 5분 대기 후에도 안 되면 그대로 진행한다.
+    """
+    for i in range(1, attempts + 1):
+        try:
+            socket.getaddrinfo(host, 443)
+            return True
+        except OSError:
+            logger.warning("DNS 대기 중 (%s resolve 실패, %d/%d)", host, i, attempts)
+            time.sleep(interval)
+    logger.error("DNS %d초 대기 후에도 resolve 실패 — 그대로 진행", attempts * interval)
+    return False
+
 
 def run_script(script: str, *args: str) -> None:
     """스크립트를 subprocess로 실행"""
     timeout = SCRIPT_TIMEOUTS.get(script, DEFAULT_TIMEOUT)
+    wait_for_dns()
     try:
         result = subprocess.run(
             [sys.executable, str(BASE_DIR / script), *args],
