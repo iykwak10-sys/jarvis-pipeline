@@ -1,33 +1,11 @@
 {
-  "date": "2026-08-26",
+  "date": "2026-08-27",
   "scan_time": "09:10",
   "scan_label": "09:10",
   "is_initial": true,
   "stocks": {
-    "005930": {
-      "name": "삼성전자",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "047040": {
-      "name": "대우건설",
+    "069540": {
+      "name": "빛과전자",
       "score": 5,
       "passed": [
         "등락률",
@@ -37,47 +15,14 @@
       ],
       "is_portfolio": false
     },
-    "006360": {
-      "name": "GS건설",
+    "078340": {
+      "name": "컴투스",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
         "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "015760": {
-      "name": "한국전력",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "361610": {
-      "name": "SK아이이테크놀로지",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "014620": {
-      "name": "성광벤드",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "신고가근접"
       ],
       "is_portfolio": false
     }
