@@ -7,7 +7,8 @@ import json
 import logging
 import os
 import threading
-from datetime import datetime, timezone
+from datetime import datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Optional
@@ -34,6 +35,7 @@ _AUTH_ALERT_THROTTLE_HOURS = 12
 
 _LOCAL_PORT = 8090
 _LOCAL_REDIRECT = f"http://localhost:{_LOCAL_PORT}/"
+_KST = ZoneInfo("Asia/Seoul")
 
 
 def _get_client_secret_path() -> Path:
@@ -231,17 +233,17 @@ def get_todays_events(max_results: int = 20) -> list[dict]:
     """
     try:
         service = _get_service()
-        now = datetime.now(timezone.utc)
-
-        # 오늘 자정 (UTC) ~ 내일 자정 (UTC)
-        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
-        today_end_dt = now.replace(hour=23, minute=59, second=59, microsecond=0)
-        today_end = today_end_dt.isoformat()
+        # Google Calendar의 timeMin/timeMax는 명시한 timezone을 기준으로
+        # 해석된다. UTC 자정으로 계산하면 한국 날짜 경계가 9시간 밀린다.
+        now = datetime.now(_KST)
+        tomorrow_start_dt = datetime.combine(
+            now.date() + timedelta(days=1), time.min, tzinfo=_KST
+        )
 
         result = service.events().list(
             calendarId="primary",
             timeMin=now.isoformat(),   # 현재 시각 이후만
-            timeMax=today_end,
+            timeMax=tomorrow_start_dt.isoformat(),
             maxResults=max_results,
             singleEvents=True,
             orderBy="startTime",
@@ -293,16 +295,15 @@ def get_tomorrow_events(max_results: int = 20) -> list[dict]:
     try:
         service = _get_service()
         from datetime import timedelta
-        now = datetime.now(timezone.utc)
-        tomorrow = now + timedelta(days=1)
-
-        tomorrow_start = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
-        tomorrow_end = tomorrow.replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+        now = datetime.now(_KST)
+        tomorrow_date = now.date() + timedelta(days=1)
+        tomorrow_start_dt = datetime.combine(tomorrow_date, time.min, tzinfo=_KST)
+        tomorrow_end_dt = tomorrow_start_dt + timedelta(days=1)
 
         result = service.events().list(
             calendarId="primary",
-            timeMin=tomorrow_start,
-            timeMax=tomorrow_end,
+            timeMin=tomorrow_start_dt.isoformat(),
+            timeMax=tomorrow_end_dt.isoformat(),
             maxResults=max_results,
             singleEvents=True,
             orderBy="startTime",
