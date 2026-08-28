@@ -1,7 +1,7 @@
 {
   "date": "2026-08-28",
-  "scan_time": "10:35",
-  "scan_label": "10:30",
+  "scan_time": "13:47",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "001210": {
@@ -16,8 +16,8 @@
       ],
       "is_portfolio": false
     },
-    "001820": {
-      "name": "삼화콘덴서",
+    "002990": {
+      "name": "금호건설",
       "score": 6,
       "passed": [
         "거래대금",
@@ -27,8 +27,31 @@
       ],
       "is_portfolio": false
     },
-    "234340": {
-      "name": "헥토파이낸셜",
+    "192820": {
+      "name": "코스맥스",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "041190": {
+      "name": "우리기술투자",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터"
+      ],
+      "is_portfolio": false
+    },
+    "214450": {
+      "name": "파마리서치",
       "score": 6,
       "passed": [
         "등락률",
@@ -39,8 +62,19 @@
       ],
       "is_portfolio": false
     },
-    "002990": {
-      "name": "금호건설",
+    "034020": {
+      "name": "두산에너빌리티",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "207940": {
+      "name": "삼성바이오로직스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -50,8 +84,8 @@
       ],
       "is_portfolio": false
     },
-    "402340": {
-      "name": "SK스퀘어",
+    "196170": {
+      "name": "알테오젠",
       "score": 5,
       "passed": [
         "거래대금",
@@ -61,14 +95,47 @@
       ],
       "is_portfolio": false
     },
-    "041190": {
-      "name": "우리기술투자",
+    "032820": {
+      "name": "우리기술",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "257720": {
+      "name": "실리콘투",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "234340": {
+      "name": "헥토파이낸셜",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도"
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "387690": {
+      "name": "레메디",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     }
