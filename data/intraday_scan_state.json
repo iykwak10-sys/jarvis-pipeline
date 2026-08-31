@@ -1,11 +1,11 @@
 {
   "date": "2026-08-31",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "003670": {
-      "name": "포스코퓨처엠",
+    "066570": {
+      "name": "LG전자",
       "score": 8,
       "passed": [
         "거래대금",
@@ -17,15 +17,16 @@
       ],
       "is_portfolio": false
     },
-    "001210": {
-      "name": "금호전기",
-      "score": 7,
+    "003670": {
+      "name": "포스코퓨처엠",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
+        "시총필터",
         "장중강도",
-        "신고가근접",
-        "신고가돌파"
+        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -53,8 +54,43 @@
       ],
       "is_portfolio": false
     },
+    "476060": {
+      "name": "온코닉테라퓨틱스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "017670": {
+      "name": "SK텔레콤",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "005930": {
       "name": "삼성전자",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "000660": {
+      "name": "SK하이닉스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -97,14 +133,13 @@
       ],
       "is_portfolio": false
     },
-    "017670": {
-      "name": "SK텔레콤",
+    "001210": {
+      "name": "금호전기",
       "score": 5,
       "passed": [
         "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "등락률",
+        "신고가근접"
       ],
       "is_portfolio": false
     },
@@ -119,8 +154,8 @@
       ],
       "is_portfolio": false
     },
-    "066570": {
-      "name": "LG전자",
+    "011070": {
+      "name": "LG이노텍",
       "score": 5,
       "passed": [
         "거래대금",
@@ -141,14 +176,36 @@
       ],
       "is_portfolio": false
     },
-    "476060": {
-      "name": "온코닉테라퓨틱스",
+    "373220": {
+      "name": "LG에너지솔루션",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "035420": {
+      "name": "NAVER",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "108490": {
+      "name": "로보티즈",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
         "시총필터",
-        "장중강도"
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     }
