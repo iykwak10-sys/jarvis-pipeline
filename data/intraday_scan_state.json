@@ -1,9 +1,34 @@
 {
   "date": "2026-09-01",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
+    "090460": {
+      "name": "비에이치",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "096770": {
+      "name": "SK이노베이션",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "004310": {
       "name": "현대약품",
       "score": 7,
@@ -16,25 +41,14 @@
       ],
       "is_portfolio": false
     },
-    "096770": {
-      "name": "SK이노베이션",
+    "055550": {
+      "name": "신한지주",
       "score": 6,
       "passed": [
         "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "090460": {
-      "name": "비에이치",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
         "시총필터",
         "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -50,8 +64,8 @@
       ],
       "is_portfolio": false
     },
-    "000660": {
-      "name": "SK하이닉스",
+    "005930": {
+      "name": "삼성전자",
       "score": 5,
       "passed": [
         "거래대금",
@@ -61,8 +75,8 @@
       ],
       "is_portfolio": true
     },
-    "005930": {
-      "name": "삼성전자",
+    "000660": {
+      "name": "SK하이닉스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -83,16 +97,6 @@
       ],
       "is_portfolio": false
     },
-    "001210": {
-      "name": "금호전기",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
     "005935": {
       "name": "삼성전자우",
       "score": 5,
@@ -100,6 +104,17 @@
         "거래대금",
         "시총필터",
         "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "278470": {
+      "name": "에이피알",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -115,14 +130,25 @@
       ],
       "is_portfolio": false
     },
-    "330350": {
-      "name": "위더스제약",
+    "0039P0": {
+      "name": "매드업",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
         "장중강도",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "064550": {
+      "name": "바이오니아",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     }
