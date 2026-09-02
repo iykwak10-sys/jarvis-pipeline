@@ -1,11 +1,24 @@
 {
   "date": "2026-09-02",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:31",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
-    "044490": {
-      "name": "태웅",
+    "196170": {
+      "name": "알테오젠",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "003160": {
+      "name": "디아이",
       "score": 6,
       "passed": [
         "등락률",
@@ -16,41 +29,75 @@
       ],
       "is_portfolio": false
     },
-    "009150": {
-      "name": "삼성전기",
-      "score": 5,
+    "232140": {
+      "name": "와이씨",
+      "score": 6,
       "passed": [
-        "거래대금",
+        "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "005935": {
-      "name": "삼성전자우",
+    "002990": {
+      "name": "금호건설",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "003160": {
-      "name": "디아이",
+    "336260": {
+      "name": "두산퓨얼셀",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "055550": {
+      "name": "신한지주",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "079650": {
+      "name": "서산",
       "score": 5,
       "passed": [
         "등락률",
-        "시총필터",
+        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "249420": {
-      "name": "일동제약",
+    "044490": {
+      "name": "태웅",
       "score": 5,
       "passed": [
         "등락률",
@@ -60,22 +107,12 @@
       ],
       "is_portfolio": false
     },
-    "067290": {
-      "name": "JW신약",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "232140": {
-      "name": "와이씨",
+    "091590": {
+      "name": "남화토건",
       "score": 5,
       "passed": [
         "등락률",
-        "시총필터",
+        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
