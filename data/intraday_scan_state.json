@@ -1,68 +1,19 @@
 {
-  "date": "2026-09-01",
-  "scan_time": "15:00",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-09-02",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "090460": {
-      "name": "비에이치",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "096770": {
-      "name": "SK이노베이션",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "004310": {
-      "name": "현대약품",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "055550": {
-      "name": "신한지주",
-      "score": 6,
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 5,
       "passed": [
         "거래대금",
         "시총필터",
         "장중강도",
-        "신고가근접",
         "RSI적정"
       ],
-      "is_portfolio": false
-    },
-    "067290": {
-      "name": "JW신약",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
+      "is_portfolio": true
     },
     "005930": {
       "name": "삼성전자",
@@ -75,80 +26,25 @@
       ],
       "is_portfolio": true
     },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "402340": {
-      "name": "SK스퀘어",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "278470": {
-      "name": "에이피알",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "034730": {
-      "name": "SK",
+    "003280": {
+      "name": "흥아해운",
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "0039P0": {
-      "name": "매드업",
+    "024060": {
+      "name": "흥구석유",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
         "장중강도",
         "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "064550": {
-      "name": "바이오니아",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
       ],
       "is_portfolio": false
     }
