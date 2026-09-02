@@ -1,22 +1,9 @@
 {
   "date": "2026-09-02",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "196170": {
-      "name": "알테오젠",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "003160": {
       "name": "디아이",
       "score": 6,
@@ -29,31 +16,19 @@
       ],
       "is_portfolio": false
     },
-    "232140": {
-      "name": "와이씨",
+    "024060": {
+      "name": "흥구석유",
       "score": 6,
       "passed": [
+        "거래대금",
         "등락률",
         "거래량급증",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
     "002990": {
       "name": "금호건설",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "336260": {
-      "name": "두산퓨얼셀",
       "score": 5,
       "passed": [
         "거래대금",
@@ -74,11 +49,65 @@
       ],
       "is_portfolio": false
     },
+    "336260": {
+      "name": "두산퓨얼셀",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "086790": {
+      "name": "하나금융지주",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "196170": {
+      "name": "알테오젠",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "036930": {
       "name": "주성엔지니어링",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "387690": {
+      "name": "레메디",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증"
+      ],
+      "is_portfolio": false
+    },
+    "232140": {
+      "name": "와이씨",
+      "score": 5,
+      "passed": [
+        "등락률",
         "거래량급증",
         "시총필터",
         "RSI적정"
