@@ -1,9 +1,23 @@
 {
   "date": "2026-09-03",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
+    "000810": {
+      "name": "삼성화재",
+      "score": 9,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "105560": {
       "name": "KB금융",
       "score": 8,
@@ -17,8 +31,21 @@
       ],
       "is_portfolio": false
     },
-    "034020": {
-      "name": "두산에너빌리티",
+    "010140": {
+      "name": "삼성중공업",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "373220": {
+      "name": "LG에너지솔루션",
       "score": 7,
       "passed": [
         "거래대금",
@@ -27,7 +54,7 @@
         "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": true
+      "is_portfolio": false
     },
     "088350": {
       "name": "한화생명",
@@ -41,21 +68,32 @@
       ],
       "is_portfolio": false
     },
-    "000810": {
-      "name": "삼성화재",
+    "000720": {
+      "name": "현대건설",
       "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
         "장중강도",
-        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "055550": {
-      "name": "신한지주",
+    "034020": {
+      "name": "두산에너빌리티",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "086790": {
+      "name": "하나금융지주",
       "score": 6,
       "passed": [
         "거래대금",
@@ -66,15 +104,25 @@
       ],
       "is_portfolio": false
     },
-    "010140": {
-      "name": "삼성중공업",
+    "100090": {
+      "name": "SK오션플랜트",
       "score": 6,
       "passed": [
+        "거래대금",
         "등락률",
         "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "시총필터"
+      ],
+      "is_portfolio": false
+    },
+    "032940": {
+      "name": "원익",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "장중강도"
       ],
       "is_portfolio": false
     },
@@ -89,25 +137,56 @@
       ],
       "is_portfolio": true
     },
-    "100090": {
-      "name": "SK오션플랜트",
+    "055550": {
+      "name": "신한지주",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "278470": {
+      "name": "에이피알",
+      "score": 5,
+      "passed": [
+        "거래대금",
         "거래량급증",
         "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "373220": {
-      "name": "LG에너지솔루션",
+    "047040": {
+      "name": "대우건설",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "079650": {
+      "name": "서산",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증"
+      ],
+      "is_portfolio": false
+    },
+    "234690": {
+      "name": "녹십자웰빙",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증"
       ],
       "is_portfolio": false
     },
@@ -122,25 +201,14 @@
       ],
       "is_portfolio": false
     },
-    "039030": {
-      "name": "이오테크닉스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "053260": {
-      "name": "금강철강",
+    "033790": {
+      "name": "피노",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
-        "장중강도",
-        "RSI적정"
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     }
