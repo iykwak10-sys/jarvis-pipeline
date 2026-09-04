@@ -1,18 +1,18 @@
 {
   "date": "2026-09-04",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
-    "386380": {
-      "name": "스카이랩스",
+    "042700": {
+      "name": "한미반도체",
       "score": 8,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
-        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -30,17 +30,76 @@
       ],
       "is_portfolio": false
     },
-    "010950": {
-      "name": "S-Oil",
-      "score": 6,
+    "030530": {
+      "name": "원익홀딩스",
+      "score": 8,
       "passed": [
+        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
-        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
+    },
+    "096770": {
+      "name": "SK이노베이션",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "010950": {
+      "name": "S-Oil",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "386380": {
+      "name": "스카이랩스",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "005930": {
+      "name": "삼성전자",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
     },
     "000660": {
       "name": "SK하이닉스",
@@ -53,22 +112,33 @@
       ],
       "is_portfolio": true
     },
-    "096770": {
-      "name": "SK이노베이션",
+    "005935": {
+      "name": "삼성전자우",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "042700": {
-      "name": "한미반도체",
+    "003490": {
+      "name": "대한항공",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "196170": {
+      "name": "알테오젠",
+      "score": 5,
+      "passed": [
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
@@ -77,17 +147,6 @@
     },
     "041190": {
       "name": "우리기술투자",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "234340": {
-      "name": "헥토파이낸셜",
       "score": 5,
       "passed": [
         "등락률",
@@ -108,12 +167,45 @@
       ],
       "is_portfolio": false
     },
-    "030530": {
-      "name": "원익홀딩스",
+    "234340": {
+      "name": "헥토파이낸셜",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "240810": {
+      "name": "원익IPS",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "095610": {
+      "name": "테스",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "014950": {
+      "name": "삼익제약",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
