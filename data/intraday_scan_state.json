@@ -1,7 +1,7 @@
 {
   "date": "2026-09-04",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "042700": {
@@ -79,6 +79,17 @@
       ],
       "is_portfolio": false
     },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
     "386380": {
       "name": "스카이랩스",
       "score": 6,
@@ -90,27 +101,29 @@
       ],
       "is_portfolio": false
     },
-    "005930": {
-      "name": "삼성전자",
-      "score": 5,
+    "240810": {
+      "name": "원익IPS",
+      "score": 6,
       "passed": [
-        "거래대금",
+        "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": true
+      "is_portfolio": false
     },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
+    "095610": {
+      "name": "테스",
+      "score": 6,
       "passed": [
-        "거래대금",
+        "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": true
+      "is_portfolio": false
     },
     "005935": {
       "name": "삼성전자우",
@@ -134,8 +147,8 @@
       ],
       "is_portfolio": false
     },
-    "196170": {
-      "name": "알테오젠",
+    "028260": {
+      "name": "삼성물산",
       "score": 5,
       "passed": [
         "거래대금",
@@ -145,14 +158,35 @@
       ],
       "is_portfolio": false
     },
-    "041190": {
-      "name": "우리기술투자",
+    "055550": {
+      "name": "신한지주",
       "score": 5,
       "passed": [
-        "등락률",
-        "거래량급증",
+        "거래대금",
         "시총필터",
+        "신고가근접",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "086790": {
+      "name": "하나금융지주",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "032940": {
+      "name": "원익",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "장중강도"
       ],
       "is_portfolio": false
     },
@@ -167,8 +201,8 @@
       ],
       "is_portfolio": false
     },
-    "234340": {
-      "name": "헥토파이낸셜",
+    "041190": {
+      "name": "우리기술투자",
       "score": 5,
       "passed": [
         "등락률",
@@ -178,24 +212,13 @@
       ],
       "is_portfolio": false
     },
-    "240810": {
-      "name": "원익IPS",
+    "234340": {
+      "name": "헥토파이낸셜",
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "095610": {
-      "name": "테스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
