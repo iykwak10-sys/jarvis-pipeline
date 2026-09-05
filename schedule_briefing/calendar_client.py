@@ -20,6 +20,8 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
+from schedule_briefing import calendar_query
+
 logger = logging.getLogger(__name__)
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
@@ -241,38 +243,12 @@ def get_todays_events(max_results: int = 20) -> list[dict]:
             now.date() + timedelta(days=1), time.min, tzinfo=_KST
         )
 
-        result = service.events().list(
-            calendarId="primary",
-            timeMin=now.isoformat(),   # 현재 시각 이후만
-            timeMax=tomorrow_start_dt.isoformat(),
-            maxResults=max_results,
-            singleEvents=True,
-            orderBy="startTime",
-        ).execute()
-
-        events = []
-        for item in result.get("items", []):
-            # 종일 이벤트는 datetime이 아닌 date만 있음
-            start_raw = item["start"].get("dateTime") or item["start"].get("date")
-            end_raw = item["end"].get("dateTime") or item["end"].get("date")
-
-            if "T" not in start_raw:
-                # 종일 이벤트 — 장소 알림 불필요
-                continue
-
-            start_dt = datetime.fromisoformat(start_raw)
-            end_dt = datetime.fromisoformat(end_raw)
-
-            location = item.get("location", "").strip()
-            events.append({
-                "id": item["id"],
-                "summary": item.get("summary", "(제목 없음)"),
-                "location": location,
-                "description": item.get("description", ""),
-                "start_dt": start_dt,
-                "end_dt": end_dt,
-                "has_location": bool(location),
-            })
+        events = calendar_query.get_events(
+            service,
+            now,
+            tomorrow_start_dt,
+            max_results,
+        )
 
         logger.info(f"캘린더 조회: {len(events)}개 일정 (장소 있음: {sum(1 for e in events if e['has_location'])}개)")
         return events
@@ -301,36 +277,12 @@ def get_tomorrow_events(max_results: int = 20) -> list[dict]:
         tomorrow_start_dt = datetime.combine(tomorrow_date, time.min, tzinfo=_KST)
         tomorrow_end_dt = tomorrow_start_dt + timedelta(days=1)
 
-        result = service.events().list(
-            calendarId="primary",
-            timeMin=tomorrow_start_dt.isoformat(),
-            timeMax=tomorrow_end_dt.isoformat(),
-            maxResults=max_results,
-            singleEvents=True,
-            orderBy="startTime",
-        ).execute()
-
-        events = []
-        for item in result.get("items", []):
-            start_raw = item["start"].get("dateTime") or item["start"].get("date")
-            end_raw = item["end"].get("dateTime") or item["end"].get("date")
-
-            if "T" not in start_raw:
-                continue
-
-            start_dt = datetime.fromisoformat(start_raw)
-            end_dt = datetime.fromisoformat(end_raw)
-
-            location = item.get("location", "").strip()
-            events.append({
-                "id": item["id"],
-                "summary": item.get("summary", "(제목 없음)"),
-                "location": location,
-                "description": item.get("description", ""),
-                "start_dt": start_dt,
-                "end_dt": end_dt,
-                "has_location": bool(location),
-            })
+        events = calendar_query.get_events(
+            service,
+            tomorrow_start_dt,
+            tomorrow_end_dt,
+            max_results,
+        )
 
         logger.info(f"내일 캘린더: {len(events)}개 일정 (장소 있음: {sum(1 for e in events if e['has_location'])}개)")
         return events

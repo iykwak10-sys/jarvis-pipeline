@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jarvis.calendar-probe</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/kwaksmacmini/01_Execution_Field/jarvis-pipeline/.venv/bin/python</string>
+        <string>/Users/kwaksmacmini/01_Execution_Field/jarvis-pipeline/.debug-calendar-probe.py</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>WorkingDirectory</key>
+    <string>/Users/kwaksmacmini/01_Execution_Field/jarvis-pipeline</string>
+    <key>StandardOutPath</key>
+    <string>/private/tmp/jarvis-calendar-probe.out</string>
+    <key>StandardErrorPath</key>
+    <string>/private/tmp/jarvis-calendar-probe.err</string>
+</dict>
+</plist>
