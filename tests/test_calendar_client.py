@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from schedule_briefing import calendar_client
 
 
@@ -55,6 +57,22 @@ def timed_event(event_id: str, summary: str, start: str) -> dict:
         "start": {"dateTime": start},
         "end": {"dateTime": start},
     }
+
+
+def _pure_source_line_count(source: str) -> int:
+    return sum(
+        bool(line.strip()) and not line.lstrip().startswith("#")
+        for line in source.splitlines()
+    )
+
+
+def test_calendar_client_stays_within_250_source_lines() -> None:
+    source = Path(calendar_client.__file__).read_text()
+    source_lines = _pure_source_line_count(source)
+
+    assert source_lines <= 250, (
+        f"calendar_client.py has {source_lines} source lines; limit is 250"
+    )
 
 
 def test_today_includes_events_from_selected_secondary_calendars(monkeypatch) -> None:
