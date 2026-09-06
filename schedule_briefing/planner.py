@@ -226,6 +226,38 @@ def _add_return_home_if_applicable(events: list[dict], origin_lat: float, origin
         logger.warning(f"귀가 경로 계산 실패: {e}")
 
 
+def run_today_briefing() -> None:
+    from core import notifier
+
+    today = datetime.now().astimezone()
+    today_str = today.strftime("%m/%d")
+    weekday = ["월", "화", "수", "목", "금", "토", "일"][today.weekday()]
+    logger.info(f"=== 오늘({today_str} {weekday}) 일정 브리핑 시작 ===")
+
+    events = calendar_client.get_today_events()
+    if not events:
+        logger.info("오늘 일정 없음 — 브리핑 생략")
+        return
+
+    lines = [
+        f"📅 <b>오늘({today_str} {weekday}) 일정 브리핑</b>",
+        "",
+        f"📅 총 <b>{len(events)}건</b>의 일정",
+        "",
+    ]
+    for i, event in enumerate(events, 1):
+        start_str = event["start_dt"].strftime("%H:%M")
+        location_text = event["location"] if event["has_location"] else ""
+        lines.append(
+            f"<b>{i}.</b> {start_str} {event['summary']}"
+            f"{' @ ' + location_text if location_text else ''}"
+        )
+
+    lines.extend(["", "좋은 하루 보내세요! ☀️"])
+    ok = notifier.send("\n".join(lines))
+    logger.info(f"오늘 브리핑 전송: {'성공' if ok else '실패'}")
+
+
 def run_tomorrow() -> None:
     """내일 사전 브리핑 — 첫 일정 역산 기상 시간 + 하루 일정 요약"""
     from datetime import date, timedelta
@@ -311,11 +343,17 @@ def run_tomorrow() -> None:
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["today", "tomorrow"], default="today",
-                        help="today: 오늘 일정 알림 예약 (기본), tomorrow: 내일 일정 사전 브리핑")
+    parser.add_argument(
+        "--mode",
+        choices=["today", "today-briefing", "tomorrow"],
+        default="today",
+        help="today: 오늘 일정 알림 예약 (기본), today-briefing: 오늘 일정 요약, tomorrow: 내일 일정 사전 브리핑",
+    )
     args = parser.parse_args()
 
-    if args.mode == "tomorrow":
+    if args.mode == "today-briefing":
+        run_today_briefing()
+    elif args.mode == "tomorrow":
         run_tomorrow()
     else:
         run()

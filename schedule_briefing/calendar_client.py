@@ -256,6 +256,24 @@ def get_todays_events(max_results: int = 20) -> list[dict]:
         return []
 
 
+def get_today_events(max_results: int = 20) -> list[dict]:
+    try:
+        service = _get_service()
+        today_start_dt = datetime.combine(datetime.now(_KST).date(), time.min, tzinfo=_KST)
+        events = calendar_query.get_events(
+            service,
+            today_start_dt,
+            today_start_dt + timedelta(days=1),
+            max_results,
+        )
+        logger.info(f"오늘 캘린더: {len(events)}개 일정 (장소 있음: {sum(1 for e in events if e['has_location'])}개)")
+        return events
+    except Exception as e:
+        logger.error(f"Google Calendar 오늘 일정 조회 실패: {e}")
+        _alert_auth_failure(e)
+        return []
+
+
 def get_tomorrow_events(max_results: int = 20) -> list[dict]:
     """내일 하루 종일 일정 조회
 
@@ -268,7 +286,6 @@ def get_tomorrow_events(max_results: int = 20) -> list[dict]:
     """
     try:
         service = _get_service()
-        from datetime import timedelta
         now = datetime.now(_KST)
         tomorrow_date = now.date() + timedelta(days=1)
         tomorrow_start_dt = datetime.combine(tomorrow_date, time.min, tzinfo=_KST)

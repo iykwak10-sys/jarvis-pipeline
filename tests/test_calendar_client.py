@@ -99,6 +99,17 @@ def test_today_includes_events_from_selected_secondary_calendars(monkeypatch) ->
     }
 
 
+def test_today_briefing_queries_the_entire_day(monkeypatch) -> None:
+    service = FakeService({"primary": [], "naver@example.com": []})
+    monkeypatch.setattr(calendar_client, "_get_service", lambda: service)
+
+    calendar_client.get_today_events()
+
+    assert {call["timeMin"].split("T")[1] for call in service.fake_events.calls} == {
+        "00:00:00+09:00"
+    }
+
+
 def test_tomorrow_sorts_selected_calendars_before_global_limit(monkeypatch) -> None:
     service = FakeService(
         {
