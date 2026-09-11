@@ -1,23 +1,45 @@
 {
   "date": "2026-09-11",
-  "scan_time": "09:11",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
-    "064550": {
-      "name": "바이오니아",
-      "score": 6,
+    "356680": {
+      "name": "엑스게이트",
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "001820": {
+      "name": "삼화콘덴서",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터"
+      ],
+      "is_portfolio": false
+    },
+    "386380": {
+      "name": "스카이랩스",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "005930": {
-      "name": "삼성전자",
+    "329180": {
+      "name": "HD현대중공업",
       "score": 5,
       "passed": [
         "거래대금",
@@ -25,27 +47,38 @@
         "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": true
-    },
-    "007540": {
-      "name": "샘표",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "장중강도",
-        "신고가근접"
-      ],
       "is_portfolio": false
     },
-    "332570": {
-      "name": "PS일렉트로닉스",
+    "000810": {
+      "name": "삼성화재",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
         "장중강도",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "203650": {
+      "name": "드림시큐리티",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "052710": {
+      "name": "아모텍",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     }
