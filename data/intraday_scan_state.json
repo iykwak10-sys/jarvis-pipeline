@@ -1,9 +1,47 @@
 {
   "date": "2026-09-11",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
+    "003350": {
+      "name": "한국화장품제조",
+      "score": 9,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "001820": {
+      "name": "삼화콘덴서",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "329180": {
+      "name": "HD현대중공업",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "356680": {
       "name": "엑스게이트",
       "score": 7,
@@ -16,8 +54,20 @@
       ],
       "is_portfolio": false
     },
-    "001820": {
-      "name": "삼화콘덴서",
+    "105560": {
+      "name": "KB금융",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "046970": {
+      "name": "우리로",
       "score": 6,
       "passed": [
         "거래대금",
@@ -27,35 +77,35 @@
       ],
       "is_portfolio": false
     },
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "006360": {
+      "name": "GS건설",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "386380": {
       "name": "스카이랩스",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "329180": {
-      "name": "HD현대중공업",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "000810": {
-      "name": "삼성화재",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
