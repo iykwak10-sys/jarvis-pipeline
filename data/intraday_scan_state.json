@@ -1,7 +1,7 @@
 {
   "date": "2026-09-15",
-  "scan_time": "10:31",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "058610": {
@@ -29,48 +29,59 @@
       ],
       "is_portfolio": false
     },
-    "125490": {
-      "name": "한라캐스트",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 5,
+    "036540": {
+      "name": "SFA반도체",
+      "score": 7,
       "passed": [
         "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "009150": {
-      "name": "삼성전기",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "004020": {
-      "name": "현대제철",
-      "score": 5,
-      "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
         "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "062970": {
+      "name": "한국첨단소재",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "105560": {
+      "name": "KB금융",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "336260": {
+      "name": "두산퓨얼셀",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -92,17 +103,6 @@
         "거래량급증",
         "시총필터",
         "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "332570": {
-      "name": "PS일렉트로닉스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
       ],
       "is_portfolio": false
     }
