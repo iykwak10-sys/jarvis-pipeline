@@ -1,22 +1,9 @@
 {
   "date": "2026-09-15",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "058610": {
-      "name": "에스피지",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "030530": {
       "name": "원익홀딩스",
       "score": 7,
@@ -25,18 +12,40 @@
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도"
+        "RSI적정"
       ],
       "is_portfolio": false
     },
-    "036540": {
-      "name": "SFA반도체",
+    "058610": {
+      "name": "에스피지",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036540": {
+      "name": "SFA반도체",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터"
+      ],
+      "is_portfolio": false
+    },
+    "042510": {
+      "name": "라온시큐어",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
         "장중강도"
       ],
       "is_portfolio": false
@@ -52,6 +61,17 @@
       ],
       "is_portfolio": false
     },
+    "034020": {
+      "name": "두산에너빌리티",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
     "105560": {
       "name": "KB금융",
       "score": 5,
@@ -63,8 +83,19 @@
       ],
       "is_portfolio": false
     },
-    "006400": {
-      "name": "삼성SDI",
+    "052690": {
+      "name": "한전기술",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "373220": {
+      "name": "LG에너지솔루션",
       "score": 5,
       "passed": [
         "거래대금",
@@ -85,6 +116,16 @@
       ],
       "is_portfolio": false
     },
+    "014950": {
+      "name": "삼익제약",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
     "067290": {
       "name": "JW신약",
       "score": 5,
@@ -92,17 +133,6 @@
         "거래대금",
         "등락률",
         "거래량급증"
-      ],
-      "is_portfolio": false
-    },
-    "437730": {
-      "name": "삼현",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
       ],
       "is_portfolio": false
     }
