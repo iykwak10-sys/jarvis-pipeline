@@ -1,234 +1,39 @@
 {
-  "date": "2026-09-18",
-  "scan_time": "15:00",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-09-21",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "000500": {
-      "name": "가온전선",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "001440": {
-      "name": "대한전선",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "402340": {
-      "name": "SK스퀘어",
+    "0161M0": {
+      "name": "네오사피엔스",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "006340": {
-      "name": "대원전선",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "005690": {
-      "name": "파미셀",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "125490": {
-      "name": "한라캐스트",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "010120": {
-      "name": "LS ELECTRIC",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "103590": {
-      "name": "일진전기",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "001820": {
-      "name": "삼화콘덴서",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "010170": {
-      "name": "대한광통신",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "043260": {
-      "name": "성호전자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "046970": {
-      "name": "우리로",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "028050": {
-      "name": "삼성E&A",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "009150": {
-      "name": "삼성전기",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "047040": {
-      "name": "대우건설",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "105560": {
-      "name": "KB금융",
-      "score": 5,
-      "passed": [
-        "거래대금",
         "시총필터",
         "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "072950": {
-      "name": "빛샘전자",
+    "005930": {
+      "name": "삼성전자",
       "score": 5,
       "passed": [
         "거래대금",
-        "등락률",
-        "거래량급증"
-      ],
-      "is_portfolio": false
-    },
-    "024840": {
-      "name": "KBI메탈",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
         "시총필터",
+        "장중강도",
         "RSI적정"
       ],
-      "is_portfolio": false
+      "is_portfolio": true
     },
-    "119850": {
-      "name": "지엔씨에너지",
+    "041190": {
+      "name": "우리기술투자",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
-        "신고가근접",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
