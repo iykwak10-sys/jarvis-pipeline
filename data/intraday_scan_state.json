@@ -1,7 +1,7 @@
 {
   "date": "2026-09-21",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "036540": {
@@ -17,8 +17,70 @@
       ],
       "is_portfolio": false
     },
+    "386380": {
+      "name": "스카이랩스",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "240810": {
+      "name": "원익IPS",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "005930": {
+      "name": "삼성전자",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
     "005935": {
       "name": "삼성전자우",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "007660": {
+      "name": "이수페타시스",
       "score": 7,
       "passed": [
         "거래대금",
@@ -53,20 +115,32 @@
       ],
       "is_portfolio": false
     },
-    "386380": {
-      "name": "스카이랩스",
+    "437730": {
+      "name": "삼현",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
-        "RSI적정"
+        "장중강도"
       ],
       "is_portfolio": false
     },
-    "005930": {
-      "name": "삼성전자",
+    "232140": {
+      "name": "와이씨",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "000660": {
+      "name": "SK하이닉스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -75,17 +149,6 @@
         "RSI적정"
       ],
       "is_portfolio": true
-    },
-    "402340": {
-      "name": "SK스퀘어",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
     },
     "017900": {
       "name": "광전자",
@@ -108,39 +171,6 @@
       ],
       "is_portfolio": false
     },
-    "240810": {
-      "name": "원익IPS",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "232140": {
-      "name": "와이씨",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "437730": {
-      "name": "삼현",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
     "041190": {
       "name": "우리기술투자",
       "score": 5,
@@ -152,14 +182,14 @@
       ],
       "is_portfolio": false
     },
-    "462860": {
-      "name": "더즌",
+    "425040": {
+      "name": "티이엠씨",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
-        "장중강도",
-        "RSI적정"
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     }
