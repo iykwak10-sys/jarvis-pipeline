@@ -23,6 +23,7 @@ from pathlib import Path
 
 from core.config import LOG_DIR
 from schedule_briefing import calendar_client, maps_client, tmap_client, schedule_db, location_cache
+from schedule_briefing.apple_calendar import get_apple_events
 
 logging.basicConfig(
     level=logging.INFO,
@@ -228,14 +229,31 @@ def _add_return_home_if_applicable(events: list[dict], origin_lat: float, origin
 
 def run_today_briefing() -> None:
     from core import notifier
+    from html import escape
 
     today = datetime.now().astimezone()
     today_str = today.strftime("%m/%d")
     weekday = ["월", "화", "수", "목", "금", "토", "일"][today.weekday()]
     logger.info(f"=== 오늘({today_str} {weekday}) 일정 브리핑 시작 ===")
 
-    events = calendar_client.get_today_events()
-    if not events:
+    errors = []
+    try:
+        events = calendar_client.get_today_events()
+    except Exception as exc:
+        logger.error("Google Calendar 오늘 조회 실패: %s", exc)
+        events = []
+        errors.append("Google/네이버 미러 조회 실패")
+    apple_events, apple_error = get_apple_events()
+    if apple_error:
+        errors.append(apple_error)
+    events.extend(apple_events)
+    events.sort(key=lambda event: event["start_dt"])
+    unique = {}
+    for event in events:
+        key = (event["summary"].strip().casefold(), event["start_dt"].strftime("%Y%m%d%H%M"))
+        unique.setdefault(key, event)
+    events = list(unique.values())
+    if not events and not errors:
         logger.info("오늘 일정 없음 — 브리핑 생략")
         return
 
@@ -247,13 +265,15 @@ def run_today_briefing() -> None:
     ]
     for i, event in enumerate(events, 1):
         start_str = event["start_dt"].strftime("%H:%M")
-        location_text = event["location"] if event["has_location"] else ""
+        location_text = escape(event["location"]) if event["has_location"] else ""
         lines.append(
-            f"<b>{i}.</b> {start_str} {event['summary']}"
+            f"<b>{i}.</b> {start_str} {escape(event['summary'])}"
             f"{' @ ' + location_text if location_text else ''}"
         )
 
-    lines.extend(["", "좋은 하루 보내세요! ☀️"])
+    if errors:
+        lines.extend(["", "⚠️ 일부 캘린더 미확인: " + "; ".join(errors)])
+    lines.extend(["", "조회 대상: Google(네이버 동기화 포함) + Apple Calendar", "좋은 하루 보내세요! ☀️"])
     ok = notifier.send("\n".join(lines))
     logger.info(f"오늘 브리핑 전송: {'성공' if ok else '실패'}")
 

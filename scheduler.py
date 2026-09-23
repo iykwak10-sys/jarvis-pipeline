@@ -302,14 +302,14 @@ def main() -> None:
     schedule.every(30).minutes.do(job_schedule_planner)   # 30분마다 다음 일정 계획
     schedule.every(1).minutes.do(job_schedule_dispatcher) # 1분마다 발송 시각 확인
 
-    schedule.every().day.at("07:20").do(job_today_briefing)
+    schedule.every().day.at("07:15").do(job_today_briefing)
 
     logger.info("🚀 Jarvis 스케줄러 시작")
     logger.info("  07:00 뉴스 브리핑 | 09:00 헬스체크  (06:30 아침 브리핑은 Hermes 통합으로 흡수)")
     logger.info("  10:00/13:00/14:30 급등락 알림 | 15:35 마감 수집")
     logger.info("  5분 간격 장중 실시간 수집")
     logger.info("  ⚡ 장중 주도주 모니터: 09:10(초기) / 10:30 / 13:30 / 15:00")
-    logger.info("  📅 일정 브리핑: 30분마다 플래너 | 1분마다 디스패처 | 07:20 오늘 일정 브리핑")
+    logger.info("  📅 일정 브리핑: 30분마다 플래너 | 1분마다 디스패처 | 07:15 오늘 일정 브리핑")
 
     while True:
         schedule.run_pending()
