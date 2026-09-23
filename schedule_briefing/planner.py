@@ -23,7 +23,6 @@ from pathlib import Path
 
 from core.config import LOG_DIR
 from schedule_briefing import calendar_client, maps_client, tmap_client, schedule_db, location_cache
-from schedule_briefing.apple_calendar import get_apple_events
 
 logging.basicConfig(
     level=logging.INFO,
@@ -243,10 +242,6 @@ def run_today_briefing() -> None:
         logger.error("Google Calendar 오늘 조회 실패: %s", exc)
         events = []
         errors.append("Google/네이버 미러 조회 실패")
-    apple_events, apple_error = get_apple_events()
-    if apple_error:
-        errors.append(apple_error)
-    events.extend(apple_events)
     events.sort(key=lambda event: event["start_dt"])
     unique = {}
     for event in events:
@@ -273,7 +268,7 @@ def run_today_briefing() -> None:
 
     if errors:
         lines.extend(["", "⚠️ 일부 캘린더 미확인: " + "; ".join(errors)])
-    lines.extend(["", "조회 대상: Google(네이버 동기화 포함) + Apple Calendar", "좋은 하루 보내세요! ☀️"])
+    lines.extend(["", "조회 대상: Google(네이버 동기화 포함)", "좋은 하루 보내세요! ☀️"])
     ok = notifier.send("\n".join(lines))
     logger.info(f"오늘 브리핑 전송: {'성공' if ok else '실패'}")
 
