@@ -1,9 +1,22 @@
 {
   "date": "2026-09-28",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
+    "009830": {
+      "name": "한화솔루션",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "096770": {
       "name": "SK이노베이션",
       "score": 8,
@@ -13,18 +26,6 @@
         "시총필터",
         "장중강도",
         "신고가근접",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "009830": {
-      "name": "한화솔루션",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -53,34 +54,11 @@
       ],
       "is_portfolio": false
     },
-    "178320": {
-      "name": "서진시스템",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "424870": {
-      "name": "이뮨온시아",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "007810": {
       "name": "코리아써키트",
-      "score": 5,
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
@@ -88,14 +66,69 @@
       ],
       "is_portfolio": false
     },
-    "328130": {
-      "name": "루닛",
+    "010060": {
+      "name": "OCI홀딩스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "387690": {
+      "name": "레메디",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "178320": {
+      "name": "서진시스템",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도"
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "0039P0": {
+      "name": "매드업",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "256840": {
+      "name": "한국비엔씨",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     }
