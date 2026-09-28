@@ -1,13 +1,14 @@
 {
   "date": "2026-09-28",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
     "096770": {
       "name": "SK이노베이션",
-      "score": 6,
+      "score": 8,
       "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
@@ -16,21 +17,11 @@
       ],
       "is_portfolio": false
     },
-    "011070": {
-      "name": "LG이노텍",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "009830": {
       "name": "한화솔루션",
-      "score": 5,
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
@@ -38,10 +29,11 @@
       ],
       "is_portfolio": false
     },
-    "010060": {
-      "name": "OCI홀딩스",
-      "score": 5,
+    "047040": {
+      "name": "대우건설",
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
@@ -49,19 +41,44 @@
       ],
       "is_portfolio": false
     },
-    "322000": {
-      "name": "HD현대에너지솔루션",
-      "score": 5,
+    "011070": {
+      "name": "LG이노텍",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "178320": {
+      "name": "서진시스템",
+      "score": 6,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "004710": {
-      "name": "한솔테크닉스",
+    "424870": {
+      "name": "이뮨온시아",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "007810": {
+      "name": "코리아써키트",
       "score": 5,
       "passed": [
         "등락률",
@@ -71,14 +88,14 @@
       ],
       "is_portfolio": false
     },
-    "178320": {
-      "name": "서진시스템",
+    "328130": {
+      "name": "루닛",
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
+        "장중강도"
       ],
       "is_portfolio": false
     }
