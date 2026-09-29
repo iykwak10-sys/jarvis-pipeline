@@ -9,6 +9,8 @@ from typing import Optional
 
 import requests
 
+from core.log_safety import sanitize_error_message
+
 logger = logging.getLogger(__name__)
 
 # 기상청 단기예보 API
@@ -135,7 +137,7 @@ def get_weather_context(lat: float, lng: float) -> dict:
         return weather
 
     except Exception as e:
-        logger.warning(f"날씨 조회 실패: {e}")
+        logger.warning(f"날씨 조회 실패: {sanitize_error_message(str(e))}")
         return _empty_weather()
 
 
