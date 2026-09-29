@@ -71,8 +71,13 @@ def upsert_alert(event_id: str, alert: dict) -> None:
 
 def get_pending_alerts(now: datetime | None = None) -> list[dict]:
     """지금 발송해야 할 알림 목록 (alert_dt <= now, sent=False)"""
+    from datetime import timedelta
+
     if now is None:
-        now = datetime.now()
+        now = datetime.now().astimezone()
+    elif now.tzinfo is None:
+        now = now.astimezone()
+    stale_cutoff = now - timedelta(hours=6)
 
     alerts = _load()
     pending = []
@@ -81,6 +86,10 @@ def get_pending_alerts(now: datetime | None = None) -> list[dict]:
             continue
         try:
             alert_dt = datetime.fromisoformat(a["alert_dt"])
+            if alert_dt.tzinfo is None:
+                alert_dt = alert_dt.astimezone()
+            if alert_dt < stale_cutoff:
+                continue
             if alert_dt <= now:
                 pending.append(a)
         except Exception:
@@ -100,14 +109,35 @@ def mark_sent(event_id: str) -> None:
 
 
 def cleanup_old_alerts(days: int = 3) -> None:
-    """오래된 발송 완료 알림 정리"""
+    """오래된 알림 정리.
+
+    발송 완료 알림뿐 아니라, 발송 시각이 오래 지난 미발송 알림도 제거한다.
+    오래된 미발송 알림을 남겨두면 dispatcher 복구 후 과거 알림이 발송될 수 있다.
+    """
     from datetime import timedelta
-    cutoff = datetime.now() - timedelta(days=days)
+    now = datetime.now().astimezone()
+    sent_cutoff = now - timedelta(days=days)
+    unsent_cutoff = now - timedelta(hours=6)
     alerts = _load()
-    kept = [
-        a for a in alerts
-        if not a.get("sent") or datetime.fromisoformat(a.get("planned_at", "2000-01-01")) > cutoff
-    ]
+    kept = []
+    for a in alerts:
+        try:
+            planned_at = datetime.fromisoformat(a.get("planned_at", "2000-01-01"))
+            if planned_at.tzinfo is None:
+                planned_at = planned_at.astimezone()
+            alert_dt = datetime.fromisoformat(a.get("alert_dt", a.get("start_dt", "2000-01-01")))
+            if alert_dt.tzinfo is None:
+                alert_dt = alert_dt.astimezone()
+        except Exception:
+            continue
+
+        if a.get("sent"):
+            if planned_at > sent_cutoff:
+                kept.append(a)
+        else:
+            # 미래/최근 미발송 알림만 유지. 6시간 넘게 지난 미발송 알림은 폐기.
+            if alert_dt > unsent_cutoff:
+                kept.append(a)
     _save(kept)
 
 

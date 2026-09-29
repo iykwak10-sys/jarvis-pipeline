@@ -55,6 +55,9 @@ def run() -> None:
     location_source = location["source"]
     logger.info(f"출발지: ({origin_lat:.4f}, {origin_lng:.4f}) [{location_source}]")
 
+    # 오래된 알림 정리: 오늘 일정이 없어도 stale 미발송 알림을 남기지 않는다.
+    schedule_db.cleanup_old_alerts(days=3)
+
     # 오늘 남은 일정 조회
     events = calendar_client.get_todays_events()
     if not events:
