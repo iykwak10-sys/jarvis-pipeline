@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "summary": "마이헤어",
+    "location": "세종특별자치시 마음로 78, 스마트큐브2 2층 209호",
+    "description": "예약 정보 상세 보기 \n - https://booking.naver.com/my/bookings/1365886413",
+    "start_dt": "2026-10-01T17:30:00+09:00",
+    "alert_dt": "2026-10-01T16:50:00+09:00",
+    "travel_minutes": 10,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 10
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.5055364428392,
+    "dest_lng": 127.233728613656,
+    "location_is_default": true,
+    "planned_at": "2026-10-01T15:33:23.495621+09:00",
+    "event_id": "bfa3e419275c4ad0fd3fff5d8333bc03ea2bdbf386edc240b32d441fe0e5dbe2@group.calendar.google.com:kr56emgjkqur0ifgn8jvldujek",
+    "sent": false,
+    "return_home_minutes": 10,
+    "return_home_mode": "자동차"
+  }
+]
