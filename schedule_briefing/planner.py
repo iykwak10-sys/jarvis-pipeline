@@ -252,7 +252,18 @@ def run_today_briefing() -> None:
         unique.setdefault(key, event)
     events = list(unique.values())
     if not events and not errors:
-        logger.info("오늘 일정 없음 — 브리핑 생략")
+        lines = [
+            f"📅 <b>오늘({today_str} {weekday}) 일정 브리핑</b>",
+            "",
+            "📅 총 <b>0건</b>의 일정",
+            "",
+            "오늘 등록된 일정이 없습니다.",
+            "",
+            "조회 대상: Google(네이버 동기화 포함)",
+            "좋은 하루 보내세요! ☀️",
+        ]
+        ok = notifier.send("\n".join(lines))
+        logger.info(f"오늘 일정 없음 브리핑 전송: {'성공' if ok else '실패'}")
         return
 
     lines = [
@@ -287,9 +298,40 @@ def run_tomorrow() -> None:
 
     logger.info(f"=== 내일({tomorrow_str} {weekday}) 사전 브리핑 시작 ===")
 
-    events = calendar_client.get_tomorrow_events()
-    if not events:
-        logger.info("내일 일정 없음 — 브리핑 생략")
+    try:
+        events = calendar_client.get_tomorrow_events()
+        errors = []
+    except Exception as exc:
+        logger.error("Google Calendar 내일 조회 실패: %s", exc)
+        events = []
+        errors = ["Google/네이버 미러 조회 실패"]
+
+    if not events and not errors:
+        message = "\n".join([
+            f"🌙 <b>내일({tomorrow_str} {weekday}) 일정 브리핑</b>",
+            "",
+            "📅 총 <b>0건</b>의 일정",
+            "",
+            "내일 등록된 일정이 없습니다.",
+            "",
+            "조회 대상: Google(네이버 동기화 포함)",
+            "좋은 밤 되세요! 🌙",
+        ])
+        ok = notifier.send(message)
+        logger.info(f"내일 일정 없음 브리핑 전송: {'성공' if ok else '실패'}")
+        return
+
+    if not events and errors:
+        message = "\n".join([
+            f"🌙 <b>내일({tomorrow_str} {weekday}) 일정 브리핑</b>",
+            "",
+            "⚠️ Google/네이버 미러 캘린더 조회에 실패했습니다.",
+            "일정이 없다고 단정할 수 없습니다.",
+            "",
+            "확인 필요: 캘린더 OAuth/네트워크 상태",
+        ])
+        ok = notifier.send(message)
+        logger.info(f"내일 일정 조회 실패 브리핑 전송: {'성공' if ok else '실패'}")
         return
 
     # 현재 위치 (내일도 같은 위치 가정)

@@ -304,4 +304,4 @@ def get_tomorrow_events(max_results: int = 20) -> list[dict]:
     except Exception as e:
         logger.error(f"Google Calendar 내일 조회 실패: {e}")
         _alert_auth_failure(e)
-        return []
+        raise

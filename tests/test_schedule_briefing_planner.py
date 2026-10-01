@@ -60,3 +60,43 @@ def test_today_briefing_deduplicates_and_sorts(monkeypatch) -> None:
     assert sent_messages[0].count("09:00 회의") == 1
     assert sent_messages[0].index("09:00 회의") < sent_messages[0].index("15:00 진료")
     assert "네이버 동기화 포함" in sent_messages[0]
+
+
+def test_today_briefing_sends_zero_event_message(monkeypatch) -> None:
+    sent_messages: list[str] = []
+    monkeypatch.setattr(calendar_client, "get_today_events", lambda: [])
+    monkeypatch.setattr(notifier, "send", lambda message: sent_messages.append(message) or True)
+
+    planner.run_today_briefing()
+
+    assert len(sent_messages) == 1
+    assert "총 <b>0건</b>" in sent_messages[0]
+    assert "오늘 등록된 일정이 없습니다" in sent_messages[0]
+
+
+def test_tomorrow_briefing_sends_zero_event_message(monkeypatch) -> None:
+    sent_messages: list[str] = []
+    monkeypatch.setattr(calendar_client, "get_tomorrow_events", lambda: [])
+    monkeypatch.setattr(notifier, "send", lambda message: sent_messages.append(message) or True)
+
+    planner.run_tomorrow()
+
+    assert len(sent_messages) == 1
+    assert "총 <b>0건</b>" in sent_messages[0]
+    assert "내일 등록된 일정이 없습니다" in sent_messages[0]
+
+
+def test_tomorrow_briefing_reports_calendar_failure(monkeypatch) -> None:
+    sent_messages: list[str] = []
+
+    def fail() -> list[dict]:
+        raise RuntimeError("invalid_grant")
+
+    monkeypatch.setattr(calendar_client, "get_tomorrow_events", fail)
+    monkeypatch.setattr(notifier, "send", lambda message: sent_messages.append(message) or True)
+
+    planner.run_tomorrow()
+
+    assert len(sent_messages) == 1
+    assert "조회에 실패" in sent_messages[0]
+    assert "일정이 없다고 단정할 수 없습니다" in sent_messages[0]
