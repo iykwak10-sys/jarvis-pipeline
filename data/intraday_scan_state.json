@@ -1,9 +1,21 @@
 {
   "date": "2026-10-07",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:31",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
+    "278470": {
+      "name": "에이피알",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "003350": {
       "name": "한국화장품제조",
       "score": 7,
@@ -29,42 +41,11 @@
       ],
       "is_portfolio": false
     },
-    "298040": {
-      "name": "효성중공업",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "281820": {
-      "name": "케이씨텍",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "069540": {
-      "name": "빛과전자",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
     "012210": {
       "name": "삼미금속",
-      "score": 5,
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
@@ -74,11 +55,35 @@
     },
     "038500": {
       "name": "삼표시멘트",
-      "score": 5,
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "281820": {
+      "name": "케이씨텍",
+      "score": 6,
       "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
