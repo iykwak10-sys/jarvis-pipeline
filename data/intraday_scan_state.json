@@ -1,11 +1,68 @@
 {
   "date": "2026-10-08",
-  "scan_time": "09:11",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
-    "000650": {
-      "name": "천일고속",
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "373220": {
+      "name": "LG에너지솔루션",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "417840": {
+      "name": "저스템",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "098460": {
+      "name": "고영",
       "score": 5,
       "passed": [
         "등락률",
@@ -15,14 +72,36 @@
       ],
       "is_portfolio": false
     },
-    "468670": {
-      "name": "브릴스",
+    "240810": {
+      "name": "원익IPS",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
         "장중강도",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "419050": {
+      "name": "삼기에너지솔루션즈",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "033790": {
+      "name": "피노",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     }
