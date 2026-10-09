@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "summary": "괴산 산막이옛길",
+    "location": "산막이옛길, 충청북도 괴산군 칠성면 산막이옛길 88",
+    "description": "",
+    "start_dt": "2026-10-10T07:00:00+09:00",
+    "alert_dt": "2026-10-10T05:19:34.113886+09:00",
+    "travel_minutes": 81,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 81
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.7610341579887,
+    "dest_lng": 127.838752998901,
+    "location_is_default": true,
+    "planned_at": "2026-10-10T05:14:34.113886+09:00",
+    "event_id": "j0e0iqbe7pvm1k2jfnq6e96igk",
+    "sent": false,
+    "return_home_minutes": 81,
+    "return_home_mode": "자동차"
+  }
+]
