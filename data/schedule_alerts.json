@@ -17,8 +17,9 @@
     "location_is_default": true,
     "planned_at": "2026-10-10T05:14:34.113886+09:00",
     "event_id": "j0e0iqbe7pvm1k2jfnq6e96igk",
-    "sent": false,
+    "sent": true,
     "return_home_minutes": 81,
-    "return_home_mode": "자동차"
+    "return_home_mode": "자동차",
+    "sent_at": "2026-10-10T05:19:43.755752"
   }
 ]
