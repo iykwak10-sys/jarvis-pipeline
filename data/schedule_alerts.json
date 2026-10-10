@@ -21,5 +21,27 @@
     "return_home_minutes": 81,
     "return_home_mode": "자동차",
     "sent_at": "2026-10-10T05:19:43.755752"
+  },
+  {
+    "summary": "[골프] 진골회 떼제베CC (가람 서남 07:35)",
+    "location": "떼제베CC, 충북 청주시 흥덕구 옥산면 동림2길 149",
+    "description": "조: 가람(서남) 07:35 — 박성익, 김영환, 배현, 곽일용\n\n차량: 05:50 한솔동 출발 → 06:00 도담 20단지 한양수자인 → 06:07 아름 9단지 한신휴플러스 → 06:45 도착\n\n아침 각자, 점심: 금수강산 (청주시 흥덕구 옥산면 심동로 687-1, 043-715-9449)\n그린피 17만원(회원가입 시), 비회원 +3만원, 문자 미동의 +1만원\n라카번호는 카카오톡으로 발송 — 회원가입 필수",
+    "start_dt": "2026-10-11T07:35:00+09:00",
+    "alert_dt": "2026-10-11T06:23:00+09:00",
+    "travel_minutes": 42,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 42
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.665459,
+    "dest_lng": 127.3190149,
+    "location_is_default": true,
+    "planned_at": "2026-10-11T06:05:15.065025+09:00",
+    "event_id": "bfa3e419275c4ad0fd3fff5d8333bc03ea2bdbf386edc240b32d441fe0e5dbe2@group.calendar.google.com:i3ihc3cu0vl9l9looqg2vo9k78",
+    "sent": false,
+    "return_home_minutes": 42,
+    "return_home_mode": "자동차"
   }
 ]
