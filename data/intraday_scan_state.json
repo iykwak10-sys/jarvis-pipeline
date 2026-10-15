@@ -1,16 +1,28 @@
 {
   "date": "2026-10-15",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
     "010580": {
       "name": "에스엠벡셀",
-      "score": 5,
+      "score": 6,
       "passed": [
         "등락률",
         "시총필터",
         "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "179880": {
+      "name": "멜콘",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
