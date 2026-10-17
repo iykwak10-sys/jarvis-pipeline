@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "summary": "[골프] 천안상록CC (남코스 08:41)",
+    "location": "천안상록컨트리클럽 (충청남도 천안시 동남구 수신면 수신로 578)",
+    "description": "[예약 정보]\n- 예약자: 곽일용\n- 코스: 남코스 (18홀)\n- 예약번호: 262956234\n- QR코드: https://h.sangnokresort.co.kr/application/qrcode.do?companycd=S01&code=262956234\n※ 본인 확인용 신분증 필히 지참\n\n※ 네이버 캘린더 그린만 일정 통합 (2026-10-18 12:00~13:00 중복 제거)",
+    "start_dt": "2026-10-18T08:41:00+09:00",
+    "alert_dt": "2026-10-18T07:27:00+09:00",
+    "travel_minutes": 44,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 44
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.7254083,
+    "dest_lng": 127.2815406,
+    "location_is_default": true,
+    "planned_at": "2026-10-18T06:45:48.068958+09:00",
+    "event_id": "f27cca560967e5172f228b3a43b88ee1e5453d86528f060f13be4c92aef549de@group.calendar.google.com:5hbu20sdmjvlhlou7r293451ak",
+    "sent": false,
+    "return_home_minutes": 46,
+    "return_home_mode": "자동차"
+  }
+]
