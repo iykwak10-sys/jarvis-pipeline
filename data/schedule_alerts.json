@@ -17,8 +17,9 @@
     "location_is_default": true,
     "planned_at": "2026-10-18T06:45:48.068958+09:00",
     "event_id": "f27cca560967e5172f228b3a43b88ee1e5453d86528f060f13be4c92aef549de@group.calendar.google.com:5hbu20sdmjvlhlou7r293451ak",
-    "sent": false,
+    "sent": true,
     "return_home_minutes": 46,
-    "return_home_mode": "자동차"
+    "return_home_mode": "자동차",
+    "sent_at": "2026-10-18T07:28:04.789381"
   }
 ]
