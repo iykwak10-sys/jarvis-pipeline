@@ -1,7 +1,7 @@
 {
   "date": "2026-10-21",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "0158S0": {
@@ -18,60 +18,50 @@
       ],
       "is_portfolio": false
     },
-    "396300": {
-      "name": "HT로보틱스",
+    "010170": {
+      "name": "대한광통신",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "신고가근접"
+        "장중강도"
       ],
       "is_portfolio": false
     },
-    "005930": {
-      "name": "삼성전자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": true
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": true
-    },
     "028050": {
       "name": "삼성E&A",
-      "score": 5,
+      "score": 6,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": true
     },
-    "402340": {
-      "name": "SK스퀘어",
+    "396300": {
+      "name": "HT로보틱스",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "010120": {
+      "name": "LS ELECTRIC",
       "score": 5,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터"
       ],
-      "is_portfolio": false
+      "is_portfolio": true
     },
     "179880": {
       "name": "멜콘",
@@ -86,6 +76,39 @@
     },
     "131970": {
       "name": "두산테스나",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "043260": {
+      "name": "성호전자",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "456160": {
+      "name": "지투지바이오",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036540": {
+      "name": "SFA반도체",
       "score": 5,
       "passed": [
         "등락률",
