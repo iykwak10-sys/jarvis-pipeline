@@ -1,7 +1,7 @@
 {
   "date": "2026-10-21",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "0158S0": {
@@ -18,6 +18,18 @@
       ],
       "is_portfolio": false
     },
+    "034730": {
+      "name": "SK",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
     "010170": {
       "name": "대한광통신",
       "score": 7,
@@ -29,6 +41,29 @@
         "장중강도"
       ],
       "is_portfolio": false
+    },
+    "179880": {
+      "name": "멜콘",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "010120": {
+      "name": "LS ELECTRIC",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": true
     },
     "028050": {
       "name": "삼성E&A",
@@ -42,6 +77,30 @@
       ],
       "is_portfolio": true
     },
+    "096770": {
+      "name": "SK이노베이션",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "009900": {
+      "name": "명신산업",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "396300": {
       "name": "HT로보틱스",
       "score": 6,
@@ -53,8 +112,8 @@
       ],
       "is_portfolio": false
     },
-    "010120": {
-      "name": "LS ELECTRIC",
+    "000660": {
+      "name": "SK하이닉스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -63,12 +122,23 @@
       ],
       "is_portfolio": true
     },
-    "179880": {
-      "name": "멜콘",
+    "079550": {
+      "name": "LIG디펜스앤에어로스페이스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "043260": {
+      "name": "성호전자",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
+        "시총필터",
         "장중강도",
         "RSI적정"
       ],
@@ -85,35 +155,24 @@
       ],
       "is_portfolio": false
     },
-    "043260": {
-      "name": "성호전자",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "456160": {
       "name": "지투지바이오",
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "036540": {
-      "name": "SFA반도체",
+    "144960": {
+      "name": "뉴파워프라즈마",
       "score": 5,
       "passed": [
         "등락률",
         "시총필터",
-        "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
