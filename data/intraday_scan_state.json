@@ -1,7 +1,7 @@
 {
   "date": "2026-10-22",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "0158S0": {
@@ -42,14 +42,14 @@
       ],
       "is_portfolio": false
     },
-    "0035S0": {
-      "name": "빅웨이브로보틱스",
-      "score": 6,
+    "065450": {
+      "name": "빅텍",
+      "score": 5,
       "passed": [
-        "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도"
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
