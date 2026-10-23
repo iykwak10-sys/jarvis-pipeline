@@ -1,16 +1,15 @@
 {
-  "date": "2026-10-22",
-  "scan_time": "15:01",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-10-23",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "0158S0": {
-      "name": "엘리스",
-      "score": 9,
+    "0015M0": {
+      "name": "디티에스",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
         "장중강도",
         "신고가근접",
@@ -20,46 +19,33 @@
     },
     "028050": {
       "name": "삼성E&A",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "0013Y0": {
-      "name": "엠에스바이오",
       "score": 6,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "RSI적정"
+        "장중강도"
       ],
-      "is_portfolio": false
+      "is_portfolio": true
     },
-    "065450": {
-      "name": "빅텍",
+    "053800": {
+      "name": "안랩",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "126340": {
-      "name": "비나텍",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
         "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "293490": {
+      "name": "카카오게임즈",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
