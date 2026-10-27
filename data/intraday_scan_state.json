@@ -1,14 +1,57 @@
 {
-  "date": "2026-10-26",
-  "scan_time": "15:01",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-10-27",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "0035S0": {
-      "name": "빅웨이브로보틱스",
-      "score": 7,
+    "009150": {
+      "name": "삼성전기",
+      "score": 6,
       "passed": [
         "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "144960": {
+      "name": "뉴파워프라즈마",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터"
+      ],
+      "is_portfolio": true
+    },
+    "0158S0": {
+      "name": "엘리스",
+      "score": 5,
+      "passed": [
         "등락률",
         "시총필터",
         "장중강도",
@@ -16,46 +59,12 @@
       ],
       "is_portfolio": false
     },
-    "108490": {
-      "name": "로보티즈",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "0013Y0": {
-      "name": "엠에스바이오",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "328130": {
-      "name": "루닛",
+    "035900": {
+      "name": "JYP Ent.",
       "score": 5,
       "passed": [
         "등락률",
-        "거래량급증",
         "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "451760": {
-      "name": "컨텍",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
