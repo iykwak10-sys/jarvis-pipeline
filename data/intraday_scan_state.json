@@ -1,21 +1,9 @@
 {
   "date": "2026-10-27",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "006400": {
-      "name": "삼성SDI",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "0158S0": {
       "name": "엘리스",
       "score": 7,
@@ -28,14 +16,24 @@
       ],
       "is_portfolio": false
     },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터"
+      ],
+      "is_portfolio": false
+    },
     "0013Y0": {
       "name": "엠에스바이오",
-      "score": 7,
+      "score": 6,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -48,18 +46,6 @@
         "등락률",
         "거래량급증",
         "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "253590": {
-      "name": "네오셈",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -83,8 +69,8 @@
       ],
       "is_portfolio": false
     },
-    "402340": {
-      "name": "SK스퀘어",
+    "006400": {
+      "name": "삼성SDI",
       "score": 5,
       "passed": [
         "거래대금",
@@ -103,23 +89,36 @@
       ],
       "is_portfolio": false
     },
-    "0205H0": {
-      "name": "에스케이증권제14호기업인수목적",
+    "207940": {
+      "name": "삼성바이오로직스",
       "score": 5,
       "passed": [
         "거래대금",
-        "등락률",
+        "거래량급증",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "036930": {
-      "name": "주성엔지니어링",
+    "007810": {
+      "name": "코리아써키트",
       "score": 5,
       "passed": [
-        "거래대금",
         "등락률",
-        "시총필터"
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "253590": {
+      "name": "네오셈",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
