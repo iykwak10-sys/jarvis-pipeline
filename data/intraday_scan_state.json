@@ -1,11 +1,73 @@
 {
   "date": "2026-10-28",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
+    "032830": {
+      "name": "삼성생명",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "108490": {
+      "name": "로보티즈",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "005935": {
       "name": "삼성전자우",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "353200": {
+      "name": "대덕전자",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "028260": {
+      "name": "삼성물산",
       "score": 7,
       "passed": [
         "거래대금",
@@ -77,18 +139,6 @@
       ],
       "is_portfolio": false
     },
-    "108490": {
-      "name": "로보티즈",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "000660": {
       "name": "SK하이닉스",
       "score": 6,
@@ -133,17 +183,6 @@
       ],
       "is_portfolio": false
     },
-    "353200": {
-      "name": "대덕전자",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
     "010170": {
       "name": "대한광통신",
       "score": 6,
@@ -161,21 +200,10 @@
       "passed": [
         "거래대금",
         "등락률",
-        "신고가근접",
+        "거래량급증",
         "RSI적정"
       ],
       "is_portfolio": false
-    },
-    "028050": {
-      "name": "삼성E&A",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": true
     },
     "011070": {
       "name": "LG이노텍",
@@ -188,19 +216,8 @@
       ],
       "is_portfolio": false
     },
-    "028260": {
-      "name": "삼성물산",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "032830": {
-      "name": "삼성생명",
+    "034730": {
+      "name": "SK",
       "score": 5,
       "passed": [
         "등락률",
@@ -221,14 +238,13 @@
       ],
       "is_portfolio": false
     },
-    "034730": {
-      "name": "SK",
+    "036930": {
+      "name": "주성엔지니어링",
       "score": 5,
       "passed": [
+        "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "시총필터"
       ],
       "is_portfolio": false
     },
@@ -243,8 +259,8 @@
       ],
       "is_portfolio": false
     },
-    "042510": {
-      "name": "라온시큐어",
+    "072950": {
+      "name": "빛샘전자",
       "score": 5,
       "passed": [
         "등락률",
