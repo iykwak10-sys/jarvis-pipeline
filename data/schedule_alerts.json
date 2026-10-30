@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "summary": "🏕️ 합강오토캠핑장 (오토A-37 데크)",
+    "location": "세종 합강오토캠핑장 (세종특별자치시 연동면 태산로 272)",
+    "description": "",
+    "start_dt": "2026-10-30T14:00:00+09:00",
+    "alert_dt": "2026-10-30T13:03:00+09:00",
+    "travel_minutes": 27,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 27
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.5246318,
+    "dest_lng": 127.3530184,
+    "location_is_default": true,
+    "planned_at": "2026-10-30T12:23:48.738432+09:00",
+    "event_id": "f6ggj4ahi40gpumn3o4qtnsbbs",
+    "sent": false,
+    "return_home_minutes": 25,
+    "return_home_mode": "자동차"
+  }
+]
