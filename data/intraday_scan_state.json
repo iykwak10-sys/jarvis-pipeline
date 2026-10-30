@@ -1,84 +1,39 @@
 {
-  "date": "2026-10-29",
-  "scan_time": "15:00",
-  "scan_label": "15:00",
-  "is_initial": false,
+  "date": "2026-10-30",
+  "scan_time": "09:10",
+  "scan_label": "09:10",
+  "is_initial": true,
   "stocks": {
-    "489790": {
-      "name": "한화비전",
-      "score": 8,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "017900": {
-      "name": "광전자",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "327260": {
-      "name": "RF머트리얼즈",
+    "053800": {
+      "name": "안랩",
       "score": 6,
       "passed": [
-        "거래대금",
         "등락률",
-        "거래량급증",
-        "시총필터"
-      ],
-      "is_portfolio": false
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "006400": {
-      "name": "삼성SDI",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "105560": {
-      "name": "KB금융",
-      "score": 5,
-      "passed": [
-        "거래대금",
         "시총필터",
         "장중강도",
+        "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "0053F0": {
-      "name": "티앤이코리아",
+    "420610": {
+      "name": "인텔리빅스",
       "score": 5,
       "passed": [
-        "거래대금",
         "등락률",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "092190": {
+      "name": "서울바이오시스",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
