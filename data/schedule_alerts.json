@@ -40,7 +40,8 @@
     "location_is_default": true,
     "planned_at": "2026-11-01T16:04:31.667388+09:00",
     "event_id": "bfa3e419275c4ad0fd3fff5d8333bc03ea2bdbf386edc240b32d441fe0e5dbe2@group.calendar.google.com:86adpinv94rltjsihcjanhb4ts",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-01T17:19:05.231150"
   },
   {
     "summary": "💈 마이헤어 커트 2명 (태기 원장)",
@@ -60,7 +61,8 @@
     "location_is_default": true,
     "planned_at": "2026-11-01T16:04:31.667388+09:00",
     "event_id": "n4ln02v4dtm5ev8r2uohmschs8",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-01T17:19:09.806112"
   },
   {
     "summary": "마이헤어",
