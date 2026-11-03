@@ -1,7 +1,7 @@
 {
   "date": "2026-11-03",
-  "scan_time": "10:31",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
     "180640": {
@@ -17,47 +17,36 @@
       ],
       "is_portfolio": false
     },
-    "053800": {
-      "name": "안랩",
+    "420610": {
+      "name": "인텔리빅스",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "003490": {
+      "name": "대한항공",
+      "score": 5,
+      "passed": [
+        "거래대금",
         "시총필터",
         "신고가근접",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "0147B0": {
-      "name": "래블업",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "005930": {
-      "name": "삼성전자",
+    "053800": {
+      "name": "안랩",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "005935": {
-      "name": "삼성전자우",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -66,20 +55,9 @@
       "name": "지니언스",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "거래량급증",
         "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "460940": {
-      "name": "피앤에스로보틱스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
