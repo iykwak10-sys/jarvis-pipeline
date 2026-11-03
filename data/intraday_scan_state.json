@@ -1,7 +1,7 @@
 {
   "date": "2026-11-03",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:00",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
     "180640": {
@@ -17,25 +17,24 @@
       ],
       "is_portfolio": false
     },
-    "420610": {
-      "name": "인텔리빅스",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
     "003490": {
       "name": "대한항공",
       "score": 5,
       "passed": [
         "거래대금",
+        "거래량급증",
         "시총필터",
-        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "420610": {
+      "name": "인텔리빅스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
@@ -64,6 +63,17 @@
     },
     "211270": {
       "name": "AP위성",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "419050": {
+      "name": "삼기에너지솔루션즈",
       "score": 5,
       "passed": [
         "등락률",
