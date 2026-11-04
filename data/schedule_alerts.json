@@ -82,6 +82,7 @@
     "location_is_default": true,
     "planned_at": "2026-11-05T06:39:40.981903+09:00",
     "event_id": "1ds6608blkruitmigvlqdao8eg",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-05T07:59:56.308757"
   }
 ]
