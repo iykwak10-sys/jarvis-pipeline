@@ -40,7 +40,8 @@
     "location_is_default": true,
     "planned_at": "2026-11-05T05:08:12.669582+09:00",
     "event_id": "ec6radh1aut0vrm83b9ujhi81c",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-05T05:13:23.460776"
   },
   {
     "summary": "✈️ [출국 항공] 제주항공 7C1451 (부산 07:00 → 후쿠오카 07:55)",
@@ -60,6 +61,7 @@
     "location_is_default": true,
     "planned_at": "2026-11-05T05:08:12.669582+09:00",
     "event_id": "rqg16vgn61eaji355kj6i9pgs0",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-05T05:13:27.151240"
   }
 ]
