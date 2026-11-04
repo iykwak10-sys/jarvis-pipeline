@@ -63,5 +63,25 @@
     "event_id": "rqg16vgn61eaji355kj6i9pgs0",
     "sent": true,
     "sent_at": "2026-11-05T05:13:27.151240"
+  },
+  {
+    "summary": "🚗 [렌터카 인수] 스즈키렌터카 (Toyota NOAH 7인승)",
+    "location": "스즈키렌터카 후쿠오카공항 국제선점",
+    "description": "업체: 스즈키렌터카 후쿠오카공항 국제선점\n예약번호: 20260904013226\n차종: Toyota NOAH(또는 동급 7인승)\n결제금액: 409,500원\n운전자: 곽일용 (여권, 국제운전면허증, 한국운전면허증 원본 지참)\n*09:35 차량 인수 완료 후 니조CC로 출발 (약 40~45분 소요)",
+    "start_dt": "2026-11-05T08:30:00+09:00",
+    "alert_dt": "2026-11-05T07:59:00+09:00",
+    "travel_minutes": 1,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 1
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.5843879,
+    "dest_lng": 130.4442781,
+    "location_is_default": true,
+    "planned_at": "2026-11-05T06:39:40.981903+09:00",
+    "event_id": "1ds6608blkruitmigvlqdao8eg",
+    "sent": false
   }
 ]
