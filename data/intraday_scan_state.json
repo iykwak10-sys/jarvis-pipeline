@@ -1,9 +1,35 @@
 {
   "date": "2026-11-04",
-  "scan_time": "13:30",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
+    "028050": {
+      "name": "삼성E&A",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": true
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 8,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "009830": {
       "name": "한화솔루션",
       "score": 8,
@@ -30,23 +56,12 @@
       ],
       "is_portfolio": false
     },
-    "006400": {
-      "name": "삼성SDI",
-      "score": 7,
+    "003670": {
+      "name": "포스코퓨처엠",
+      "score": 8,
       "passed": [
         "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "068270": {
-      "name": "셀트리온",
-      "score": 6,
-      "passed": [
-        "거래대금",
         "거래량급증",
         "시총필터",
         "장중강도",
@@ -56,23 +71,159 @@
     },
     "180640": {
       "name": "한진칼",
-      "score": 5,
+      "score": 7,
       "passed": [
         "거래대금",
+        "등락률",
         "거래량급증",
         "시총필터",
         "신고가근접"
       ],
       "is_portfolio": false
     },
-    "047810": {
-      "name": "한국항공우주",
+    "222800": {
+      "name": "심텍",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "0158S0": {
+      "name": "엘리스",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "036930": {
+      "name": "주성엔지니어링",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "0147B0": {
+      "name": "래블업",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "086520": {
+      "name": "에코프로",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "010120": {
+      "name": "LS ELECTRIC",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "373220": {
+      "name": "LG에너지솔루션",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "068270": {
+      "name": "셀트리온",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
+    "005380": {
+      "name": "현대차",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "028260": {
+      "name": "삼성물산",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "112610": {
+      "name": "씨에스윈드",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
-        "RSI적정"
+        "장중강도"
       ],
       "is_portfolio": false
     },
@@ -84,17 +235,6 @@
         "거래량급증",
         "시총필터",
         "장중강도"
-      ],
-      "is_portfolio": false
-    },
-    "222800": {
-      "name": "심텍",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "거래량급증",
-        "시총필터",
-        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -115,6 +255,17 @@
       "passed": [
         "등락률",
         "거래량급증",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "247540": {
+      "name": "에코프로비엠",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
         "장중강도",
         "RSI적정"
       ],
