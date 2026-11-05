@@ -82,5 +82,25 @@
     "event_id": "pc51bq5ek5nhd2mitc26k80imc",
     "sent": true,
     "sent_at": "2026-11-05T10:36:41.782520"
+  },
+  {
+    "summary": "⛳ [골프 2일차] 카츠야마고쇼 컨트리클럽 (IN 10:08 티오프)",
+    "location": "Katsuyamagosho Country Club, 4108 Katsuyamaokubo, Miyako, Miyako District, Fukuoka 824-0801 일본",
+    "description": "골프장: 카츠야마고쇼 컨트리클럽 (勝山御所カントリークラブ)\n티오프: IN 10:08 (18홀)\n인원: 3명 (곽일용, 배인수, 이병곤)\n1인 총액: 8,980엔 (초가성비 플랜)\n*08:00 호텔 출발 권장 (하카타에서 약 1시간 10분 소요, 60km)\n*라운드 종료(~15:30) 후 사우나 및 하카타 복귀, 저녁 나카스 야키토리",
+    "start_dt": "2026-11-06T10:08:00+09:00",
+    "alert_dt": "2026-11-06T09:37:00+09:00",
+    "travel_minutes": 1,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 1
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.683449,
+    "dest_lng": 130.927332,
+    "location_is_default": true,
+    "planned_at": "2026-11-06T08:30:07.699711+09:00",
+    "event_id": "a3se548t20cvckvlthrlg95g54",
+    "sent": false
   }
 ]
