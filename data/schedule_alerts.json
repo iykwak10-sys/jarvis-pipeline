@@ -1,28 +1,5 @@
 [
   {
-    "summary": "뉴발란스 수선 제품 수령 (롯데대전)",
-    "location": "롯데대전 뉴발란스 매장",
-    "description": "수선 맡긴 제품이 도착해 매장에 보관 중입니다.\n수선비: 25,000원 (현금 또는 계좌이체만 가능)\n준비물: 접수증 지참\n매장 전화: 042-601-3266",
-    "start_dt": "2026-11-02T14:00:00+09:00",
-    "alert_dt": "2026-11-02T12:54:00+09:00",
-    "travel_minutes": 36,
-    "travel_mode": "자동차",
-    "travel_options": {
-      "자동차": 36
-    },
-    "origin_lat": 36.4761412736415,
-    "origin_lng": 127.251951200134,
-    "dest_lat": 36.3293726,
-    "dest_lng": 127.42697,
-    "location_is_default": true,
-    "planned_at": "2026-11-02T12:19:47.173527+09:00",
-    "event_id": "776b15ti2imlssdd3jobk86hds",
-    "sent": true,
-    "return_home_minutes": 39,
-    "return_home_mode": "자동차",
-    "sent_at": "2026-11-02T12:54:22.946910"
-  },
-  {
     "summary": "Flight to 후쿠오카시 (7C 1451)",
     "location": "부산광역시 PUS",
     "description": "이처럼 자동으로 생성된 일정의 세부정보를 확인하려면 공식 Google Calendar 앱을 사용하세요. https://g.co/calendar\n\nGmail에서 수신한 이메일에서 생성된 일정입니다. https://mail.google.com/mail?extsrc=cal&plid=ACUX6DNTha3W0ihnYUAJS8ZFPFBwDEdkGIZ6cao\n",
