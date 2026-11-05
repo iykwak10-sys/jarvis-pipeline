@@ -103,6 +103,7 @@
     "location_is_default": true,
     "planned_at": "2026-11-05T09:13:29.018676+09:00",
     "event_id": "pc51bq5ek5nhd2mitc26k80imc",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-05T10:36:41.782520"
   }
 ]
