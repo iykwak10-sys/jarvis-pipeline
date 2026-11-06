@@ -145,6 +145,7 @@
     "location_is_default": true,
     "planned_at": "2026-11-07T07:16:58.474990+09:00",
     "event_id": "3bloaosnksaqloa2q6d1ol8l78",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-07T08:23:18.055265"
   }
 ]
