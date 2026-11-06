@@ -126,5 +126,25 @@
     "return_home_minutes": 1,
     "return_home_mode": "자동차",
     "sent_at": "2026-11-06T19:29:24.451680"
+  },
+  {
+    "summary": "⛳ [골프 3일차] 아리아케 컨트리클럽 (OUT 08:54 티오프)",
+    "location": "Ariake Country Club, 1523 Misaki, Omuta, Fukuoka 836-0002 일본",
+    "description": "골프장: 아리아케 컨트리클럽 (有明カントリークラブ)\n티오프: OUT 08:54 (18홀)\n인원: 3명 (곽일용, 배인수, 이병곤)\n1인 총액: 12,500엔 (페어웨이 카트 진입/2인보증 플랜)\n*06:50 호텔 출발 권장 (하카타에서 약 76분 소요, 73.7km)\n*라운드 종료(~14:20) 후 하카타 복귀(15:30~16:00 도착) 및 골프용품 쇼핑, 저녁 흑우 야키니쿠",
+    "start_dt": "2026-11-07T08:54:00+09:00",
+    "alert_dt": "2026-11-07T08:23:00+09:00",
+    "travel_minutes": 1,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 1
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.0727778,
+    "dest_lng": 130.4438889,
+    "location_is_default": true,
+    "planned_at": "2026-11-07T07:16:58.474990+09:00",
+    "event_id": "3bloaosnksaqloa2q6d1ol8l78",
+    "sent": false
   }
 ]
