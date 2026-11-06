@@ -103,5 +103,27 @@
     "event_id": "a3se548t20cvckvlthrlg95g54",
     "sent": true,
     "sent_at": "2026-11-06T09:37:05.268637"
+  },
+  {
+    "summary": "🥩 저녁: 焼肉はやと 博多駅前店 (3명)",
+    "location": "焼肉はやと 博多駅前店, 福岡県福岡市博多区博多駅前3-10-26",
+    "description": "TableCheck 예약번호 JJVXM6 (좌석만, 3명)\n☎ 092-287-4309\n90분제, 1인 1드링크, 흡연 가능 업장, 20세 미만 불가\n연락 없이 10분 지나면 취소될 수 있음 → 늦으면 미리 전화\n무료취소: 11/5(목) 20:00 JST까지 (24시간 이내 1인 ¥5,000)\n변경·취소: https://www.tablecheck.com/en/reservation/JJVXM6\n숙소에서 도보 약 20분(1.6km)",
+    "start_dt": "2026-11-06T20:00:00+09:00",
+    "alert_dt": "2026-11-06T19:29:00+09:00",
+    "travel_minutes": 1,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 1
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.5878884,
+    "dest_lng": 130.4156674,
+    "location_is_default": true,
+    "planned_at": "2026-11-06T18:06:14.385124+09:00",
+    "event_id": "s2nj1goo98buqdmvi9ltb9b5d8",
+    "sent": false,
+    "return_home_minutes": 1,
+    "return_home_mode": "자동차"
   }
 ]
