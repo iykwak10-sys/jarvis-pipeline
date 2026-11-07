@@ -1,47 +1,5 @@
 [
   {
-    "summary": "Flight to 후쿠오카시 (7C 1451)",
-    "location": "부산광역시 PUS",
-    "description": "이처럼 자동으로 생성된 일정의 세부정보를 확인하려면 공식 Google Calendar 앱을 사용하세요. https://g.co/calendar\n\nGmail에서 수신한 이메일에서 생성된 일정입니다. https://mail.google.com/mail?extsrc=cal&plid=ACUX6DNTha3W0ihnYUAJS8ZFPFBwDEdkGIZ6cao\n",
-    "start_dt": "2026-11-05T07:00:00+09:00",
-    "alert_dt": "2026-11-05T05:13:12.669582+09:00",
-    "travel_minutes": 200,
-    "travel_mode": "자동차",
-    "travel_options": {
-      "자동차": 200
-    },
-    "origin_lat": 36.4761412736415,
-    "origin_lng": 127.251951200134,
-    "dest_lat": 35.17248776128935,
-    "dest_lng": 128.9467852952128,
-    "location_is_default": true,
-    "planned_at": "2026-11-05T05:08:12.669582+09:00",
-    "event_id": "ec6radh1aut0vrm83b9ujhi81c",
-    "sent": true,
-    "sent_at": "2026-11-05T05:13:23.460776"
-  },
-  {
-    "summary": "✈️ [출국 항공] 제주항공 7C1451 (부산 07:00 → 후쿠오카 07:55)",
-    "location": "김해국제공항 국제선 청사",
-    "description": "제주항공 7C1451\n구간: 김해국제공항(PUS) → 후쿠오카공항(FUK)\n탑승자: 곽일용, 배인수, 이병곤 (3명)\n운임: 스탠다드\n07:55 후쿠오카 국제선 도착 후 렌터카 수령 이동",
-    "start_dt": "2026-11-05T07:00:00+09:00",
-    "alert_dt": "2026-11-05T05:13:12.669582+09:00",
-    "travel_minutes": 200,
-    "travel_mode": "자동차",
-    "travel_options": {
-      "자동차": 200
-    },
-    "origin_lat": 36.4761412736415,
-    "origin_lng": 127.251951200134,
-    "dest_lat": 35.17248776128935,
-    "dest_lng": 128.9467852952128,
-    "location_is_default": true,
-    "planned_at": "2026-11-05T05:08:12.669582+09:00",
-    "event_id": "rqg16vgn61eaji355kj6i9pgs0",
-    "sent": true,
-    "sent_at": "2026-11-05T05:13:27.151240"
-  },
-  {
     "summary": "🚗 [렌터카 인수] 스즈키렌터카 (Toyota NOAH 7인승)",
     "location": "스즈키렌터카 후쿠오카공항 국제선점",
     "description": "업체: 스즈키렌터카 후쿠오카공항 국제선점\n예약번호: 20260904013226\n차종: Toyota NOAH(또는 동급 7인승)\n결제금액: 409,500원\n운전자: 곽일용 (여권, 국제운전면허증, 한국운전면허증 원본 지참)\n*09:35 차량 인수 완료 후 니조CC로 출발 (약 40~45분 소요)",
