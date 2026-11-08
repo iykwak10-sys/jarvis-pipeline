@@ -105,7 +105,8 @@
     "location_is_default": true,
     "planned_at": "2026-11-08T10:38:22.967154+09:00",
     "event_id": "stu101ab9tpt8m6jdmivqsr540",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-08T11:59:59.322521"
   },
   {
     "summary": "🛫 [공항 도착·출국수속] 후쿠오카공항 국제선 터미널",
