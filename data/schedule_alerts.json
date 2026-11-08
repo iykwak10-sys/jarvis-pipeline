@@ -106,5 +106,25 @@
     "planned_at": "2026-11-08T10:38:22.967154+09:00",
     "event_id": "stu101ab9tpt8m6jdmivqsr540",
     "sent": false
+  },
+  {
+    "summary": "🛫 [공항 도착·출국수속] 후쿠오카공항 국제선 터미널",
+    "location": "福岡空港 国際線ターミナル",
+    "description": "11/8 마지막 날 별도 일정 없음. 렌터카 반납(12:30~13:00) 후 국제선 청사 도착, 제주항공 7C1454 (15:10 출발) 체크인·보안·출국심사. 체크인 마감 시각은 미확인이므로 여유 있게 진행.",
+    "start_dt": "2026-11-08T13:00:00+09:00",
+    "alert_dt": "2026-11-08T12:29:00+09:00",
+    "travel_minutes": 1,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 1
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 33.583849,
+    "dest_lng": 130.444176,
+    "location_is_default": true,
+    "planned_at": "2026-11-08T11:08:46.635021+09:00",
+    "event_id": "08cmlltjal46vp8gfjqven1d9b",
+    "sent": false
   }
 ]
