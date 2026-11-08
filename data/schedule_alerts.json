@@ -126,6 +126,7 @@
     "location_is_default": true,
     "planned_at": "2026-11-08T11:08:46.635021+09:00",
     "event_id": "08cmlltjal46vp8gfjqven1d9b",
-    "sent": false
+    "sent": true,
+    "sent_at": "2026-11-08T12:29:28.042352"
   }
 ]
