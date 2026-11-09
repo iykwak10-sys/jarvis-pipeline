@@ -1,41 +1,7 @@
 {
   "date": "2026-11-09",
-  "scan_time": "09:11",
-  "scan_label": "09:10",
-  "is_initial": true,
-  "stocks": {
-    "180640": {
-      "name": "한진칼",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "18064K": {
-      "name": "한진칼우",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "장중강도",
-        "신고가근접",
-        "신고가돌파"
-      ],
-      "is_portfolio": false
-    },
-    "053800": {
-      "name": "안랩",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    }
-  }
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
+  "stocks": {}
 }
