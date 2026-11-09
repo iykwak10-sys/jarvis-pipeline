@@ -1,28 +1,5 @@
 [
   {
-    "summary": "🥩 저녁: 焼肉はやと 博多駅前店 (3명)",
-    "location": "焼肉はやと 博多駅前店, 福岡県福岡市博多区博多駅前3-10-26",
-    "description": "TableCheck 예약번호 JJVXM6 (좌석만, 3명)\n☎ 092-287-4309\n90분제, 1인 1드링크, 흡연 가능 업장, 20세 미만 불가\n연락 없이 10분 지나면 취소될 수 있음 → 늦으면 미리 전화\n무료취소: 11/5(목) 20:00 JST까지 (24시간 이내 1인 ¥5,000)\n변경·취소: https://www.tablecheck.com/en/reservation/JJVXM6\n숙소에서 도보 약 20분(1.6km)",
-    "start_dt": "2026-11-06T20:00:00+09:00",
-    "alert_dt": "2026-11-06T19:29:00+09:00",
-    "travel_minutes": 1,
-    "travel_mode": "자동차",
-    "travel_options": {
-      "자동차": 1
-    },
-    "origin_lat": 36.4761412736415,
-    "origin_lng": 127.251951200134,
-    "dest_lat": 33.5878884,
-    "dest_lng": 130.4156674,
-    "location_is_default": true,
-    "planned_at": "2026-11-06T18:06:14.385124+09:00",
-    "event_id": "s2nj1goo98buqdmvi9ltb9b5d8",
-    "sent": true,
-    "return_home_minutes": 1,
-    "return_home_mode": "자동차",
-    "sent_at": "2026-11-06T19:29:24.451680"
-  },
-  {
     "summary": "⛳ [골프 3일차] 아리아케 컨트리클럽 (OUT 08:54 티오프)",
     "location": "Ariake Country Club, 1523 Misaki, Omuta, Fukuoka 836-0002 일본",
     "description": "골프장: 아리아케 컨트리클럽 (有明カントリークラブ)\n티오프: OUT 08:54 (18홀)\n인원: 3명 (곽일용, 배인수, 이병곤)\n1인 총액: 12,500엔 (페어웨이 카트 진입/2인보증 플랜)\n*06:50 호텔 출발 권장 (하카타에서 약 76분 소요, 73.7km)\n*라운드 종료(~14:20) 후 하카타 복귀(15:30~16:00 도착) 및 골프용품 쇼핑, 저녁 흑우 야키니쿠",
