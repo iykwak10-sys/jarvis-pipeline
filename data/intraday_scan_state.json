@@ -1,18 +1,18 @@
 {
   "date": "2026-11-13",
-  "scan_time": "13:31",
-  "scan_label": "13:30",
+  "scan_time": "15:01",
+  "scan_label": "15:00",
   "is_initial": false,
   "stocks": {
-    "030530": {
-      "name": "원익홀딩스",
+    "263860": {
+      "name": "지니언스",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
-        "거래량급증",
         "시총필터",
-        "RSI적정"
+        "장중강도",
+        "신고가근접"
       ],
       "is_portfolio": false
     },
@@ -51,29 +51,31 @@
       ],
       "is_portfolio": false
     },
-    "263860": {
-      "name": "지니언스",
+    "092870": {
+      "name": "엑시콘",
       "score": 6,
       "passed": [
-        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "18064K": {
-      "name": "한진칼우",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "신고가근접"
+        "신고가근접",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
     "015760": {
       "name": "한국전력",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "064400": {
+      "name": "LG씨엔에스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -94,8 +96,8 @@
       ],
       "is_portfolio": false
     },
-    "080220": {
-      "name": "제주반도체",
+    "030530": {
+      "name": "원익홀딩스",
       "score": 5,
       "passed": [
         "거래대금",
@@ -105,13 +107,13 @@
       ],
       "is_portfolio": false
     },
-    "024840": {
-      "name": "KBI메탈",
+    "080220": {
+      "name": "제주반도체",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "거래량급증",
-        "장중강도",
+        "시총필터",
         "RSI적정"
       ],
       "is_portfolio": false
