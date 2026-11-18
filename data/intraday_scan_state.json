@@ -1,55 +1,56 @@
 {
   "date": "2026-11-18",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:30",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
-    "009150": {
-      "name": "삼성전기",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": true
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": true
-    },
-    "263860": {
-      "name": "지니언스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
     "030530": {
       "name": "원익홀딩스",
-      "score": 5,
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "053800": {
-      "name": "안랩",
+    "263860": {
+      "name": "지니언스",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "028050": {
+      "name": "삼성E&A",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "471800": {
+      "name": "에이엘로봇",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "108490": {
+      "name": "로보티즈",
       "score": 5,
       "passed": [
         "등락률",
@@ -61,6 +62,28 @@
     },
     "100790": {
       "name": "미래에셋벤처투자",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "437730": {
+      "name": "삼현",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "277810": {
+      "name": "레인보우로보틱스",
       "score": 5,
       "passed": [
         "등락률",
