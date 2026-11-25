@@ -1,9 +1,23 @@
 {
   "date": "2026-11-25",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
+    "053800": {
+      "name": "안랩",
+      "score": 9,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "신고가돌파"
+      ],
+      "is_portfolio": false
+    },
     "278470": {
       "name": "에이피알",
       "score": 8,
@@ -17,8 +31,8 @@
       ],
       "is_portfolio": false
     },
-    "053800": {
-      "name": "안랩",
+    "263860": {
+      "name": "지니언스",
       "score": 8,
       "passed": [
         "거래대금",
@@ -30,15 +44,15 @@
       ],
       "is_portfolio": false
     },
-    "263860": {
-      "name": "지니언스",
-      "score": 7,
+    "003230": {
+      "name": "삼양식품",
+      "score": 6,
       "passed": [
-        "거래대금",
         "등락률",
         "거래량급증",
         "시총필터",
-        "장중강도"
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     },
@@ -54,27 +68,15 @@
       ],
       "is_portfolio": false
     },
-    "257720": {
-      "name": "실리콘투",
+    "192820": {
+      "name": "코스맥스",
       "score": 6,
       "passed": [
         "등락률",
         "거래량급증",
         "시총필터",
         "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "328130": {
-      "name": "루닛",
-      "score": 6,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "신고가근접"
       ],
       "is_portfolio": false
     },
@@ -90,19 +92,8 @@
       ],
       "is_portfolio": false
     },
-    "090430": {
-      "name": "아모레퍼시픽",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "003350": {
-      "name": "한국화장품제조",
+    "257720": {
+      "name": "실리콘투",
       "score": 5,
       "passed": [
         "등락률",
@@ -112,25 +103,14 @@
       ],
       "is_portfolio": false
     },
-    "192820": {
-      "name": "코스맥스",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "신고가근접"
-      ],
-      "is_portfolio": false
-    },
-    "060720": {
-      "name": "KH바텍",
+    "042510": {
+      "name": "라온시큐어",
       "score": 5,
       "passed": [
         "등락률",
         "거래량급증",
-        "시총필터",
-        "장중강도"
+        "장중강도",
+        "RSI적정"
       ],
       "is_portfolio": false
     }
