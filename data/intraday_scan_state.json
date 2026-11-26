@@ -1,24 +1,38 @@
 {
   "date": "2026-11-26",
-  "scan_time": "09:10",
-  "scan_label": "09:10",
-  "is_initial": true,
+  "scan_time": "10:33",
+  "scan_label": "10:30",
+  "is_initial": false,
   "stocks": {
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 5,
+    "009150": {
+      "name": "삼성전기",
+      "score": 7,
       "passed": [
         "거래대금",
+        "등락률",
         "시총필터",
         "장중강도",
         "RSI적정"
       ],
       "is_portfolio": true
     },
-    "006400": {
-      "name": "삼성SDI",
-      "score": 5,
+    "000660": {
+      "name": "SK하이닉스",
+      "score": 7,
       "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "402340": {
+      "name": "SK스퀘어",
+      "score": 7,
+      "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
@@ -26,33 +40,34 @@
       ],
       "is_portfolio": false
     },
-    "457190": {
-      "name": "이수스페셜티케미컬",
-      "score": 5,
+    "100790": {
+      "name": "미래에셋벤처투자",
+      "score": 7,
       "passed": [
+        "거래대금",
         "등락률",
+        "거래량급증",
         "시총필터",
-        "장중강도",
-        "RSI적정"
+        "장중강도"
       ],
       "is_portfolio": false
     },
     "036930": {
       "name": "주성엔지니어링",
-      "score": 5,
+      "score": 6,
       "passed": [
+        "거래대금",
         "등락률",
         "시총필터",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
     },
-    "190510": {
-      "name": "나무가",
+    "005935": {
+      "name": "삼성전자우",
       "score": 5,
       "passed": [
-        "등락률",
+        "거래대금",
         "시총필터",
         "장중강도",
         "RSI적정"
@@ -64,7 +79,40 @@
       "score": 5,
       "passed": [
         "등락률",
+        "거래량급증",
         "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "190510": {
+      "name": "나무가",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "027360": {
+      "name": "아주IB투자",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "282720": {
+      "name": "금양그린파워",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
