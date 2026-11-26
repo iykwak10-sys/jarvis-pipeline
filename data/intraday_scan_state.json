@@ -1,42 +1,18 @@
 {
   "date": "2026-11-26",
-  "scan_time": "10:33",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
-    "009150": {
-      "name": "삼성전기",
+    "053800": {
+      "name": "안랩",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
         "시총필터",
         "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "000660": {
-      "name": "SK하이닉스",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "402340": {
-      "name": "SK스퀘어",
-      "score": 7,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "신고가근접"
       ],
       "is_portfolio": false
     },
@@ -51,6 +27,17 @@
         "장중강도"
       ],
       "is_portfolio": false
+    },
+    "009150": {
+      "name": "삼성전기",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "RSI적정"
+      ],
+      "is_portfolio": true
     },
     "036930": {
       "name": "주성엔지니어링",
@@ -74,6 +61,39 @@
       ],
       "is_portfolio": false
     },
+    "105560": {
+      "name": "KB금융",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "263860": {
+      "name": "지니언스",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접"
+      ],
+      "is_portfolio": false
+    },
+    "347700": {
+      "name": "스피어",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
+      ],
+      "is_portfolio": false
+    },
     "078600": {
       "name": "대주전자재료",
       "score": 5,
@@ -82,6 +102,17 @@
         "거래량급증",
         "시총필터",
         "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "218410": {
+      "name": "RFHIC",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도"
       ],
       "is_portfolio": false
     },
@@ -103,17 +134,6 @@
         "등락률",
         "거래량급증",
         "시총필터",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "282720": {
-      "name": "금양그린파워",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
-        "장중강도",
         "RSI적정"
       ],
       "is_portfolio": false
