@@ -1,15 +1,75 @@
 {
   "date": "2026-11-27",
-  "scan_time": "10:30",
-  "scan_label": "10:30",
+  "scan_time": "13:30",
+  "scan_label": "13:30",
   "is_initial": false,
   "stocks": {
+    "005935": {
+      "name": "삼성전자우",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "006400": {
+      "name": "삼성SDI",
+      "score": 7,
+      "passed": [
+        "거래대금",
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
     "036930": {
       "name": "주성엔지니어링",
       "score": 7,
       "passed": [
         "거래대금",
         "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "068270": {
+      "name": "셀트리온",
+      "score": 6,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "신고가근접",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "066570": {
+      "name": "LG전자",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "326030": {
+      "name": "SK바이오팜",
+      "score": 6,
+      "passed": [
+        "등락률",
+        "거래량급증",
         "시총필터",
         "장중강도",
         "RSI적정"
@@ -39,52 +99,8 @@
       ],
       "is_portfolio": false
     },
-    "277810": {
-      "name": "레인보우로보틱스",
-      "score": 6,
-      "passed": [
-        "거래대금",
-        "등락률",
-        "시총필터",
-        "장중강도"
-      ],
-      "is_portfolio": false
-    },
     "034020": {
       "name": "두산에너빌리티",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "103590": {
-      "name": "일진전기",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "005930": {
-      "name": "삼성전자",
-      "score": 5,
-      "passed": [
-        "거래대금",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": true
-    },
-    "010120": {
-      "name": "LS ELECTRIC",
       "score": 5,
       "passed": [
         "등락률",
@@ -116,8 +132,30 @@
       ],
       "is_portfolio": true
     },
-    "005935": {
-      "name": "삼성전자우",
+    "010120": {
+      "name": "LS ELECTRIC",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "005930": {
+      "name": "삼성전자",
+      "score": 5,
+      "passed": [
+        "거래대금",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": true
+    },
+    "402340": {
+      "name": "SK스퀘어",
       "score": 5,
       "passed": [
         "거래대금",
@@ -127,8 +165,8 @@
       ],
       "is_portfolio": false
     },
-    "006400": {
-      "name": "삼성SDI",
+    "042700": {
+      "name": "한미반도체",
       "score": 5,
       "passed": [
         "등락률",
@@ -138,8 +176,8 @@
       ],
       "is_portfolio": false
     },
-    "066570": {
-      "name": "LG전자",
+    "298040": {
+      "name": "효성중공업",
       "score": 5,
       "passed": [
         "등락률",
@@ -149,41 +187,39 @@
       ],
       "is_portfolio": false
     },
-    "012450": {
-      "name": "한화에어로스페이스",
+    "277810": {
+      "name": "레인보우로보틱스",
       "score": 5,
       "passed": [
+        "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "시총필터"
       ],
       "is_portfolio": false
     },
-    "128940": {
-      "name": "한미약품",
+    "108490": {
+      "name": "로보티즈",
       "score": 5,
       "passed": [
+        "거래대금",
         "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "326030": {
-      "name": "SK바이오팜",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "시총필터",
-        "장중강도",
-        "RSI적정"
+        "시총필터"
       ],
       "is_portfolio": false
     },
     "196170": {
       "name": "알테오젠",
+      "score": 5,
+      "passed": [
+        "등락률",
+        "시총필터",
+        "장중강도",
+        "RSI적정"
+      ],
+      "is_portfolio": false
+    },
+    "403870": {
+      "name": "HPSP",
       "score": 5,
       "passed": [
         "등락률",
@@ -210,17 +246,6 @@
       "passed": [
         "등락률",
         "시총필터",
-        "장중강도",
-        "RSI적정"
-      ],
-      "is_portfolio": false
-    },
-    "471800": {
-      "name": "에이엘로봇",
-      "score": 5,
-      "passed": [
-        "등락률",
-        "거래량급증",
         "장중강도",
         "RSI적정"
       ],
