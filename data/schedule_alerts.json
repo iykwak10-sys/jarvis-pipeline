@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "summary": "아산둔포센터점",
+    "location": "충남 아산시 둔포중앙로133번길 18",
+    "description": "",
+    "start_dt": "2026-11-27T14:00:00+09:00",
+    "alert_dt": "2026-11-27T12:18:00+09:00",
+    "travel_minutes": 72,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 72
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 36.9286464973374,
+    "dest_lng": 127.040071708262,
+    "location_is_default": true,
+    "planned_at": "2026-11-27T12:17:51.532758+09:00",
+    "event_id": "8ji78encv2jgahhumkv3949ic4",
+    "sent": true,
+    "return_home_minutes": 79,
+    "return_home_mode": "자동차",
+    "sent_at": "2026-11-27T12:18:57.624472"
+  }
+]
