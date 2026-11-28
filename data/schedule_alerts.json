@@ -21,5 +21,27 @@
     "return_home_minutes": 79,
     "return_home_mode": "자동차",
     "sent_at": "2026-11-27T12:18:57.624472"
+  },
+  {
+    "summary": "신진철 대표님 딸 결혼식",
+    "location": "메종디탈리, 경기 성남시 수정구 시흥동 63-5",
+    "description": "신진철 부장님이 공유한 모바일 청첩장 기준.",
+    "start_dt": "2026-11-28T12:00:00+09:00",
+    "alert_dt": "2026-11-28T10:08:00.042329+09:00",
+    "travel_minutes": 114,
+    "travel_mode": "자동차",
+    "travel_options": {
+      "자동차": 114
+    },
+    "origin_lat": 36.4761412736415,
+    "origin_lng": 127.251951200134,
+    "dest_lat": 37.4194971,
+    "dest_lng": 127.1079769,
+    "location_is_default": true,
+    "planned_at": "2026-11-28T10:03:00.042329+09:00",
+    "event_id": "739hva51b5es8k0omi8nsj1k78",
+    "sent": false,
+    "return_home_minutes": 146,
+    "return_home_mode": "자동차"
   }
 ]
